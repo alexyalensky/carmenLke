@@ -1,0 +1,202 @@
+{
+  "attribution": "Cartoon avatars by Freepik",
+  "count": 28,
+  "portraits": [
+    {
+      "id": "dana",
+      "sheet": "modern",
+      "col": 0,
+      "row": 0,
+      "path": "/images/suspects/dana.jpg"
+    },
+    {
+      "id": "yossi",
+      "sheet": "modern",
+      "col": 1,
+      "row": 0,
+      "path": "/images/suspects/yossi.jpg"
+    },
+    {
+      "id": "maya",
+      "sheet": "modern",
+      "col": 2,
+      "row": 0,
+      "path": "/images/suspects/maya.jpg"
+    },
+    {
+      "id": "ron",
+      "sheet": "modern",
+      "col": 0,
+      "row": 1,
+      "path": "/images/suspects/ron.jpg"
+    },
+    {
+      "id": "lila",
+      "sheet": "modern",
+      "col": 2,
+      "row": 1,
+      "path": "/images/suspects/lila.jpg"
+    },
+    {
+      "id": "omar",
+      "sheet": "modern",
+      "col": 0,
+      "row": 2,
+      "path": "/images/suspects/omar.jpg"
+    },
+    {
+      "id": "nina",
+      "sheet": "modern",
+      "col": 1,
+      "row": 2,
+      "path": "/images/suspects/nina.jpg"
+    },
+    {
+      "id": "avi",
+      "sheet": "modern",
+      "col": 2,
+      "row": 2,
+      "path": "/images/suspects/avi.jpg"
+    },
+    {
+      "id": "tali",
+      "sheet": "jobs",
+      "col": 0,
+      "row": 0,
+      "path": "/images/suspects/tali.jpg"
+    },
+    {
+      "id": "guy",
+      "sheet": "jobs",
+      "col": 1,
+      "row": 0,
+      "path": "/images/suspects/guy.jpg"
+    },
+    {
+      "id": "noa",
+      "sheet": "jobs",
+      "col": 2,
+      "row": 0,
+      "path": "/images/suspects/noa.jpg"
+    },
+    {
+      "id": "ido",
+      "sheet": "jobs",
+      "col": 0,
+      "row": 1,
+      "path": "/images/suspects/ido.jpg"
+    },
+    {
+      "id": "shira",
+      "sheet": "jobs",
+      "col": 1,
+      "row": 1,
+      "path": "/images/suspects/shira.jpg"
+    },
+    {
+      "id": "amir",
+      "sheet": "jobs",
+      "col": 2,
+      "row": 1,
+      "path": "/images/suspects/amir.jpg"
+    },
+    {
+      "id": "yael",
+      "sheet": "happy",
+      "col": 0,
+      "row": 0,
+      "path": "/images/suspects/yael.jpg"
+    },
+    {
+      "id": "tom",
+      "sheet": "happy",
+      "col": 1,
+      "row": 0,
+      "path": "/images/suspects/tom.jpg"
+    },
+    {
+      "id": "hila",
+      "sheet": "happy",
+      "col": 2,
+      "row": 0,
+      "path": "/images/suspects/hila.jpg"
+    },
+    {
+      "id": "eran",
+      "sheet": "happy",
+      "col": 0,
+      "row": 1,
+      "path": "/images/suspects/eran.jpg"
+    },
+    {
+      "id": "gal",
+      "sheet": "happy",
+      "col": 1,
+      "row": 1,
+      "path": "/images/suspects/gal.jpg"
+    },
+    {
+      "id": "rotem",
+      "sheet": "happy",
+      "col": 2,
+      "row": 1,
+      "path": "/images/suspects/rotem.jpg"
+    },
+    {
+      "id": "uri",
+      "sheet": "happy",
+      "col": 0,
+      "row": 2,
+      "path": "/images/suspects/uri.jpg"
+    },
+    {
+      "id": "merav",
+      "sheet": "happy",
+      "col": 1,
+      "row": 2,
+      "path": "/images/suspects/merav.jpg"
+    },
+    {
+      "id": "dan",
+      "sheet": "happy",
+      "col": 2,
+      "row": 2,
+      "path": "/images/suspects/dan.jpg"
+    },
+    {
+      "id": "inbar",
+      "sheet": "professions",
+      "col": 0,
+      "row": 0,
+      "path": "/images/suspects/inbar.jpg"
+    },
+    {
+      "id": "itay",
+      "sheet": "professions",
+      "col": 1,
+      "row": 0,
+      "path": "/images/suspects/itay.jpg"
+    },
+    {
+      "id": "carmit",
+      "sheet": "professions",
+      "col": 2,
+      "row": 0,
+      "path": "/images/suspects/carmit.jpg"
+    },
+    {
+      "id": "ben",
+      "sheet": "professions",
+      "col": 3,
+      "row": 0,
+      "path": "/images/suspects/ben.jpg"
+    },
+    {
+      "id": "sapir",
+      "sheet": "professions",
+      "col": 0,
+      "row": 1,
+      "path": "/images/suspects/sapir.jpg"
+    }
+  ]
+}

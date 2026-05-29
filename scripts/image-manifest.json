@@ -1,0 +1,217 @@
+{
+  "localPaths": {
+    "cities": {
+      "tel-aviv": "/images/cities/tel-aviv.jpg",
+      "paris": "/images/cities/paris.jpg",
+      "cairo": "/images/cities/cairo.jpg",
+      "tokyo": "/images/cities/tokyo.jpg",
+      "new-york": "/images/cities/new-york.jpg",
+      "berlin": "/images/cities/berlin.jpg",
+      "buenos-aires": "/images/cities/buenos-aires.jpg",
+      "sydney": "/images/cities/sydney.jpg",
+      "mumbai": "/images/cities/mumbai.jpg",
+      "rome": "/images/cities/rome.jpg",
+      "beijing": "/images/cities/beijing.jpg",
+      "bangkok": "/images/cities/bangkok.jpg"
+    },
+    "treasures": {
+      "blue-diamond": "/images/treasures/blue-diamond.jpg",
+      "papyrus": "/images/treasures/papyrus.jpg",
+      "painting": "/images/treasures/painting.jpg",
+      "katana": "/images/treasures/katana.jpg"
+    },
+    "sites": {
+      "park": "/images/sites/park.jpg",
+      "station": "/images/sites/station.jpg",
+      "hotel": "/images/sites/hotel.jpg",
+      "bazaar": "/images/sites/bazaar.jpg",
+      "beach": "/images/sites/beach.jpg",
+      "palace": "/images/sites/palace.jpg",
+      "mosque": "/images/sites/mosque.jpg",
+      "library": "/images/sites/library.jpg",
+      "tower": "/images/sites/tower.jpg"
+    },
+    "ui": {
+      "chief": "/images/ui/chief.jpg",
+      "world-map": "/images/ui/world-map.jpg",
+      "menu": "/images/ui/menu.jpg",
+      "placeholder": "/images/ui/placeholder.jpg",
+      "witness1": "/images/ui/witness1.jpg",
+      "witness2": "/images/ui/witness2.jpg",
+      "witness3": "/images/ui/witness3.jpg"
+    },
+    "suspects": {
+      "dana": "/images/suspects/dana.jpg",
+      "yossi": "/images/suspects/yossi.jpg",
+      "maya": "/images/suspects/maya.jpg",
+      "ron": "/images/suspects/ron.jpg",
+      "lila": "/images/suspects/lila.jpg",
+      "omar": "/images/suspects/omar.jpg",
+      "nina": "/images/suspects/nina.jpg"
+    }
+  },
+  "failed": [
+    {
+      "category": "cities",
+      "id": "london",
+      "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/67/London_Skyline_%28London_Eye%29_%28cropped%29.jpg/1280px-London_Skyline_%28London_Eye%29_%28cropped%29.jpg",
+      "error": "HTTP 404 for https://upload.wikimedia.org/wikipedia/commons/thumb/6/67/London_Skyline_%28London_Eye%29_%28cropped%29.jpg/1280px-London_Skyline_%28London_Eye%29_%28cropped%29.jpg"
+    },
+    {
+      "category": "cities",
+      "id": "rio",
+      "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/98/Christ_the_Redeemer_-_Cristo_Redeemer.jpg/1280px-Christ_the_Redeemer_-_Cristo_Redeemer.jpg",
+      "error": "HTTP 429 for https://upload.wikimedia.org/wikipedia/commons/thumb/9/98/Christ_the_Redeemer_-_Cristo_Redeemer.jpg/1280px-Christ_the_Redeemer_-_Cristo_Redeemer.jpg"
+    },
+    {
+      "category": "cities",
+      "id": "istanbul",
+      "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/91/Hagia_Sophia_Mars_2013.jpg/1280px-Hagia_Sophia_Mars_2013.jpg",
+      "error": "HTTP 429 for https://upload.wikimedia.org/wikipedia/commons/thumb/9/91/Hagia_Sophia_Mars_2013.jpg/1280px-Hagia_Sophia_Mars_2013.jpg"
+    },
+    {
+      "category": "cities",
+      "id": "madrid",
+      "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/79/Fuente_de_Cibeles_%28Madrid%29_01.jpg/1280px-Fuente_de_Cibeles_%28Madrid%29_01.jpg",
+      "error": "HTTP 429 for https://upload.wikimedia.org/wikipedia/commons/thumb/7/79/Fuente_de_Cibeles_%28Madrid%29_01.jpg/1280px-Fuente_de_Cibeles_%28Madrid%29_01.jpg"
+    },
+    {
+      "category": "cities",
+      "id": "moscow",
+      "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/01/Saint_Basil%27s_Cathedral_in_Moscow.jpg/1280px-Saint_Basil%27s_Cathedral_in_Moscow.jpg",
+      "error": "HTTP 429 for https://upload.wikimedia.org/wikipedia/commons/thumb/0/01/Saint_Basil%27s_Cathedral_in_Moscow.jpg/1280px-Saint_Basil%27s_Cathedral_in_Moscow.jpg"
+    },
+    {
+      "category": "cities",
+      "id": "athens",
+      "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/da/The_Parthenon_in_Athens.jpg/1280px-The_Parthenon_in_Athens.jpg",
+      "error": "HTTP 429 for https://upload.wikimedia.org/wikipedia/commons/thumb/d/da/The_Parthenon_in_Athens.jpg/1280px-The_Parthenon_in_Athens.jpg"
+    },
+    {
+      "category": "cities",
+      "id": "mexico-city",
+      "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/15/Mexico_City_Reforma_skyline.jpg/1280px-Mexico_City_Reforma_skyline.jpg",
+      "error": "HTTP 429 for https://upload.wikimedia.org/wikipedia/commons/thumb/1/15/Mexico_City_Reforma_skyline.jpg/1280px-Mexico_City_Reforma_skyline.jpg"
+    },
+    {
+      "category": "cities",
+      "id": "montreal",
+      "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e8/Montreal_from_Mount_Royal%2C_August_2017.jpg/1280px-Montreal_from_Mount_Royal%2C_August_2017.jpg",
+      "error": "HTTP 429 for https://upload.wikimedia.org/wikipedia/commons/thumb/e/e8/Montreal_from_Mount_Royal%2C_August_2017.jpg/1280px-Montreal_from_Mount_Royal%2C_August_2017.jpg"
+    },
+    {
+      "category": "cities",
+      "id": "amsterdam",
+      "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e1/Canals_of_Amsterdam.jpg/1280px-Canals_of_Amsterdam.jpg",
+      "error": "HTTP 429 for https://upload.wikimedia.org/wikipedia/commons/thumb/e/e1/Canals_of_Amsterdam.jpg/1280px-Canals_of_Amsterdam.jpg"
+    },
+    {
+      "category": "cities",
+      "id": "johannesburg",
+      "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1b/Johannesburg_skyline_2017.jpg/1280px-Johannesburg_skyline_2017.jpg",
+      "error": "HTTP 429 for https://upload.wikimedia.org/wikipedia/commons/thumb/1/1b/Johannesburg_skyline_2017.jpg/1280px-Johannesburg_skyline_2017.jpg"
+    },
+    {
+      "category": "treasures",
+      "id": "gold-statue",
+      "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5f/Buddha-Vandana-Reflection.jpg/640px-Buddha-Vandana-Reflection.jpg",
+      "error": "HTTP 400 for https://upload.wikimedia.org/wikipedia/commons/thumb/5/5f/Buddha-Vandana-Reflection.jpg/640px-Buddha-Vandana-Reflection.jpg"
+    },
+    {
+      "category": "treasures",
+      "id": "crown",
+      "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4c/Imperial_State_Crown_of_Great_Britain_%281997%29_%28cropped%29.jpg/640px-Imperial_State_Crown_of_Great_Britain_%281997%29_%28cropped%29.jpg",
+      "error": "HTTP 400 for https://upload.wikimedia.org/wikipedia/commons/thumb/4/4c/Imperial_State_Crown_of_Great_Britain_%281997%29_%28cropped%29.jpg/640px-Imperial_State_Crown_of_Great_Britain_%281997%29_%28cropped%29.jpg"
+    },
+    {
+      "category": "treasures",
+      "id": "mask",
+      "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ec/Egyptian_death_mask_%28cropped%29.jpg/640px-Egyptian_death_mask_%28cropped%29.jpg",
+      "error": "HTTP 400 for https://upload.wikimedia.org/wikipedia/commons/thumb/e/ec/Egyptian_death_mask_%28cropped%29.jpg/640px-Egyptian_death_mask_%28cropped%29.jpg"
+    },
+    {
+      "category": "treasures",
+      "id": "gold-coin",
+      "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/47/Gold_coin_of_Croesus_%28cropped%29.JPG/640px-Gold_coin_of_Croesus_%28cropped%29.JPG",
+      "error": "HTTP 400 for https://upload.wikimedia.org/wikipedia/commons/thumb/4/47/Gold_coin_of_Croesus_%28cropped%29.JPG/640px-Gold_coin_of_Croesus_%28cropped%29.JPG"
+    },
+    {
+      "category": "treasures",
+      "id": "jade",
+      "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6e/Jadeite_jade%2C_mutton-fat%2C_white%2C_45mm.jpg/640px-Jadeite_jade%2C_mutton-fat%2C_white%2C_45mm.jpg",
+      "error": "HTTP 400 for https://upload.wikimedia.org/wikipedia/commons/thumb/6/6e/Jadeite_jade%2C_mutton-fat%2C_white%2C_45mm.jpg/640px-Jadeite_jade%2C_mutton-fat%2C_white%2C_45mm.jpg"
+    },
+    {
+      "category": "treasures",
+      "id": "ruby",
+      "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9a/Ruby_gemstone.jpg/640px-Ruby_gemstone.jpg",
+      "error": "HTTP 400 for https://upload.wikimedia.org/wikipedia/commons/thumb/9/9a/Ruby_gemstone.jpg/640px-Ruby_gemstone.jpg"
+    },
+    {
+      "category": "sites",
+      "id": "port",
+      "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2f/Port_of_Singapore.jpg/800px-Port_of_Singapore.jpg",
+      "error": "HTTP 400 for https://upload.wikimedia.org/wikipedia/commons/thumb/2/2f/Port_of_Singapore.jpg/800px-Port_of_Singapore.jpg"
+    },
+    {
+      "category": "sites",
+      "id": "market",
+      "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/46/Grand_Bazaar%2C_Istanbul%2C_Turkey.jpg/800px-Grand_Bazaar%2C_Istanbul%2C_Turkey.jpg",
+      "error": "HTTP 400 for https://upload.wikimedia.org/wikipedia/commons/thumb/4/46/Grand_Bazaar%2C_Istanbul%2C_Turkey.jpg/800px-Grand_Bazaar%2C_Istanbul%2C_Turkey.jpg"
+    },
+    {
+      "category": "sites",
+      "id": "museum",
+      "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6e/Louvre_Museum_Wikimedia_Commons.jpg/800px-Louvre_Museum_Wikimedia_Commons.jpg",
+      "error": "HTTP 400 for https://upload.wikimedia.org/wikipedia/commons/thumb/6/6e/Louvre_Museum_Wikimedia_Commons.jpg/800px-Louvre_Museum_Wikimedia_Commons.jpg"
+    },
+    {
+      "category": "sites",
+      "id": "shrine",
+      "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0e/Torii_of_Itsukushima_Shrine.jpg/800px-Torii_of_Itsukushima_Shrine.jpg",
+      "error": "HTTP 400 for https://upload.wikimedia.org/wikipedia/commons/thumb/0/0e/Torii_of_Itsukushima_Shrine.jpg/800px-Torii_of_Itsukushima_Shrine.jpg"
+    },
+    {
+      "category": "sites",
+      "id": "cafe",
+      "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a6/Cafe_Flore%2C_Paris%2C_France.jpg/800px-Cafe_Flore%2C_Paris%2C_France.jpg",
+      "error": "HTTP 400 for https://upload.wikimedia.org/wikipedia/commons/thumb/a/a6/Cafe_Flore%2C_Paris%2C_France.jpg/800px-Cafe_Flore%2C_Paris%2C_France.jpg"
+    },
+    {
+      "category": "sites",
+      "id": "gate",
+      "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a6/Brandenburger_Tor_abends.jpg/800px-Brandenburger_Tor_abends.jpg",
+      "error": "HTTP 400 for https://upload.wikimedia.org/wikipedia/commons/thumb/a/a6/Brandenburger_Tor_abends.jpg/800px-Brandenburger_Tor_abends.jpg"
+    },
+    {
+      "category": "sites",
+      "id": "bridge",
+      "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/27/Tower_Bridge_at_Dawn.jpg/800px-Tower_Bridge_at_Dawn.jpg",
+      "error": "HTTP 400 for https://upload.wikimedia.org/wikipedia/commons/thumb/2/27/Tower_Bridge_at_Dawn.jpg/800px-Tower_Bridge_at_Dawn.jpg"
+    },
+    {
+      "category": "sites",
+      "id": "opera",
+      "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2c/Sydney_Opera_House_Sails.jpg/800px-Sydney_Opera_House_Sails.jpg",
+      "error": "HTTP 400 for https://upload.wikimedia.org/wikipedia/commons/thumb/2/2c/Sydney_Opera_House_Sails.jpg/800px-Sydney_Opera_House_Sails.jpg"
+    },
+    {
+      "category": "sites",
+      "id": "plaza",
+      "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/79/Fuente_de_Cibeles_%28Madrid%29_01.jpg/800px-Fuente_de_Cibeles_%28Madrid%29_01.jpg",
+      "error": "HTTP 400 for https://upload.wikimedia.org/wikipedia/commons/thumb/7/79/Fuente_de_Cibeles_%28Madrid%29_01.jpg/800px-Fuente_de_Cibeles_%28Madrid%29_01.jpg"
+    },
+    {
+      "category": "sites",
+      "id": "statue",
+      "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/98/Christ_the_Redeemer_-_Cristo_Redeemer.jpg/800px-Christ_the_Redeemer_-_Cristo_Redeemer.jpg",
+      "error": "HTTP 400 for https://upload.wikimedia.org/wikipedia/commons/thumb/9/98/Christ_the_Redeemer_-_Cristo_Redeemer.jpg/800px-Christ_the_Redeemer_-_Cristo_Redeemer.jpg"
+    },
+    {
+      "category": "sites",
+      "id": "harbour",
+      "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/40/Sydney_Harbour_Bridge_from_the_air.jpg/800px-Sydney_Harbour_Bridge_from_the_air.jpg",
+      "error": "HTTP 400 for https://upload.wikimedia.org/wikipedia/commons/thumb/4/40/Sydney_Harbour_Bridge_from_the_air.jpg/800px-Sydney_Harbour_Bridge_from_the_air.jpg"
+    }
+  ]
+}

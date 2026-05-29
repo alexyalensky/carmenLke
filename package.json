@@ -1,0 +1,30 @@
+{
+  "name": "carmen-hebrew",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc -b && vite build",
+    "preview": "vite preview",
+    "images": "node scripts/download-images.mjs",
+    "images:ghibli": "node scripts/download-ghibli-images.mjs",
+    "images:suspects": "node scripts/download-suspect-portraits.mjs",
+    "images:witnesses": "node scripts/download-witness-images.mjs",
+    "images:world-map": "node scripts/download-world-map.mjs",
+    "images:istock": "node scripts/download-istock-images.mjs",
+    "images:istock:links": "node scripts/download-istock-images.mjs --links"
+  },
+  "dependencies": {
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0"
+  },
+  "devDependencies": {
+    "@types/react": "^19.1.2",
+    "@types/react-dom": "^19.1.2",
+    "@vitejs/plugin-react": "^4.4.1",
+    "sharp": "^0.34.5",
+    "typescript": "~5.8.3",
+    "vite": "^6.3.5"
+  }
+}

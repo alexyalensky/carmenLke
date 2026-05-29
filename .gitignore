@@ -1,0 +1,11 @@
+node_modules/
+dist/
+*.local
+.DS_Store
+Thumbs.db
+.env
+.env.*
+
+.specstory/
+.vscode/
+scripts/.istock-cache/

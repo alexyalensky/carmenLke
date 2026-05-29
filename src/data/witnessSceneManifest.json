@@ -1,0 +1,213 @@
+{
+  "attribution": "Cartoon avatars by Freepik & Vecteezy",
+  "scenes": [
+    {
+      "scene": "delivery-boy",
+      "sheet": "modern",
+      "col": 2,
+      "row": 0,
+      "witness": "/images/witnesses/delivery-boy.jpg",
+      "sceneImg": "/images/scenes/delivery-boy.jpg"
+    },
+    {
+      "scene": "market",
+      "sheet": "happy",
+      "col": 2,
+      "row": 0,
+      "witness": "/images/witnesses/market.jpg",
+      "sceneImg": "/images/scenes/market.jpg"
+    },
+    {
+      "scene": "sewers",
+      "sheet": "happy",
+      "col": 0,
+      "row": 1,
+      "witness": "/images/witnesses/sewers.jpg",
+      "sceneImg": "/images/scenes/sewers.jpg"
+    },
+    {
+      "scene": "taxi-driver",
+      "sheet": "modern",
+      "col": 2,
+      "row": 1,
+      "witness": "/images/witnesses/taxi-driver.jpg",
+      "sceneImg": "/images/scenes/taxi-driver.jpg"
+    },
+    {
+      "scene": "street-vendor",
+      "sheet": "modern",
+      "col": 2,
+      "row": 0,
+      "witness": "/images/witnesses/street-vendor.jpg",
+      "sceneImg": "/images/scenes/street-vendor.jpg"
+    },
+    {
+      "scene": "hotel-clerk",
+      "sheet": "happy",
+      "col": 1,
+      "row": 0,
+      "witness": "/images/witnesses/hotel-clerk.jpg",
+      "sceneImg": "/images/scenes/hotel-clerk.jpg"
+    },
+    {
+      "scene": "dock-worker",
+      "sheet": "modern",
+      "col": 0,
+      "row": 1,
+      "witness": "/images/witnesses/dock-worker.jpg",
+      "sceneImg": "/images/scenes/dock-worker.jpg"
+    },
+    {
+      "scene": "subway",
+      "sheet": "happy",
+      "col": 2,
+      "row": 1,
+      "witness": "/images/witnesses/subway.jpg",
+      "sceneImg": "/images/scenes/subway.jpg"
+    },
+    {
+      "scene": "alley",
+      "sheet": "happy",
+      "col": 0,
+      "row": 1,
+      "witness": "/images/witnesses/alley.jpg",
+      "sceneImg": "/images/scenes/alley.jpg"
+    },
+    {
+      "scene": "rooftop",
+      "sheet": "happy",
+      "col": 2,
+      "row": 2,
+      "witness": "/images/witnesses/rooftop.jpg",
+      "sceneImg": "/images/scenes/rooftop.jpg"
+    },
+    {
+      "scene": "newsstand",
+      "sheet": "jobs",
+      "col": 1,
+      "row": 1,
+      "witness": "/images/witnesses/newsstand.jpg",
+      "sceneImg": "/images/scenes/newsstand.jpg"
+    },
+    {
+      "scene": "bus-driver",
+      "sheet": "professions",
+      "col": 1,
+      "row": 0,
+      "witness": "/images/witnesses/bus-driver.jpg",
+      "sceneImg": "/images/scenes/bus-driver.jpg"
+    },
+    {
+      "scene": "fish-market",
+      "sheet": "modern",
+      "col": 2,
+      "row": 2,
+      "witness": "/images/witnesses/fish-market.jpg",
+      "sceneImg": "/images/scenes/fish-market.jpg"
+    },
+    {
+      "scene": "monk",
+      "sheet": "jobs",
+      "col": 0,
+      "row": 1,
+      "witness": "/images/witnesses/monk.jpg",
+      "sceneImg": "/images/scenes/monk.jpg"
+    },
+    {
+      "scene": "tour-guide",
+      "sheet": "modern",
+      "col": 1,
+      "row": 0,
+      "witness": "/images/witnesses/tour-guide.jpg",
+      "sceneImg": "/images/scenes/tour-guide.jpg"
+    },
+    {
+      "scene": "cafe-waiter",
+      "sheet": "jobs",
+      "col": 2,
+      "row": 0,
+      "witness": "/images/witnesses/cafe-waiter.jpg",
+      "sceneImg": "/images/scenes/cafe-waiter.jpg"
+    },
+    {
+      "scene": "museum-guard",
+      "sheet": "happy",
+      "col": 0,
+      "row": 2,
+      "witness": "/images/witnesses/museum-guard.jpg",
+      "sceneImg": "/images/scenes/museum-guard.jpg"
+    },
+    {
+      "scene": "train-conductor",
+      "sheet": "modern",
+      "col": 1,
+      "row": 2,
+      "witness": "/images/witnesses/train-conductor.jpg",
+      "sceneImg": "/images/scenes/train-conductor.jpg"
+    },
+    {
+      "scene": "park-jogger",
+      "sheet": "happy",
+      "col": 2,
+      "row": 2,
+      "witness": "/images/witnesses/park-jogger.jpg",
+      "sceneImg": "/images/scenes/park-jogger.jpg"
+    },
+    {
+      "scene": "construction",
+      "sheet": "jobs",
+      "col": 0,
+      "row": 0,
+      "witness": "/images/witnesses/construction.jpg",
+      "sceneImg": "/images/scenes/construction.jpg"
+    },
+    {
+      "scene": "airport",
+      "sheet": "modern",
+      "col": 1,
+      "row": 2,
+      "witness": "/images/witnesses/airport.jpg",
+      "sceneImg": "/images/scenes/airport.jpg"
+    },
+    {
+      "scene": "bazaar",
+      "sheet": "happy",
+      "col": 1,
+      "row": 1,
+      "witness": "/images/witnesses/bazaar.jpg",
+      "sceneImg": "/images/scenes/bazaar.jpg"
+    },
+    {
+      "scene": "bridge-toll",
+      "sheet": "professions",
+      "col": 0,
+      "row": 0,
+      "witness": "/images/witnesses/bridge-toll.jpg",
+      "sceneImg": "/images/scenes/bridge-toll.jpg"
+    },
+    {
+      "scene": "beach-lifeguard",
+      "sheet": "jobs",
+      "col": 1,
+      "row": 0,
+      "witness": "/images/witnesses/beach-lifeguard.jpg",
+      "sceneImg": "/images/scenes/beach-lifeguard.jpg"
+    },
+    {
+      "scene": "police-informant",
+      "sheet": "jobs",
+      "col": 2,
+      "row": 1,
+      "witness": "/images/witnesses/police-informant.jpg",
+      "sceneImg": "/images/scenes/police-informant.jpg"
+    },
+    {
+      "scene": "underground-garage",
+      "sheet": "modern",
+      "col": 2,
+      "row": 1,
+      "witness": "/images/witnesses/underground-garage.jpg",
+      "sceneImg": "/images/scenes/underground-garage.jpg"
+    }
+  ]
+}

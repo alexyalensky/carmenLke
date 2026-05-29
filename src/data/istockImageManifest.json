@@ -1,0 +1,501 @@
+{
+  "attribution": "Images sourced from iStock search previews — license required for production use",
+  "downloadedAt": "2026-05-29T11:23:17.778Z",
+  "cities": [
+    {
+      "id": "tel-aviv",
+      "phrase": "tel aviv",
+      "searchUrl": "https://www.istockphoto.com/search/2/image-film?phrase=tel%20aviv",
+      "sourceUrl": "https://media.istockphoto.com/id/1077741064/photo/tel-aviv-skyline.jpg?s=612x612&w=0&k=20&c=4GqVLwnp3zsh8f9kJtIXzMClTvz2r5-6pNilFSd855s=",
+      "path": "/images/cities/tel-aviv.jpg"
+    },
+    {
+      "id": "paris",
+      "phrase": "paris",
+      "searchUrl": "https://www.istockphoto.com/search/2/image-film?phrase=paris",
+      "sourceUrl": "https://media.istockphoto.com/id/1498516775/photo/the-eiffel-tower-in-paris-france-at-sunset.jpg?s=612x612&w=0&k=20&c=V4StdESr6-QQWOjXm6R8b1T-_slWLxasMnN6SWdV9ko=",
+      "path": "/images/cities/paris.jpg"
+    },
+    {
+      "id": "cairo",
+      "phrase": "cairo",
+      "searchUrl": "https://www.istockphoto.com/search/2/image-film?phrase=cairo",
+      "sourceUrl": "https://media.istockphoto.com/id/2140634074/photo/beautiful-view-of-cairo-downtown-and-the-nile-from-above-egypt.jpg?s=612x612&w=0&k=20&c=DE6qxp4G_yNJ_6gedod1uPPfvhUFM9lfsBNeDOU7Zvk=",
+      "path": "/images/cities/cairo.jpg"
+    },
+    {
+      "id": "tokyo",
+      "phrase": "tokyo",
+      "searchUrl": "https://www.istockphoto.com/search/2/image-film?phrase=tokyo",
+      "sourceUrl": "https://media.istockphoto.com/id/1390815938/photo/tokyo-city-in-japan.jpg?s=612x612&w=0&k=20&c=VHiC3TlbXkb-Yf6WUYjh825Y0nGMCTkNUa9j8X8rVfY=",
+      "path": "/images/cities/tokyo.jpg"
+    },
+    {
+      "id": "new-york",
+      "phrase": "new york",
+      "searchUrl": "https://www.istockphoto.com/search/2/image-film?phrase=new%20york",
+      "sourceUrl": "https://media.istockphoto.com/id/2156176090/photo/times-square-in-new-york-city.jpg?s=612x612&w=0&k=20&c=ayJcQzds5L6Bb7MxfgXZd2RFrSy_nLlYs1YTtWKZl2g=",
+      "path": "/images/cities/new-york.jpg"
+    },
+    {
+      "id": "berlin",
+      "phrase": "berlin",
+      "searchUrl": "https://www.istockphoto.com/search/2/image-film?phrase=berlin",
+      "sourceUrl": "https://media.istockphoto.com/id/503874284/photo/berlin-skyline-with-spree-river-at-sunset-germany.jpg?s=612x612&w=0&k=20&c=gnrw-SQQq9Niao93SU4djAgGXi-5LRBNkSRiwwX96Tk=",
+      "path": "/images/cities/berlin.jpg"
+    },
+    {
+      "id": "buenos-aires",
+      "phrase": "buenos aires",
+      "searchUrl": "https://www.istockphoto.com/search/2/image-film?phrase=buenos%20aires",
+      "sourceUrl": "https://media.istockphoto.com/id/1869916912/photo/colorful-buildings-in-caminito-street-in-la-boca-at-buenos-aires-argentina.jpg?s=612x612&w=0&k=20&c=jtB1ullfwVjag7O0I6qFepn0OwdbGP1YKSwWr7HBNgU=",
+      "path": "/images/cities/buenos-aires.jpg"
+    },
+    {
+      "id": "sydney",
+      "phrase": "sydney",
+      "searchUrl": "https://www.istockphoto.com/search/2/image-film?phrase=sydney",
+      "sourceUrl": "https://media.istockphoto.com/id/1498418424/photo/sydneys-splendour.jpg?s=612x612&w=0&k=20&c=fEJhZM4J-p-Kq9nfN1FU13UxLdIHFkNeJJMJGYO303k=",
+      "path": "/images/cities/sydney.jpg"
+    },
+    {
+      "id": "mumbai",
+      "phrase": "mumbai",
+      "searchUrl": "https://www.istockphoto.com/search/2/image-film?phrase=mumbai",
+      "sourceUrl": "https://media.istockphoto.com/id/539018660/photo/taj-mahal-hotel-and-gateway-of-india.jpg?s=612x612&w=0&k=20&c=L1LJVrYMS8kj2rJKlQMcUR88vYoAZeWbYIGkcTo6QV0=",
+      "path": "/images/cities/mumbai.jpg"
+    },
+    {
+      "id": "london",
+      "phrase": "london",
+      "searchUrl": "https://www.istockphoto.com/search/2/image-film?phrase=london",
+      "sourceUrl": "https://media.istockphoto.com/id/1342505734/photo/the-skyline-of-london-city-with-tower-bridge-and-financial-district-during-sunrise.jpg?s=612x612&w=0&k=20&c=HxkAA5zt5DyxkksmRpu6Jo8K3ouHArmIX4jBodNMQuM=",
+      "path": "/images/cities/london.jpg"
+    },
+    {
+      "id": "rio",
+      "phrase": "rio de janeiro",
+      "searchUrl": "https://www.istockphoto.com/search/2/image-film?phrase=rio%20de%20janeiro",
+      "sourceUrl": "https://media.istockphoto.com/id/608540602/photo/aerial-panorama-of-botafogo-bay-rio-de-janeiro.jpg?s=612x612&w=0&k=20&c=9vsK_9r4ldoLyfS6oLnUbvpQOgYCfzr4xCZ1-YFNJZo=",
+      "path": "/images/cities/rio.jpg"
+    },
+    {
+      "id": "istanbul",
+      "phrase": "istanbul",
+      "searchUrl": "https://www.istockphoto.com/search/2/image-film?phrase=istanbul",
+      "sourceUrl": "https://media.istockphoto.com/id/1499025854/photo/touristic-sightseeing-ships-in-istanbul-city-turkey.jpg?s=612x612&w=0&k=20&c=K43B2lq3aH_G1uzE8z48Oz0HDokFhCV1rbwzZh3iP_k=",
+      "path": "/images/cities/istanbul.jpg"
+    },
+    {
+      "id": "rome",
+      "phrase": "rome",
+      "searchUrl": "https://www.istockphoto.com/search/2/image-film?phrase=rome",
+      "sourceUrl": "https://media.istockphoto.com/id/539115110/photo/colosseum-in-rome-and-morning-sun-italy.jpg?s=612x612&w=0&k=20&c=9NtFxHI3P2IBWRY9t0NrfPZPR4iusHmVLbXg2Cjv9Fs=",
+      "path": "/images/cities/rome.jpg"
+    },
+    {
+      "id": "madrid",
+      "phrase": "madrid",
+      "searchUrl": "https://www.istockphoto.com/search/2/image-film?phrase=madrid",
+      "sourceUrl": "https://media.istockphoto.com/id/1059076792/photo/madrid-city-skyline-gran-via-street-twilight-spain.jpg?s=612x612&w=0&k=20&c=jQbBLWmR46lkJl-_OsYKLcykBweSNpf61H6NmcaHQxE=",
+      "path": "/images/cities/madrid.jpg"
+    },
+    {
+      "id": "moscow",
+      "phrase": "moscow",
+      "searchUrl": "https://www.istockphoto.com/search/2/image-film?phrase=moscow",
+      "sourceUrl": "https://media.istockphoto.com/id/1474651053/photo/moscow-skyline-with-cathedral-of-vasily-the-blessed-and-spasskaya-tower-on-red-square-russia.jpg?s=612x612&w=0&k=20&c=9lOBVq7fUxMPt_mvREjJJ0KDE2w20ReMLgcVXTFVWSA=",
+      "path": "/images/cities/moscow.jpg"
+    },
+    {
+      "id": "beijing",
+      "phrase": "beijing",
+      "searchUrl": "https://www.istockphoto.com/search/2/image-film?phrase=beijing",
+      "sourceUrl": "https://media.istockphoto.com/id/482334184/photo/night-on-beijing-central-business-district-buildings-skyline-china-cityscape.jpg?s=612x612&w=0&k=20&c=gd1nunX5dLfHTAyyqTE2frn4Iw-dzyr60YqJGaK2M4U=",
+      "path": "/images/cities/beijing.jpg"
+    },
+    {
+      "id": "bangkok",
+      "phrase": "bangkok",
+      "searchUrl": "https://www.istockphoto.com/search/2/image-film?phrase=bangkok",
+      "sourceUrl": "https://media.istockphoto.com/id/2149112736/photo/wat-arun-temple-at-sunset-bangkok-in-thailand.jpg?s=612x612&w=0&k=20&c=1JqYAueTVDWfnj8iwCRlS_VIp-3YBeDp6Wp-Pq19qVk=",
+      "path": "/images/cities/bangkok.jpg"
+    },
+    {
+      "id": "athens",
+      "phrase": "athens",
+      "searchUrl": "https://www.istockphoto.com/search/2/image-film?phrase=athens",
+      "sourceUrl": "https://media.istockphoto.com/id/1028749698/photo/the-acropolis-of-athens-greece.jpg?s=612x612&w=0&k=20&c=fiP0MdkAlz4kVjNrvyb9LADj9TsgKm7Q8SgJABFhKcs=",
+      "path": "/images/cities/athens.jpg"
+    },
+    {
+      "id": "mexico-city",
+      "phrase": "mexico city",
+      "searchUrl": "https://www.istockphoto.com/search/2/image-film?phrase=mexico%20city",
+      "sourceUrl": "https://media.istockphoto.com/id/1064279806/photo/independence-monument-mexico-city.jpg?s=612x612&w=0&k=20&c=TAxMpl2yDRbqZ3ABR5TlJ3tAFGiHyMm80uO5RXc9gVw=",
+      "path": "/images/cities/mexico-city.jpg"
+    },
+    {
+      "id": "montreal",
+      "phrase": "montreal",
+      "searchUrl": "https://www.istockphoto.com/search/2/image-film?phrase=montreal",
+      "sourceUrl": "https://media.istockphoto.com/id/1332557931/photo/skyline-downtown-montreal-canada.jpg?s=612x612&w=0&k=20&c=GA1xNbbjmqVb9-EFW9LA5gPrS-49MPqvUYtyBUkzDK4=",
+      "path": "/images/cities/montreal.jpg"
+    },
+    {
+      "id": "amsterdam",
+      "phrase": "amsterdam",
+      "searchUrl": "https://www.istockphoto.com/search/2/image-film?phrase=amsterdam",
+      "sourceUrl": "https://media.istockphoto.com/id/1352073906/photo/amsterdam-downtown-amstel-river-old-houses-and-a-bridge-nice-view-of-the-famous-city-of.jpg?s=612x612&w=0&k=20&c=0-l6Lf8A_QM0Nd-YPLrp5qUn8S1uc0TFKETH8TU9JcU=",
+      "path": "/images/cities/amsterdam.jpg"
+    },
+    {
+      "id": "johannesburg",
+      "phrase": "johannesburg",
+      "searchUrl": "https://www.istockphoto.com/search/2/image-film?phrase=johannesburg",
+      "sourceUrl": "https://media.istockphoto.com/id/1201928833/photo/johannesburg-city-skyline-and-nelson-mandela-bridge-at-sunset.jpg?s=612x612&w=0&k=20&c=rm1QGnsofR_qvqizvt438IWD1f2TlV9kBatr6F-Dqmk=",
+      "path": "/images/cities/johannesburg.jpg"
+    }
+  ],
+  "scenes": [
+    {
+      "scene": "delivery-boy",
+      "witness": {
+        "phrase": "delivery courier",
+        "searchUrl": "https://www.istockphoto.com/search/2/image-film?phrase=delivery%20courier",
+        "path": "/images/witnesses/delivery-boy.jpg"
+      },
+      "sceneImg": {
+        "phrase": "package delivery street",
+        "searchUrl": "https://www.istockphoto.com/search/2/image-film?phrase=package%20delivery%20street",
+        "path": "/images/scenes/delivery-boy.jpg"
+      }
+    },
+    {
+      "scene": "market",
+      "witness": {
+        "phrase": "market vendor",
+        "searchUrl": "https://www.istockphoto.com/search/2/image-film?phrase=market%20vendor",
+        "path": "/images/witnesses/market.jpg"
+      },
+      "sceneImg": {
+        "phrase": "outdoor food market",
+        "searchUrl": "https://www.istockphoto.com/search/2/image-film?phrase=outdoor%20food%20market",
+        "path": "/images/scenes/market.jpg"
+      }
+    },
+    {
+      "scene": "sewers",
+      "witness": {
+        "phrase": "sewer worker",
+        "searchUrl": "https://www.istockphoto.com/search/2/image-film?phrase=sewer%20worker",
+        "path": "/images/witnesses/sewers.jpg"
+      },
+      "sceneImg": {
+        "phrase": "urban sewer tunnel",
+        "searchUrl": "https://www.istockphoto.com/search/2/image-film?phrase=urban%20sewer%20tunnel",
+        "path": "/images/scenes/sewers.jpg"
+      }
+    },
+    {
+      "scene": "taxi-driver",
+      "witness": {
+        "phrase": "taxi driver",
+        "searchUrl": "https://www.istockphoto.com/search/2/image-film?phrase=taxi%20driver",
+        "path": "/images/witnesses/taxi-driver.jpg"
+      },
+      "sceneImg": {
+        "phrase": "yellow taxi city",
+        "searchUrl": "https://www.istockphoto.com/search/2/image-film?phrase=yellow%20taxi%20city",
+        "path": "/images/scenes/taxi-driver.jpg"
+      }
+    },
+    {
+      "scene": "street-vendor",
+      "witness": {
+        "phrase": "street food vendor",
+        "searchUrl": "https://www.istockphoto.com/search/2/image-film?phrase=street%20food%20vendor",
+        "path": "/images/witnesses/street-vendor.jpg"
+      },
+      "sceneImg": {
+        "phrase": "street food stall",
+        "searchUrl": "https://www.istockphoto.com/search/2/image-film?phrase=street%20food%20stall",
+        "path": "/images/scenes/street-vendor.jpg"
+      }
+    },
+    {
+      "scene": "hotel-clerk",
+      "witness": {
+        "phrase": "hotel receptionist",
+        "searchUrl": "https://www.istockphoto.com/search/2/image-film?phrase=hotel%20receptionist",
+        "path": "/images/witnesses/hotel-clerk.jpg"
+      },
+      "sceneImg": {
+        "phrase": "hotel lobby",
+        "searchUrl": "https://www.istockphoto.com/search/2/image-film?phrase=hotel%20lobby",
+        "path": "/images/scenes/hotel-clerk.jpg"
+      }
+    },
+    {
+      "scene": "dock-worker",
+      "witness": {
+        "phrase": "dock worker port",
+        "searchUrl": "https://www.istockphoto.com/search/2/image-film?phrase=dock%20worker%20port",
+        "path": "/images/witnesses/dock-worker.jpg"
+      },
+      "sceneImg": {
+        "phrase": "shipping port harbour",
+        "searchUrl": "https://www.istockphoto.com/search/2/image-film?phrase=shipping%20port%20harbour",
+        "path": "/images/scenes/dock-worker.jpg"
+      }
+    },
+    {
+      "scene": "subway",
+      "witness": {
+        "phrase": "subway commuter",
+        "searchUrl": "https://www.istockphoto.com/search/2/image-film?phrase=subway%20commuter",
+        "path": "/images/witnesses/subway.jpg"
+      },
+      "sceneImg": {
+        "phrase": "subway station platform",
+        "searchUrl": "https://www.istockphoto.com/search/2/image-film?phrase=subway%20station%20platform",
+        "path": "/images/scenes/subway.jpg"
+      }
+    },
+    {
+      "scene": "alley",
+      "witness": {
+        "phrase": "detective alley",
+        "searchUrl": "https://www.istockphoto.com/search/2/image-film?phrase=detective%20alley",
+        "path": "/images/witnesses/alley.jpg"
+      },
+      "sceneImg": {
+        "phrase": "dark city alley",
+        "searchUrl": "https://www.istockphoto.com/search/2/image-film?phrase=dark%20city%20alley",
+        "path": "/images/scenes/alley.jpg"
+      }
+    },
+    {
+      "scene": "rooftop",
+      "witness": {
+        "phrase": "rooftop worker",
+        "searchUrl": "https://www.istockphoto.com/search/2/image-film?phrase=rooftop%20worker",
+        "path": "/images/witnesses/rooftop.jpg"
+      },
+      "sceneImg": {
+        "phrase": "city rooftop skyline",
+        "searchUrl": "https://www.istockphoto.com/search/2/image-film?phrase=city%20rooftop%20skyline",
+        "path": "/images/scenes/rooftop.jpg"
+      }
+    },
+    {
+      "scene": "newsstand",
+      "witness": {
+        "phrase": "newsstand vendor",
+        "searchUrl": "https://www.istockphoto.com/search/2/image-film?phrase=newsstand%20vendor",
+        "path": "/images/witnesses/newsstand.jpg"
+      },
+      "sceneImg": {
+        "phrase": "newspaper kiosk street",
+        "searchUrl": "https://www.istockphoto.com/search/2/image-film?phrase=newspaper%20kiosk%20street",
+        "path": "/images/scenes/newsstand.jpg"
+      }
+    },
+    {
+      "scene": "bus-driver",
+      "witness": {
+        "phrase": "bus driver",
+        "searchUrl": "https://www.istockphoto.com/search/2/image-film?phrase=bus%20driver",
+        "path": "/images/witnesses/bus-driver.jpg"
+      },
+      "sceneImg": {
+        "phrase": "city bus stop",
+        "searchUrl": "https://www.istockphoto.com/search/2/image-film?phrase=city%20bus%20stop",
+        "path": "/images/scenes/bus-driver.jpg"
+      }
+    },
+    {
+      "scene": "fish-market",
+      "witness": {
+        "phrase": "fish market vendor",
+        "searchUrl": "https://www.istockphoto.com/search/2/image-film?phrase=fish%20market%20vendor",
+        "path": "/images/witnesses/fish-market.jpg"
+      },
+      "sceneImg": {
+        "phrase": "fish market",
+        "searchUrl": "https://www.istockphoto.com/search/2/image-film?phrase=fish%20market",
+        "path": "/images/scenes/fish-market.jpg"
+      }
+    },
+    {
+      "scene": "monk",
+      "witness": {
+        "phrase": "buddhist monk",
+        "searchUrl": "https://www.istockphoto.com/search/2/image-film?phrase=buddhist%20monk",
+        "path": "/images/witnesses/monk.jpg"
+      },
+      "sceneImg": {
+        "phrase": "temple shrine",
+        "searchUrl": "https://www.istockphoto.com/search/2/image-film?phrase=temple%20shrine",
+        "path": "/images/scenes/monk.jpg"
+      }
+    },
+    {
+      "scene": "tour-guide",
+      "witness": {
+        "phrase": "tour guide",
+        "searchUrl": "https://www.istockphoto.com/search/2/image-film?phrase=tour%20guide",
+        "path": "/images/witnesses/tour-guide.jpg"
+      },
+      "sceneImg": {
+        "phrase": "tourist group city",
+        "searchUrl": "https://www.istockphoto.com/search/2/image-film?phrase=tourist%20group%20city",
+        "path": "/images/scenes/tour-guide.jpg"
+      }
+    },
+    {
+      "scene": "cafe-waiter",
+      "witness": {
+        "phrase": "cafe waiter",
+        "searchUrl": "https://www.istockphoto.com/search/2/image-film?phrase=cafe%20waiter",
+        "path": "/images/witnesses/cafe-waiter.jpg"
+      },
+      "sceneImg": {
+        "phrase": "paris cafe bistro",
+        "searchUrl": "https://www.istockphoto.com/search/2/image-film?phrase=paris%20cafe%20bistro",
+        "path": "/images/scenes/cafe-waiter.jpg"
+      }
+    },
+    {
+      "scene": "museum-guard",
+      "witness": {
+        "phrase": "museum security guard",
+        "searchUrl": "https://www.istockphoto.com/search/2/image-film?phrase=museum%20security%20guard",
+        "path": "/images/witnesses/museum-guard.jpg"
+      },
+      "sceneImg": {
+        "phrase": "art museum gallery",
+        "searchUrl": "https://www.istockphoto.com/search/2/image-film?phrase=art%20museum%20gallery",
+        "path": "/images/scenes/museum-guard.jpg"
+      }
+    },
+    {
+      "scene": "train-conductor",
+      "witness": {
+        "phrase": "train conductor",
+        "searchUrl": "https://www.istockphoto.com/search/2/image-film?phrase=train%20conductor",
+        "path": "/images/witnesses/train-conductor.jpg"
+      },
+      "sceneImg": {
+        "phrase": "train station platform",
+        "searchUrl": "https://www.istockphoto.com/search/2/image-film?phrase=train%20station%20platform",
+        "path": "/images/scenes/train-conductor.jpg"
+      }
+    },
+    {
+      "scene": "park-jogger",
+      "witness": {
+        "phrase": "jogger park",
+        "searchUrl": "https://www.istockphoto.com/search/2/image-film?phrase=jogger%20park",
+        "path": "/images/witnesses/park-jogger.jpg"
+      },
+      "sceneImg": {
+        "phrase": "city park running",
+        "searchUrl": "https://www.istockphoto.com/search/2/image-film?phrase=city%20park%20running",
+        "path": "/images/scenes/park-jogger.jpg"
+      }
+    },
+    {
+      "scene": "construction",
+      "witness": {
+        "phrase": "construction worker",
+        "searchUrl": "https://www.istockphoto.com/search/2/image-film?phrase=construction%20worker",
+        "path": "/images/witnesses/construction.jpg"
+      },
+      "sceneImg": {
+        "phrase": "construction site city",
+        "searchUrl": "https://www.istockphoto.com/search/2/image-film?phrase=construction%20site%20city",
+        "path": "/images/scenes/construction.jpg"
+      }
+    },
+    {
+      "scene": "airport",
+      "witness": {
+        "phrase": "airport worker",
+        "searchUrl": "https://www.istockphoto.com/search/2/image-film?phrase=airport%20worker",
+        "path": "/images/witnesses/airport.jpg"
+      },
+      "sceneImg": {
+        "phrase": "airport terminal",
+        "searchUrl": "https://www.istockphoto.com/search/2/image-film?phrase=airport%20terminal",
+        "path": "/images/scenes/airport.jpg"
+      }
+    },
+    {
+      "scene": "bazaar",
+      "witness": {
+        "phrase": "bazaar merchant",
+        "searchUrl": "https://www.istockphoto.com/search/2/image-film?phrase=bazaar%20merchant",
+        "path": "/images/witnesses/bazaar.jpg"
+      },
+      "sceneImg": {
+        "phrase": "grand bazaar market",
+        "searchUrl": "https://www.istockphoto.com/search/2/image-film?phrase=grand%20bazaar%20market",
+        "path": "/images/scenes/bazaar.jpg"
+      }
+    },
+    {
+      "scene": "bridge-toll",
+      "witness": {
+        "phrase": "toll booth worker",
+        "searchUrl": "https://www.istockphoto.com/search/2/image-film?phrase=toll%20booth%20worker",
+        "path": "/images/witnesses/bridge-toll.jpg"
+      },
+      "sceneImg": {
+        "phrase": "city bridge traffic",
+        "searchUrl": "https://www.istockphoto.com/search/2/image-film?phrase=city%20bridge%20traffic",
+        "path": "/images/scenes/bridge-toll.jpg"
+      }
+    },
+    {
+      "scene": "beach-lifeguard",
+      "witness": {
+        "phrase": "beach lifeguard",
+        "searchUrl": "https://www.istockphoto.com/search/2/image-film?phrase=beach%20lifeguard",
+        "path": "/images/witnesses/beach-lifeguard.jpg"
+      },
+      "sceneImg": {
+        "phrase": "beach lifeguard tower",
+        "searchUrl": "https://www.istockphoto.com/search/2/image-film?phrase=beach%20lifeguard%20tower",
+        "path": "/images/scenes/beach-lifeguard.jpg"
+      }
+    },
+    {
+      "scene": "police-informant",
+      "witness": {
+        "phrase": "police officer",
+        "searchUrl": "https://www.istockphoto.com/search/2/image-film?phrase=police%20officer",
+        "path": "/images/witnesses/police-informant.jpg"
+      },
+      "sceneImg": {
+        "phrase": "police station",
+        "searchUrl": "https://www.istockphoto.com/search/2/image-film?phrase=police%20station",
+        "path": "/images/scenes/police-informant.jpg"
+      }
+    },
+    {
+      "scene": "underground-garage",
+      "witness": {
+        "phrase": "parking attendant",
+        "searchUrl": "https://www.istockphoto.com/search/2/image-film?phrase=parking%20attendant",
+        "path": "/images/witnesses/underground-garage.jpg"
+      },
+      "sceneImg": {
+        "phrase": "underground parking garage",
+        "searchUrl": "https://www.istockphoto.com/search/2/image-film?phrase=underground%20parking%20garage",
+        "path": "/images/scenes/underground-garage.jpg"
+      }
+    }
+  ],
+  "failed": []
+}
