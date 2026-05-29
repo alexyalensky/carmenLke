@@ -6,6 +6,8 @@ import {
   getClueCategories,
   pickVariedTemplate,
   templateMixesFlagWithOtherClues,
+  templateUsesPlaceGroup,
+  isVagueDestinationClue,
   type ClueCategory,
   type RichClueTemplate,
 } from '../game/clueVariety'
@@ -624,58 +626,151 @@ export const richDestinationClues: Record<string, RichClueTemplate[]> = {
 function pickUnusedTemplate(
   pool: RichClueTemplate[],
   usedKeys: Set<string>,
-  usedCategories: Set<ClueCategory>,
+  globalUsed: Set<ClueCategory>,
+  cityUsed: Set<ClueCategory>,
   usedEnglish: Set<string>,
+  usedTexts: Set<string>,
+  entry?: AlmanacEntry,
+  usedPlaceGroups?: Set<number>,
 ): RichClueTemplate | null {
-  return pickVariedTemplate(pool, usedKeys, usedCategories, usedEnglish)
+  return pickVariedTemplate(
+    pool,
+    usedKeys,
+    globalUsed,
+    cityUsed,
+    usedEnglish,
+    usedTexts,
+    entry,
+    usedPlaceGroups,
+  )
+}
+
+function templateWeakness(template: RichClueTemplate): number {
+  if (template.id.includes('-fact')) return 50
+  const cats = getClueCategories(template.segments)
+  if (template.id.includes('-site-') || template.id.includes('-landmark')) return 0
+  if (template.id.includes('-flag')) return 2
+  if (cats.has('landmark')) return 1
+  if (cats.has('cultural')) return 4
+  if (cats.has('capital') || cats.has('neighbor')) return 6
+  if (cats.has('language')) return 8
+  if (cats.has('currency')) return 10
+  return 5
 }
 
 export function pickRichClueForCity(
   cityId: string,
   usedKeys: Set<string>,
-  usedCategories: Set<ClueCategory>,
+  globalUsed: Set<ClueCategory>,
+  cityUsed: Set<ClueCategory>,
   usedEnglish: Set<string>,
   city?: City,
   entry?: AlmanacEntry,
+  usedTexts: Set<string> = usedKeys,
+  usedFacts: Set<string> = new Set(),
+  usedPlaceGroups: Set<number> = new Set(),
 ): RichClueTemplate | null {
   const pool = richDestinationClues[cityId] ?? []
 
   const staticPick = pool.length
-    ? pickUnusedTemplate(pool, usedKeys, usedCategories, usedEnglish)
+    ? pickUnusedTemplate(
+        pool,
+        usedKeys,
+        globalUsed,
+        cityUsed,
+        usedEnglish,
+        usedTexts,
+        entry,
+        usedPlaceGroups,
+      )
     : null
 
   const dynamicPick =
     city && entry
-      ? buildDynamicDestinationClue(city, entry, usedKeys, usedCategories, usedEnglish)
+      ? buildDynamicDestinationClue(
+          city,
+          entry,
+          usedKeys,
+          globalUsed,
+          cityUsed,
+          usedEnglish,
+          usedTexts,
+          usedFacts,
+          usedPlaceGroups,
+        )
       : null
 
   const candidates = [staticPick, dynamicPick].filter(Boolean) as RichClueTemplate[]
   if (!candidates.length) return null
 
-  return pickRandomCandidate(candidates, usedCategories, usedEnglish)
+  return pickRandomCandidate(
+    candidates,
+    globalUsed,
+    cityUsed,
+    usedEnglish,
+    usedTexts,
+    entry,
+    usedPlaceGroups,
+  )
 }
 
 function pickRandomCandidate(
   candidates: RichClueTemplate[],
-  usedCategories: Set<ClueCategory>,
+  globalUsed: Set<ClueCategory>,
+  cityUsed: Set<ClueCategory>,
   usedEnglish: Set<string>,
+  usedTexts: Set<string>,
+  entry?: AlmanacEntry,
+  usedPlaceGroups?: Set<number>,
 ): RichClueTemplate {
   const ranked = candidates
-    .map((t) => ({ t, score: scoreCandidate(t, usedCategories, usedEnglish) }))
+    .map((t) => ({
+      t,
+      score: scoreCandidate(
+        t,
+        globalUsed,
+        cityUsed,
+        usedEnglish,
+        usedTexts,
+        entry,
+        usedPlaceGroups,
+      ),
+    }))
+    .filter((x) => x.score < Infinity)
     .sort((a, b) => a.score - b.score)
+  if (!ranked.length) return candidates[0]!
   return ranked[0]!.t
 }
 
 function scoreCandidate(
   template: RichClueTemplate,
-  usedCategories: Set<ClueCategory>,
+  globalUsed: Set<ClueCategory>,
+  cityUsed: Set<ClueCategory>,
   usedEnglish: Set<string>,
+  usedTexts: Set<string>,
+  entry?: AlmanacEntry,
+  usedPlaceGroups?: Set<number>,
 ): number {
   if (templateMixesFlagWithOtherClues(template.segments)) return Infinity
-  let score = Math.random() * 8
+  if (isVagueDestinationClue(template.segments)) return Infinity
+  if (entry && usedPlaceGroups?.size && templateUsesPlaceGroup(template.segments, entry, usedPlaceGroups)) {
+    return Infinity
+  }
   const cats = getClueCategories(template.segments)
   for (const cat of cats) {
-    if (usedCategories.has(cat)) score += 15
+    if (globalUsed.has(cat) && (cat === 'flag' || cat === 'currency' || cat === 'language' || cat === 'capital' || cat === 'neighbor')) {
+      return Infinity
+    }
+    if (cityUsed.has(cat) && (cat === 'landmark' || cat === 'neighbor' || cat === 'capital' || cat === 'flag' || cat === 'currency' || cat === 'language')) {
+      return Infinity
+    }
+  }
+  if (usedTexts.has(segmentsToPlainText(template.segments))) return Infinity
+
+  let score = Math.random() * 8 + templateWeakness(template)
+  for (const cat of cats) {
+    if (globalUsed.has(cat)) score += 15
+    if (cityUsed.has(cat)) score += 18
   }
   for (const w of extractEnglishWords(template.segments)) {
     if (usedEnglish.has(w)) score += 10
@@ -688,6 +783,7 @@ export function pickRichClueForWrongCity(
   usedKeys: Set<string>,
   usedCategories: Set<ClueCategory>,
   usedEnglish: Set<string>,
+  usedTexts: Set<string> = usedKeys,
 ): RichClueTemplate {
   const pool = Object.entries(richDestinationClues)
     .filter(([id]) => id !== excludeCityId)
@@ -699,18 +795,21 @@ export function pickRichClueForWrongCity(
       segments: [he('העד נתן רמז מטעה — פרטים שלא תואמים את האזור.')],
     }
   }
-  return pickUnusedTemplate(pool, usedKeys, usedCategories, usedEnglish) ?? pool[0]!
+  return pickUnusedTemplate(pool, usedKeys, usedCategories, new Set(), usedEnglish, usedTexts) ?? pool[0]!
 }
 
 export function richClueToDisplay(
   template: RichClueTemplate,
   city: City,
   entry: AlmanacEntry,
+  usedFacts: Set<string> = new Set(),
+  usedPlaceGroups: Set<number> = new Set(),
 ) {
-  const finalized = finalizeClueTemplate(template, city, entry)
+  const finalized = finalizeClueTemplate(template, city, entry, usedFacts, usedPlaceGroups)
+  const text = segmentsToPlainText(finalized.segments)
   return {
-    dedupeKey: finalized.id,
-    text: segmentsToPlainText(finalized.segments),
+    dedupeKey: text,
+    text,
     segments: finalized.segments,
     targetCountryId: finalized.countryId,
   }

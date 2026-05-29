@@ -197,6 +197,8 @@ export interface CaseState {
   score: number
   lastTravelWasCorrect: boolean | null
   arrestAttempted: boolean
+  /** After a wrong flight, player must return here before continuing the trail */
+  mustReturnToCityId: string | null
 }
 
 export interface GameData {

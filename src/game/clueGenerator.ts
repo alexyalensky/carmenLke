@@ -79,8 +79,11 @@ export function generateClueForDestination(
   destinationCityId: string,
   siteId: string,
   usedTexts: Set<string>,
-  usedCategories: Set<ClueCategory>,
+  globalUsed: Set<ClueCategory>,
+  cityUsed: Set<ClueCategory>,
   usedEnglish: Set<string>,
+  usedFacts: Set<string>,
+  usedPlaceGroups: Set<number>,
   slotIndex: number,
 ): Clue {
   const destinationCity = data.cities.find((c) => c.id === destinationCityId)
@@ -91,14 +94,18 @@ export function generateClueForDestination(
 
   const template = pickRichClueForCity(
     destinationCityId,
-    usedTexts,
-    usedCategories,
+    new Set(),
+    globalUsed,
+    cityUsed,
     usedEnglish,
     destinationCity,
     entry,
+    usedTexts,
+    usedFacts,
+    usedPlaceGroups,
   )
   const rich = template
-    ? richClueToDisplay(template, destinationCity, entry)
+    ? richClueToDisplay(template, destinationCity, entry, usedFacts, usedPlaceGroups)
     : {
         dedupeKey: `${destinationCityId}-fallback-${slotIndex}`,
         text: 'החשוד השאיל שאלות על יעד מסתורי.',
@@ -126,6 +133,7 @@ export function generateWrongCityClue(
   usedTexts: Set<string>,
   usedCategories: Set<ClueCategory>,
   usedEnglish: Set<string>,
+  usedFacts: Set<string>,
   slotIndex: number,
 ): Clue {
   const city = data.cities.find((c) => c.id === cityId)
@@ -133,13 +141,13 @@ export function generateWrongCityClue(
   const wrongCountry = wrongCountries[Math.floor(Math.random() * wrongCountries.length)]!
   const wrongCity = data.cities.find((c) => c.countryId === wrongCountry.id)
 
-  const template = pickRichClueForWrongCity(cityId, usedTexts, usedCategories, usedEnglish)
+  const template = pickRichClueForWrongCity(cityId, usedTexts, usedCategories, usedEnglish, usedTexts)
   const targetCity =
     data.cities.find((c) => c.countryId === template.countryId) ?? wrongCity
   const targetEntry = data.almanac.find((a) => a.id === template.countryId)
 
   const rich = targetCity && targetEntry
-    ? richClueToDisplay(template, targetCity, targetEntry)
+    ? richClueToDisplay(template, targetCity, targetEntry, usedFacts)
     : {
         dedupeKey: template.id,
         text: template.segments.map((s) => (s.type === 'he' ? s.text : s.type === 'en' ? s.word : '')).join(''),

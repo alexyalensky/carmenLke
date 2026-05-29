@@ -35,6 +35,9 @@ export function CityView() {
       : 'הגעתם לעיר המחבוא! אספו רמזים וסננו ב-CrimeNet כדי להנפיק צו מעצר.'
   } else if (onTrail) {
     chiefMessage = 'נראה שהחשוד היה כאן. חקור מקומות בעיר כדי לאסוף רמזים על היעד הבא.'
+  } else if (caseState.mustReturnToCityId) {
+    const home = getCity(gameData, caseState.mustReturnToCityId)
+    chiefMessage = `טעיתם ביעד! חזרו ל${home?.name ?? 'עיר המוצא'} — שם תוכלו לחקור מחדש את העדים.`
   } else if (caseState.lastTravelWasCorrect === false) {
     chiefMessage = 'טעיתם ביעד! בזבזתם זמן יקר. חזרו למסלול הנכון.'
   } else if (caseState.lastTravelWasCorrect === true) {

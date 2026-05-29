@@ -3,7 +3,7 @@ import { getCityPhoto, worldMapBg } from '../assets/images'
 import { getCityMapPosition, mapPosToSvg, worldMapAspect } from '../assets/worldMap'
 import { useGame } from '../context/GameContext'
 import { gameData } from '../data/gameData'
-import { getConnectedCities, getCity, wasCityVisitedByThief } from '../game/engine'
+import { getTravelDestinations, getCity } from '../game/engine'
 
 interface WorldMapTravelProps {
   currentCityId: string
@@ -11,8 +11,10 @@ interface WorldMapTravelProps {
 
 export function WorldMapTravel({ currentCityId }: WorldMapTravelProps) {
   const { doTravel, caseState, setActivePanel } = useGame()
-  const connected = getConnectedCities(gameData, currentCityId)
+  const connected = caseState ? getTravelDestinations(gameData, caseState) : []
   const current = getCity(gameData, currentCityId)
+  const returnHome = caseState?.mustReturnToCityId
+  const returnCity = returnHome ? getCity(gameData, returnHome) : undefined
   const [hoveredId, setHoveredId] = useState<string | null>(null)
 
   const currentPos = getCityMapPosition(currentCityId)
@@ -23,9 +25,8 @@ export function WorldMapTravel({ currentCityId }: WorldMapTravelProps) {
         city,
         index: index + 1,
         pos: getCityMapPosition(city.id),
-        visited: caseState ? wasCityVisitedByThief(caseState, city.id) : false,
       })),
-    [connected, caseState],
+    [connected],
   )
 
   return (
@@ -34,8 +35,15 @@ export function WorldMapTravel({ currentCityId }: WorldMapTravelProps) {
         <header className="modal-header">
           <h2>✈ טיסה מ{current?.name}</h2>
           <p className="travel-instruction">
-            בחרו יעד מהרשימה — המספרים תואמים לסימון על המפה. טיסה נכונה: −1 · שגויה: −3
+            {returnCity
+              ? `טעיתם ביעד! חזרו ל${returnCity.name} כדי לחקור מחדש את העדים (−${1} יחידת זמן).`
+              : 'בחרו יעד מהרשימה — המספרים תואמים לסימון על המפה. טיסה נכונה: −1 · שגויה: −3'}
           </p>
+          {returnCity && (
+            <p className="alert-banner travel-return-banner">
+              ניתן לטוס רק חזרה ל{returnCity.name}. לאחר החזרה — עדים חדשים יהיו זמינים לחקירה.
+            </p>
+          )}
         </header>
 
         <div className="travel-layout">
@@ -83,14 +91,14 @@ export function WorldMapTravel({ currentCityId }: WorldMapTravelProps) {
                   </div>
                 )}
 
-                {destinations.map(({ city, index, pos, visited }) => {
+                {destinations.map(({ city, index, pos }) => {
                   if (!pos) return null
                   const highlighted = hoveredId === city.id
                   const dimmed = hoveredId !== null && hoveredId !== city.id
                   return (
                     <div
                       key={city.id}
-                      className={`map-marker map-marker-dest ${highlighted ? 'highlighted' : ''} ${dimmed ? 'dimmed' : ''} ${visited ? 'visited' : ''}`}
+                      className={`map-marker map-marker-dest ${highlighted ? 'highlighted' : ''} ${dimmed ? 'dimmed' : ''}`}
                       style={{ left: `${pos.x}%`, top: `${pos.y}%` }}
                     >
                       <span className="map-marker-number">{index}</span>
@@ -106,7 +114,7 @@ export function WorldMapTravel({ currentCityId }: WorldMapTravelProps) {
               יעדים זמינים <span className="travel-dest-count">{connected.length}</span>
             </h3>
             <ul className="travel-dest-list">
-              {destinations.map(({ city, index, visited }) => (
+              {destinations.map(({ city, index }) => (
                 <li key={city.id}>
                   <button
                     type="button"
@@ -122,7 +130,6 @@ export function WorldMapTravel({ currentCityId }: WorldMapTravelProps) {
                     <span className="travel-dest-text">
                       <strong>{city.name}</strong>
                       <span className="travel-dest-en">{city.nameEn}</span>
-                      {visited && <span className="dest-trail">החשוד עבר כאן</span>}
                     </span>
                     <span className="travel-dest-fly" aria-hidden="true">
                       ✈

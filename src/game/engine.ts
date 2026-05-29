@@ -6,6 +6,13 @@ import {
   collectUsedClueCategories,
   collectUsedEnglishWords,
 } from './clueGenerator'
+import {
+  collectUsedClueTexts,
+  collectUsedFacts,
+  collectCityUsedCategories,
+  collectUsedPlaceGroups,
+  isStrongDestinationClue,
+} from './clueVariety'
 import type {
   CaseState,
   City,
@@ -41,6 +48,7 @@ function cloneState(state: CaseState): CaseState {
     investigatedSites: [...state.investigatedSites],
     suspectFilters: [...state.suspectFilters],
     activeSuspectIds: [...state.activeSuspectIds],
+    mustReturnToCityId: state.mustReturnToCityId,
   }
 }
 
@@ -225,6 +233,7 @@ export function startNewCase(
     score: 0,
     lastTravelWasCorrect: null,
     arrestAttempted: false,
+    mustReturnToCityId: null,
   }
 }
 
@@ -248,6 +257,18 @@ export function getConnectedCities(data: GameData, cityId: string): City[] {
   return city.connections
     .map((id) => getCity(data, id))
     .filter((c): c is City => c !== undefined)
+}
+
+export function getTrailAnchorCityId(state: CaseState): string {
+  return state.thiefPath[state.currentStep] ?? state.currentCityId
+}
+
+export function getTravelDestinations(data: GameData, state: CaseState): City[] {
+  if (state.mustReturnToCityId) {
+    const returnCity = getCity(data, state.mustReturnToCityId)
+    return returnCity ? [returnCity] : []
+  }
+  return getConnectedCities(data, state.currentCityId)
 }
 
 function applyTimeCost(state: CaseState, cost: number): CaseState {
@@ -286,11 +307,11 @@ export function investigate(
   next = cloneState(next)
   next.investigatedSites.push(key)
 
-  const usedTexts = new Set(
-    next.knownClues.map((c) => c.dedupeKey ?? c.text),
-  )
-  const usedCategories = collectUsedClueCategories(next.knownClues)
+  const usedTexts = collectUsedClueTexts(next.knownClues)
+  const globalUsed = collectUsedClueCategories(next.knownClues)
+  const cityUsed = collectCityUsedCategories(next.knownClues, next.currentCityId)
   const usedEnglish = collectUsedEnglishWords(next.knownClues)
+  const usedFacts = collectUsedFacts(next.knownClues)
   const usedTraits = new Set(
     next.knownClues
       .filter((c) => c.type === 'suspect' && c.suspectTrait)
@@ -304,19 +325,33 @@ export function investigate(
   const config = DIFFICULTY_CONFIG[next.difficulty]
 
   if (onTrail && nextDestination) {
+    const destCity = data.cities.find((c) => c.id === nextDestination)
+    const destEntry = data.almanac.find((a) => a.id === destCity?.countryId)
+    const usedPlaceGroups =
+      destEntry !== undefined
+        ? collectUsedPlaceGroups(next.knownClues, next.currentCityId, destEntry)
+        : new Set<number>()
+
     const clue = generateClueForDestination(
       data,
       next.currentCityId,
       nextDestination,
       siteId,
       usedTexts,
-      usedCategories,
+      globalUsed,
+      cityUsed,
       usedEnglish,
+      usedFacts,
+      usedPlaceGroups,
       slotIndex,
     )
     next.knownClues.push(clue)
     usedTexts.add(clue.dedupeKey ?? clue.text)
-    if (Math.random() < config.suspectClueChance && suspect) {
+    if (
+      Math.random() < config.suspectClueChance &&
+      suspect &&
+      isStrongDestinationClue(clue)
+    ) {
       const pool = getActiveSuspects(data, next)
       const suspectClue = generateSuspectClue(
         suspect,
@@ -349,7 +384,7 @@ export function investigate(
     })
   } else {
     next.knownClues.push(
-      generateWrongCityClue(data, next.currentCityId, siteId, usedTexts, usedCategories, usedEnglish, slotIndex),
+      generateWrongCityClue(data, next.currentCityId, siteId, usedTexts, globalUsed, usedEnglish, usedFacts, slotIndex),
     )
   }
 
@@ -363,29 +398,47 @@ export function travel(
 ): CaseState {
   if (state.status !== 'active') return state
 
+  const trailAnchorId = getTrailAnchorCityId(state)
+  const isReturnFlight =
+    state.mustReturnToCityId !== null && destinationCityId === state.mustReturnToCityId
+
+  if (state.mustReturnToCityId && !isReturnFlight) return state
+
   const currentCity = getCity(data, state.currentCityId)
-  if (!currentCity?.connections.includes(destinationCityId)) return state
+  const canFly =
+    isReturnFlight || (currentCity?.connections.includes(destinationCityId) ?? false)
+  if (!canFly) return state
 
   const nextDestination = getNextDestinationCityId(state)
-  const isCorrect = destinationCityId === nextDestination
+  const isCorrect = !state.mustReturnToCityId && destinationCityId === nextDestination
   const wrongCost = DIFFICULTY_CONFIG[state.difficulty].wrongTravelCost
 
-  let next = applyTimeCost(
-    state,
-    isCorrect ? TIME_COST.correctTravel : wrongCost,
-  )
+  const travelCost = isReturnFlight
+    ? TIME_COST.correctTravel
+    : isCorrect
+      ? TIME_COST.correctTravel
+      : wrongCost
+
+  let next = applyTimeCost(state, travelCost)
   if (next.status !== 'active') {
-    next.lastTravelWasCorrect = isCorrect
+    next.lastTravelWasCorrect = isReturnFlight ? true : isCorrect
     return next
   }
 
   next = cloneState(next)
   next.currentCityId = destinationCityId
-  next.lastTravelWasCorrect = isCorrect
+  next.lastTravelWasCorrect = isReturnFlight ? true : isCorrect
 
-  if (isCorrect) {
+  if (isReturnFlight) {
+    next.mustReturnToCityId = null
+    next.investigatedSites = next.investigatedSites.filter(
+      (key) => !key.startsWith(`${destinationCityId}:`),
+    )
+  } else if (isCorrect) {
     next.currentStep += 1
     next.score += 100
+  } else {
+    next.mustReturnToCityId = trailAnchorId
   }
 
   return next

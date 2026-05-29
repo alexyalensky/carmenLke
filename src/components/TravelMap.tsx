@@ -1,8 +1,8 @@
 import { CityScene } from '../assets/cityScenes'
-import { PlaneIcon, ThiefSilhouette } from '../assets/PixelArt'
+import { PlaneIcon } from '../assets/PixelArt'
 import { useGame } from '../context/GameContext'
 import { gameData } from '../data/gameData'
-import { getConnectedCities, getCity, wasCityVisitedByThief } from '../game/engine'
+import { getTravelDestinations, getCity } from '../game/engine'
 
 interface TravelMapProps {
   currentCityId: string
@@ -10,7 +10,7 @@ interface TravelMapProps {
 
 export function TravelMap({ currentCityId }: TravelMapProps) {
   const { doTravel, caseState, setActivePanel } = useGame()
-  const connected = getConnectedCities(gameData, currentCityId)
+  const connected = caseState ? getTravelDestinations(gameData, caseState) : []
   const current = getCity(gameData, currentCityId)
 
   return (
@@ -27,9 +27,7 @@ export function TravelMap({ currentCityId }: TravelMapProps) {
         </div>
 
         <div className="city-grid travel-grid">
-          {connected.map((city) => {
-            const visited = caseState && wasCityVisitedByThief(caseState, city.id)
-            return (
+          {connected.map((city) => (
               <button
                 key={city.id}
                 type="button"
@@ -39,15 +37,8 @@ export function TravelMap({ currentCityId }: TravelMapProps) {
                 <CityScene cityId={city.id} size={72} />
                 <div>{city.name}</div>
                 <div className="en">{city.nameEn}</div>
-                {visited && (
-                  <div className="trail-row">
-                    <ThiefSilhouette size={32} />
-                    <span className="trail-indicator">היה כאן</span>
-                  </div>
-                )}
               </button>
-            )
-          })}
+            ))}
         </div>
 
         <button

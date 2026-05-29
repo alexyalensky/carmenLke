@@ -113,8 +113,25 @@ export function factSafeForClue(fact: string, entry: AlmanacEntry, city: City): 
   return true
 }
 
-export function pickSafeFact(entry: AlmanacEntry, city: City): string | undefined {
-  const safe = entry.facts.filter((f) => factSafeForClue(f, entry, city))
+/** Almanac filler lines — too vague for witness clues and repeat across investigations */
+export function isBoilerplateFact(fact: string): boolean {
+  return (
+    /^מטבע:/.test(fact) ||
+    /^שכנות:/.test(fact) ||
+    /^אתר מפורסם:/.test(fact) ||
+    /— בירתה /.test(fact) ||
+    /אינה גובלת ביבשה/.test(fact)
+  )
+}
+
+export function pickSafeFact(
+  entry: AlmanacEntry,
+  city: City,
+  usedFacts: Set<string> = new Set(),
+): string | undefined {
+  const safe = entry.facts.filter(
+    (f) => factSafeForClue(f, entry, city) && !isBoilerplateFact(f) && !usedFacts.has(f),
+  )
   if (!safe.length) return undefined
   return safe[Math.floor(Math.random() * safe.length)]
 }
