@@ -1,4 +1,4 @@
-import type { City, ClueSegment } from './types'
+import type { AlmanacEntry, City, ClueSegment } from './types'
 
 /** Remove destination city names and clean up broken phrasing. */
 export function sanitizeDestinationClue(segments: ClueSegment[], city: City): ClueSegment[] {
@@ -92,4 +92,29 @@ export function siteMentionsCity(siteNameEn: string, city: City): boolean {
   const site = siteNameEn.toLowerCase()
   const blocked = buildBlockedNames(city)
   return blocked.some((b) => b.length > 3 && site.includes(b))
+}
+
+/** Facts used in clues must not name the country, capital, or destination city. */
+export function factSafeForClue(fact: string, entry: AlmanacEntry, city: City): boolean {
+  const lower = fact.toLowerCase()
+
+  if (entry.name && fact.includes(entry.name)) return false
+  if (entry.capital && fact.includes(entry.capital)) return false
+
+  for (const mc of entry.majorCities) {
+    if (mc.name && fact.includes(mc.name)) return false
+    if (mc.nameEn && lower.includes(mc.nameEn.toLowerCase())) return false
+  }
+
+  if (fact.includes(city.name)) return false
+  const cityEn = city.nameEn.toLowerCase()
+  if (cityEn.length > 3 && lower.includes(cityEn)) return false
+
+  return true
+}
+
+export function pickSafeFact(entry: AlmanacEntry, city: City): string | undefined {
+  const safe = entry.facts.filter((f) => factSafeForClue(f, entry, city))
+  if (!safe.length) return undefined
+  return safe[Math.floor(Math.random() * safe.length)]
 }

@@ -1,5 +1,5 @@
 import type { AlmanacEntry, City, Clue, ClueSegment } from './types'
-import { extractEnglishWords, sanitizeDestinationClue, siteMentionsCity } from './clueSanitize'
+import { extractEnglishWords, pickSafeFact, sanitizeDestinationClue, siteMentionsCity } from './clueSanitize'
 
 export interface RichClueTemplate {
   id: string
@@ -199,7 +199,7 @@ function buildDynamicStyles(
     })
   }
 
-  const fact = pickRandom(entry.facts)
+  const fact = pickSafeFact(entry, city)
   if (fact) {
     const trimmed = fact.length > 72 ? `${fact.slice(0, 69)}…` : fact
     styles.push({
@@ -235,7 +235,7 @@ function buildInformativeFallback(
   city: City,
 ): ClueSegment[] {
   const site = pickRandom(entry.mainSites.filter((s) => !siteMentionsCity(s.nameEn, city)))
-  const fact = pickRandom(entry.facts)
+  const fact = pickSafeFact(entry, city)
 
   const options: ClueSegment[][] = [
     [he('גלויה עם דגל: '), flag(countryId)],
