@@ -37,6 +37,13 @@ const ONCE_PER_CASE: Set<ClueCategory> = new Set([
   'flag', 'currency', 'language', 'capital', 'neighbor',
 ])
 
+/** Flag clues must stand alone — only Hebrew + flag image, no English/currency mixed in */
+export function templateMixesFlagWithOtherClues(segments: ClueSegment[]): boolean {
+  const hasFlag = segments.some((s) => s.type === 'flag')
+  if (!hasFlag) return false
+  return segments.some((s) => s.type === 'en' || s.type === 'currency')
+}
+
 const he = (text: string): ClueSegment => ({ type: 'he', text })
 const en = (word: string, speak?: string): ClueSegment => ({ type: 'en', word, speak })
 const flag = (countryId: string): ClueSegment => ({ type: 'flag', countryId })
@@ -104,6 +111,7 @@ function scoreTemplate(
   if (categoryBlocked(cats, usedCategories)) return Infinity
 
   let score = Math.random() * 14
+  if (templateMixesFlagWithOtherClues(template.segments)) return Infinity
   if (cats.has('flag') && usedCategories.has('flag')) score += 30
   if (cats.has('currency') && usedCategories.has('currency')) score += 35
   if (cats.has('language') && usedCategories.has('language')) score += 28
@@ -161,7 +169,17 @@ function buildDynamicStyles(
   styles.push({
     id: `dyn-${entry.id}-flag-shirt`,
     countryId: entry.id,
-    segments: [flag(entry.id), he(' רקום על החולצה.')],
+    segments: [he('החשוד לבש חולצה עם דגל '), flag(entry.id), he('.')],
+  })
+  styles.push({
+    id: `dyn-${entry.id}-flag-hat`,
+    countryId: entry.id,
+    segments: [he('ראו את החשוד עם כובע שעליו '), flag(entry.id), he('.')],
+  })
+  styles.push({
+    id: `dyn-${entry.id}-flag-cap`,
+    countryId: entry.id,
+    segments: [he('על כובע הבייסבול היה רקום '), flag(entry.id), he('.')],
   })
 
   styles.push({
@@ -239,7 +257,9 @@ function buildInformativeFallback(
 
   const options: ClueSegment[][] = [
     [he('גלויה עם דגל: '), flag(countryId)],
-    [flag(countryId), he(' היה מודבק על המזוודה.')],
+    [he('מדבקת דגל על המזוודה — '), flag(countryId)],
+    [he('החשוד לבש חולצה עם דגל '), flag(countryId), he('.')],
+    [he('ראו את החשוד עם כובע שעליו '), flag(countryId), he('.')],
     [he(`העד תיאר את ${entry.landmark}.`)],
     [he('שילם ב'), cur(countryId), he(' בחנות.')],
     [he('דיבר '), en(entry.languageEn), he(' עם המוכר.')],

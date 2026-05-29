@@ -67,34 +67,88 @@ function countTraitOverlap(a: Suspect, b: Suspect): number {
   return SUSPECT_TRAITS.filter((t) => a[t] === b[t]).length
 }
 
-/** Prefer decoys that share many traits with the thief — harder to narrow with one filter */
+function countPoolMatches(pool: Suspect[], perpetrator: Suspect, traits: SuspectTrait[]): number {
+  return pool.filter((s) => traits.every((t) => s[t] === perpetrator[t])).length
+}
+
+/**
+ * Build a suspect pool where each filter narrows gradually — not 24 → 3 after two traits.
+ * Ensures many suspects share each individual trait value, and enough share pairs too.
+ */
 function buildSuspectPool(data: GameData, perpetratorId: string, poolSize: number): string[] {
   const perpetrator = getSuspect(data, perpetratorId)
   if (!perpetrator) return [perpetratorId]
 
-  const need = Math.max(0, poolSize - 1)
   const decoys = data.suspects.filter((s) => s.id !== perpetratorId)
-  const ranked = [...decoys].sort(
-    (a, b) => countTraitOverlap(b, perpetrator) - countTraitOverlap(a, perpetrator),
-  )
-  const highOverlap = ranked.slice(0, Math.max(need, Math.ceil(decoys.length * 0.6)))
-  const picked: string[] = []
-  const used = new Set<string>()
+  const picked: Suspect[] = [perpetrator]
+  const used = new Set<string>([perpetratorId])
 
-  for (const suspect of shuffle(highOverlap)) {
-    if (picked.length >= need) break
-    picked.push(suspect.id)
+  const minPerTrait = Math.max(4, Math.ceil(poolSize * 0.42))
+  const minPerPair = Math.max(3, Math.ceil(poolSize * 0.18))
+
+  const tryAdd = (suspect: Suspect) => {
+    if (picked.length >= poolSize || used.has(suspect.id)) return false
+    picked.push(suspect)
     used.add(suspect.id)
+    return true
+  }
+
+  // Phase 1 — each trait value of the thief should appear in many pool members
+  for (const trait of shuffle([...SUSPECT_TRAITS])) {
+    const value = perpetrator[trait]
+    const candidates = shuffle(decoys.filter((s) => !used.has(s.id) && s[trait] === value))
+    while (
+      picked.length < poolSize &&
+      countPoolMatches(picked, perpetrator, [trait]) < minPerTrait &&
+      candidates.length > 0
+    ) {
+      tryAdd(candidates.pop()!)
+    }
+  }
+
+  // Phase 2 — boost two-trait intersections so a second filter still leaves options
+  for (let i = 0; i < SUSPECT_TRAITS.length; i++) {
+    for (let j = i + 1; j < SUSPECT_TRAITS.length; j++) {
+      const traits: SuspectTrait[] = [SUSPECT_TRAITS[i]!, SUSPECT_TRAITS[j]!]
+      const candidates = shuffle(
+        decoys.filter(
+          (s) =>
+            !used.has(s.id) &&
+            traits.every((t) => s[t] === perpetrator[t]),
+        ),
+      )
+      while (
+        picked.length < poolSize &&
+        countPoolMatches(picked, perpetrator, traits) < minPerPair &&
+        candidates.length > 0
+      ) {
+        tryAdd(candidates.pop()!)
+      }
+    }
+  }
+
+  // Phase 3 — fill with moderate overlap (red herrings, not near-clones of the thief)
+  const targetOverlap = 2
+  const moderate = shuffle(
+    [...decoys]
+      .filter((s) => !used.has(s.id))
+      .sort(
+        (a, b) =>
+          Math.abs(countTraitOverlap(a, perpetrator) - targetOverlap) -
+          Math.abs(countTraitOverlap(b, perpetrator) - targetOverlap),
+      ),
+  )
+  for (const suspect of moderate) {
+    if (picked.length >= poolSize) break
+    tryAdd(suspect)
   }
 
   for (const suspect of shuffle(decoys)) {
-    if (picked.length >= need) break
-    if (used.has(suspect.id)) continue
-    picked.push(suspect.id)
-    used.add(suspect.id)
+    if (picked.length >= poolSize) break
+    tryAdd(suspect)
   }
 
-  return shuffle([perpetratorId, ...picked])
+  return shuffle(picked.map((s) => s.id))
 }
 
 export function getSuspectClueReveals(knownClues: Clue[]): Map<SuspectTrait, Set<string>> {
@@ -263,22 +317,26 @@ export function investigate(
     next.knownClues.push(clue)
     usedTexts.add(clue.dedupeKey ?? clue.text)
     if (Math.random() < config.suspectClueChance && suspect) {
+      const pool = getActiveSuspects(data, next)
       const suspectClue = generateSuspectClue(
         suspect,
         siteId,
         next.currentCityId,
         usedTexts,
         usedTraits,
+        pool,
       )
       next.knownClues.push(suspectClue)
     }
   } else if (onTrail && isAtFinalCity(next) && suspect) {
+    const pool = getActiveSuspects(data, next)
     const suspectClue = generateSuspectClue(
       suspect,
       siteId,
       next.currentCityId,
       usedTexts,
       usedTraits,
+      pool,
     )
     next.knownClues.push(suspectClue)
     next.knownClues.push({

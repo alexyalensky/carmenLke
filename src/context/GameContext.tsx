@@ -20,7 +20,7 @@ import type { CaseState, Difficulty, SuspectTrait } from '../game/types'
 import { DIFFICULTY_CONFIG, TIME_COST } from '../game/types'
 import { useAudio } from './AudioProvider'
 
-type Screen = 'menu' | 'alert' | 'game' | 'about' | 'over'
+type Screen = 'menu' | 'alert' | 'game' | 'about' | 'arrest' | 'over'
 
 interface GameContextValue {
   screen: Screen
@@ -37,6 +37,7 @@ interface GameContextValue {
   doFilter: (trait: SuspectTrait, value: string) => void
   doClearFilters: () => void
   doArrest: (siteId: string) => void
+  finishArrest: () => void
   activePanel: 'none' | 'investigate' | 'travel' | 'interpol' | 'almanac'
   setActivePanel: (panel: GameContextValue['activePanel']) => void
 }
@@ -79,7 +80,7 @@ export function GameProvider({ children }: { children: ReactNode }) {
     setCaseState((prev) => {
       if (!prev) return prev
       const next = updater(prev)
-      if (next.status !== 'active') {
+      if (next.status === 'escaped') {
         setScreen('over')
         setActivePanel('none')
       }
@@ -132,11 +133,20 @@ export function GameProvider({ children }: { children: ReactNode }) {
   const doArrest = useCallback(
     (siteId: string) => {
       playSfx('investigate')
-      updateCase((s) => attemptArrest(s, siteId))
+      setCaseState((prev) => {
+        if (!prev) return prev
+        return attemptArrest(prev, siteId)
+      })
+      setScreen('arrest')
       setActivePanel('none')
     },
-    [updateCase, playSfx],
+    [playSfx],
   )
+
+  const finishArrest = useCallback(() => {
+    playSfx('click')
+    setScreen('over')
+  }, [playSfx])
 
   const value = useMemo(
     () => ({
@@ -154,6 +164,7 @@ export function GameProvider({ children }: { children: ReactNode }) {
       doFilter,
       doClearFilters,
       doArrest,
+      finishArrest,
       activePanel,
       setActivePanel,
     }),
@@ -171,6 +182,7 @@ export function GameProvider({ children }: { children: ReactNode }) {
       doFilter,
       doClearFilters,
       doArrest,
+      finishArrest,
       activePanel,
     ],
   )

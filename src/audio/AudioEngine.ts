@@ -9,6 +9,7 @@ export type SfxName =
   | 'travelOk'
   | 'travelBad'
   | 'warrant'
+  | 'arrest'
   | 'win'
   | 'lose'
   | 'urgent'
@@ -159,6 +160,13 @@ class AudioEngine {
         tone(130.81, 0.08, 'square', 0.18)
         tone(196, 0.25, 'sine', 0.15, 0.06)
         tone(261.63, 0.35, 'triangle', 0.12, 0.12)
+        break
+      case 'arrest':
+        tone(220, 0.08, 'square', 0.16)
+        tone(330, 0.08, 'square', 0.14, 0.09)
+        tone(440, 0.12, 'sawtooth', 0.12, 0.18)
+        tone(880, 0.06, 'square', 0.1, 0.32)
+        tone(880, 0.06, 'square', 0.1, 0.42)
         break
       case 'win':
         ;[523.25, 659.25, 783.99, 1046.5].forEach((f, i) => tone(f, 0.22, 'triangle', 0.13, i * 0.11))

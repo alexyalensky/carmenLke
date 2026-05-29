@@ -39,10 +39,29 @@ const TRAIT_CLUE_TEMPLATES: Record<SuspectTrait, ((value: string) => string)[]> 
   ],
 }
 
-function pickSuspectTrait(usedTraits: Set<SuspectTrait>): SuspectTrait {
+function pickSuspectTrait(
+  suspect: Suspect,
+  activePool: Suspect[],
+  usedTraits: Set<SuspectTrait>,
+): SuspectTrait {
   const available = SUSPECT_TRAITS.filter((t) => !usedTraits.has(t))
-  const pool = available.length > 0 ? available : SUSPECT_TRAITS
-  return pool[Math.floor(Math.random() * pool.length)]!
+  const candidates = available.length > 0 ? available : SUSPECT_TRAITS
+  const revealedTraits = [...usedTraits]
+
+  const weights = candidates.map((trait) => {
+    const traitsToCheck = [...revealedTraits, trait]
+    const matchCount = activePool.filter((s) =>
+      traitsToCheck.every((t) => s[t] === suspect[t]),
+    ).length
+    return { trait, weight: matchCount * matchCount }
+  })
+  const total = weights.reduce((sum, w) => sum + w.weight, 0)
+  let roll = Math.random() * total
+  for (const { trait, weight } of weights) {
+    roll -= weight
+    if (roll <= 0) return trait
+  }
+  return weights[weights.length - 1]!.trait
 }
 
 function pickSuspectText(trait: SuspectTrait, value: string, usedTexts: Set<string>): string {
@@ -147,8 +166,9 @@ export function generateSuspectClue(
   cityId: string,
   usedTexts: Set<string>,
   usedTraits: Set<SuspectTrait>,
+  activePool: Suspect[] = [suspect],
 ): Clue {
-  const trait = pickSuspectTrait(usedTraits)
+  const trait = pickSuspectTrait(suspect, activePool, usedTraits)
   const value = suspect[trait]
   const text = pickSuspectText(trait, value, usedTexts)
 

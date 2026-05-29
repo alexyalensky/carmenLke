@@ -1,6 +1,6 @@
 import type { Suspect } from '../game/types'
 
-/** 28 suspects with overlapping traits — multiple filters needed to identify */
+/** 28 suspects — overlapping traits; pool builder spreads matches so filters narrow gradually */
 export const suspects: Suspect[] = [
   {
     "id": "dana",

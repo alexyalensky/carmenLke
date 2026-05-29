@@ -222,7 +222,7 @@ const baseAlmanac: Omit<AlmanacEntry, 'currencyEn' | 'languageEn' | 'continent' 
     currency: 'דולר קנדי',
     language: 'אנגלית וצרפתית',
     neighbors: ['ארצות הברית'],
-    landmark: 'מגדל ניאגרה',
+    landmark: 'מפלי ניאגרה',
     flagDescription: 'דגל אדום עם עלה מייפל לבן במרכז',
     imageKey: 'canada',
   },

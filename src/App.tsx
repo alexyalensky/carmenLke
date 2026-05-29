@@ -5,6 +5,7 @@ import { AboutScreen } from './components/AboutScreen'
 import { AudioController } from './components/AudioController'
 import { CityView } from './components/CityView'
 import { CrimeAlert } from './components/CrimeAlert'
+import { ArrestScene } from './components/ArrestScene'
 import { GameOver } from './components/GameOver'
 import { MainMenu } from './components/MainMenu'
 import { MuteButton } from './components/MuteButton'
@@ -22,6 +23,8 @@ function AppContent() {
       return <CrimeAlert />
     case 'game':
       return <CityView />
+    case 'arrest':
+      return <ArrestScene />
     case 'over':
       return <GameOver />
     default:

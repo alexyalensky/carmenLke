@@ -5,6 +5,7 @@ import {
   finalizeClueTemplate,
   getClueCategories,
   pickVariedTemplate,
+  templateMixesFlagWithOtherClues,
   type ClueCategory,
   type RichClueTemplate,
 } from '../game/clueVariety'
@@ -541,7 +542,12 @@ export const richDestinationClues: Record<string, RichClueTemplate[]> = {
     {
       id: 'montreal-2',
       countryId: 'canada',
-      segments: [he('דיבר '), en('English'), he(' ו'), en('French'), he(' — '), flag('canada'), he('.')],
+      segments: [he('דיבר '), en('English'), he(' ו'), en('French'), he(' עם המוכר.')],
+    },
+    {
+      id: 'montreal-2-flag',
+      countryId: 'canada',
+      segments: [he('החשוד לבש חולצה עם דגל '), flag('canada'), he('.')],
     },
     {
       id: 'montreal-3',
@@ -665,6 +671,7 @@ function scoreCandidate(
   usedCategories: Set<ClueCategory>,
   usedEnglish: Set<string>,
 ): number {
+  if (templateMixesFlagWithOtherClues(template.segments)) return Infinity
   let score = Math.random() * 8
   const cats = getClueCategories(template.segments)
   for (const cat of cats) {

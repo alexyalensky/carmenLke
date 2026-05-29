@@ -488,7 +488,7 @@ export const almanacExtras: Record<string, AlmanacExtra> = {
       { name: 'קוובק סיטי', nameEn: 'Quebec City' },
     ],
     mainSites: [
-      { name: 'מגדל ניאגרה', nameEn: 'Niagara Falls' },
+      { name: 'מפלי ניאגרה', nameEn: 'Niagara Falls' },
       { name: 'פארק בנף', nameEn: 'Banff National Park' },
       { name: 'מגדל CN', nameEn: 'CN Tower' },
       { name: 'קוובק העתיקה', nameEn: 'Old Quebec' },
@@ -497,7 +497,7 @@ export const almanacExtras: Record<string, AlmanacExtra> = {
     facts: [
       'קנדה — בירתה אוטווה, והשפה אנגלית וצרפתית.',
       'מטבע: דולר קנדי.',
-      'אתר מפורסם: מגדל ניאגרה.',
+      'אתר מפורסם: מפלי ניאגרה.',
       'שכנות: ארצות הברית.',
     ],
   },

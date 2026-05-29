@@ -2029,3 +2029,277 @@ body {
   font-size: 0.9rem;
   color: var(--text-muted);
 }
+
+/* Arrest scene */
+.arrest-scene {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background: #050810;
+}
+
+.arrest-lights {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.arrest-light {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+}
+
+.arrest-light-red {
+  background: radial-gradient(circle at 20% 30%, rgba(220, 40, 40, 0.55), transparent 55%);
+  animation: arrest-light-red 0.55s ease-in-out infinite;
+}
+
+.arrest-light-blue {
+  background: radial-gradient(circle at 80% 70%, rgba(40, 90, 220, 0.55), transparent 55%);
+  animation: arrest-light-blue 0.55s ease-in-out infinite;
+}
+
+@keyframes arrest-light-red {
+  0%, 49% { opacity: 0.85; }
+  50%, 100% { opacity: 0.1; }
+}
+
+@keyframes arrest-light-blue {
+  0%, 49% { opacity: 0.1; }
+  50%, 100% { opacity: 0.85; }
+}
+
+.arrest-flash {
+  position: absolute;
+  inset: 0;
+  background: white;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.arrest-scene.phase-0 .arrest-flash {
+  animation: arrest-flash 0.45s ease-out forwards;
+}
+
+@keyframes arrest-flash {
+  0% { opacity: 0.75; }
+  100% { opacity: 0; }
+}
+
+.arrest-stage {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+  padding: 2rem;
+  max-width: 420px;
+  animation: arrest-stage-in 0.5s ease-out;
+}
+
+@keyframes arrest-stage-in {
+  from {
+    opacity: 0;
+    transform: scale(0.85) translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+.arrest-badge {
+  display: inline-block;
+  margin: 0 0 1rem;
+  padding: 0.35rem 0.9rem;
+  border-radius: 999px;
+  background: rgba(220, 40, 40, 0.2);
+  border: 1px solid rgba(220, 40, 40, 0.5);
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+
+.arrest-suspect-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-block: 1rem 1.25rem;
+}
+
+.arrest-mugshot {
+  width: 140px;
+  border: 3px solid var(--accent-gold);
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 0 32px rgba(255, 200, 80, 0.35);
+  animation: arrest-mugshot-pop 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) 0.2s both;
+}
+
+.arrest-scene.arrest-lost .arrest-mugshot {
+  animation: arrest-mugshot-pop 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) 0.2s both,
+    arrest-suspect-escape 0.8s ease-in 1.4s forwards;
+}
+
+@keyframes arrest-mugshot-pop {
+  from {
+    opacity: 0;
+    transform: scale(0.4) rotate(-6deg);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) rotate(0);
+  }
+}
+
+@keyframes arrest-suspect-escape {
+  to {
+    opacity: 0;
+    transform: scale(0.6) translateX(120px) rotate(8deg);
+  }
+}
+
+.arrest-cuff {
+  font-size: 2rem;
+  opacity: 0;
+  transform: translateX(0);
+}
+
+.arrest-scene.phase-1 .arrest-cuff-left,
+.arrest-scene.phase-2 .arrest-cuff-left,
+.arrest-scene.phase-3 .arrest-cuff-left {
+  animation: arrest-cuff-left 0.45s ease-out forwards;
+}
+
+.arrest-scene.phase-1 .arrest-cuff-right,
+.arrest-scene.phase-2 .arrest-cuff-right,
+.arrest-scene.phase-3 .arrest-cuff-right {
+  animation: arrest-cuff-right 0.45s ease-out forwards;
+}
+
+@keyframes arrest-cuff-left {
+  from {
+    opacity: 0;
+    transform: translateX(40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes arrest-cuff-right {
+  from {
+    opacity: 0;
+    transform: translateX(-40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.arrest-title {
+  margin: 0 0 0.5rem;
+  font-size: 2rem;
+  animation: arrest-title-pulse 0.5s ease-out;
+}
+
+.arrest-scene.arrest-won .arrest-title {
+  color: var(--accent-green);
+  text-shadow: 0 0 24px rgba(39, 174, 96, 0.5);
+}
+
+.arrest-scene.arrest-lost .arrest-title {
+  color: var(--accent-red);
+}
+
+.arrest-scene.arrest-lost.phase-2,
+.arrest-scene.arrest-lost.phase-3 {
+  animation: arrest-shake 0.5s ease-in-out;
+}
+
+@keyframes arrest-shake {
+  0%, 100% { transform: translateX(0); }
+  20% { transform: translateX(-8px); }
+  40% { transform: translateX(8px); }
+  60% { transform: translateX(-6px); }
+  80% { transform: translateX(6px); }
+}
+
+@keyframes arrest-title-pulse {
+  from { transform: scale(1.3); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+.arrest-subtitle {
+  margin: 0;
+  color: var(--text-muted);
+  line-height: 1.5;
+}
+
+.arrest-treasure {
+  margin-block-start: 1.25rem;
+  animation: arrest-treasure-in 0.6s ease-out;
+}
+
+.arrest-treasure .treasure-photo {
+  width: 80px;
+  margin-inline: auto;
+}
+
+@keyframes arrest-treasure-in {
+  from {
+    opacity: 0;
+    transform: translateY(16px) scale(0.8);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.arrest-continue {
+  margin-block-start: 1.75rem;
+  animation: arrest-continue-in 0.4s ease-out;
+}
+
+@keyframes arrest-continue-in {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.arrest-confetti {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.arrest-confetti-piece {
+  position: absolute;
+  top: -12px;
+  left: calc((var(--i) * 4.2%) + 1%);
+  width: 8px;
+  height: 14px;
+  border-radius: 2px;
+  opacity: 0;
+  animation: arrest-confetti-fall 2.2s ease-in forwards;
+  animation-delay: calc(var(--i) * 0.06s);
+  background: hsl(calc(var(--i) * 15deg), 85%, 58%);
+}
+
+@keyframes arrest-confetti-fall {
+  0% {
+    opacity: 1;
+    transform: translateY(0) rotate(0deg);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(110vh) rotate(720deg);
+  }
+}
