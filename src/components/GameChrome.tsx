@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react'
+import { formatRealTimeClock } from '../game/types'
 
 const ACTIONS = [
   { id: 'investigate', label: 'חקור', icon: '🔍', desc: 'שאל עדים' },
@@ -38,6 +39,7 @@ export function StatusBar({
   cityName,
   countryName,
   timeRemaining,
+  realTimeRemainingSeconds,
   score,
   rank = 'טירון',
   rankLabel = 'דרגה',
@@ -46,6 +48,7 @@ export function StatusBar({
   cityName: string
   countryName: string
   timeRemaining: number
+  realTimeRemainingSeconds?: number | null
   score: number
   rank?: string
   rankLabel?: string
@@ -80,6 +83,16 @@ export function StatusBar({
           {timeRemaining} יחידות
         </span>
       </div>
+      {realTimeRemainingSeconds != null && (
+        <div className="status-block status-block-timer">
+          <span className="status-label">שעון חקירה</span>
+          <span
+            className={`status-value status-timer ${realTimeRemainingSeconds <= 60 ? 'urgent' : ''} ${realTimeRemainingSeconds <= 30 ? 'critical' : ''}`}
+          >
+            {formatRealTimeClock(realTimeRemainingSeconds)}
+          </span>
+        </div>
+      )}
       <div className="status-block">
         <span className="status-label">{rankLabel}</span>
         <span className="status-value">{rank}</span>

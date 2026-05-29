@@ -17,6 +17,8 @@ export interface GameSettings {
   useEnglishWords: boolean
   /** Require a math problem before each investigation clue */
   useMath: boolean
+  /** Real-time countdown per case; suspect escapes when it hits zero */
+  timedInvestigation: boolean
   /** Detective name shown in the game */
   playerName: string
 }
@@ -24,6 +26,7 @@ export interface GameSettings {
 const DEFAULT_SETTINGS: GameSettings = {
   useEnglishWords: true,
   useMath: false,
+  timedInvestigation: false,
   playerName: '',
 }
 
@@ -62,6 +65,7 @@ function saveSettings(settings: GameSettings) {
 interface SettingsContextValue extends GameSettings {
   setUseEnglishWords: (value: boolean) => void
   setUseMath: (value: boolean) => void
+  setTimedInvestigation: (value: boolean) => void
   setPlayerName: (value: string) => void
   displayPlayerName: string
   settingsOpen: boolean
@@ -91,6 +95,14 @@ export function SettingsProvider({ children }: { children: ReactNode }) {
     })
   }, [])
 
+  const setTimedInvestigation = useCallback((timedInvestigation: boolean) => {
+    setSettings((prev) => {
+      const next = { ...prev, timedInvestigation }
+      saveSettings(next)
+      return next
+    })
+  }, [])
+
   const setPlayerName = useCallback((playerName: string) => {
     setSettings((prev) => {
       const next = { ...prev, playerName: sanitizePlayerName(playerName) }
@@ -104,13 +116,14 @@ export function SettingsProvider({ children }: { children: ReactNode }) {
       ...settings,
       setUseEnglishWords,
       setUseMath,
+      setTimedInvestigation,
       setPlayerName,
       displayPlayerName: getDisplayPlayerName(settings.playerName),
       settingsOpen,
       openSettings: () => setSettingsOpen(true),
       closeSettings: () => setSettingsOpen(false),
     }),
-    [settings, setUseEnglishWords, setUseMath, setPlayerName, settingsOpen],
+    [settings, setUseEnglishWords, setUseMath, setTimedInvestigation, setPlayerName, settingsOpen],
   )
 
   return <SettingsContext.Provider value={value}>{children}</SettingsContext.Provider>

@@ -19,13 +19,23 @@ export function GameOver() {
       break
     case 'escaped':
       title = '⏱ החשוד נמלט!'
-      message = `הזמן אזל ו${suspect?.nickname ?? 'החשוד'} (${suspect?.name ?? 'לא ידוע'}) הצליח/ה להימלט. נסו שוב!`
+      message =
+        caseState.escapeReason === 'realTime'
+          ? `שעון החקירה הגיע לאפס — ${suspect?.nickname ?? 'החשוד'} (${suspect?.name ?? 'לא ידוע'}) הצליח/ה להימלט. נסו שוב!`
+          : `נגמרו יחידות הזמן — ${suspect?.nickname ?? 'החשוד'} (${suspect?.name ?? 'לא ידוע'}) הצליח/ה להימלט. נסו שוב!`
       break
     case 'lost':
       title = '❌ המעצר נכשל'
-      message = caseState.arrestAttempted
-        ? `מעצר שגוי — ${suspect?.nickname ?? 'החשוד'} (${suspect?.name ?? 'לא ידוע'}) לא נתפס/ה.`
-        : 'החקירה נכשלה.'
+      if (caseState.arrestAttempted && caseState.selectedSuspectId !== caseState.suspectId) {
+        const accused = caseState.selectedSuspectId
+          ? getSuspect(gameData, caseState.selectedSuspectId)
+          : undefined
+        message = `טעיתם בחשוד! ${accused?.nickname ?? 'החשוד'} לא היה/הייתה הגנב/ת — ${suspect?.name ?? 'האמת'} נמלט/ת.`
+      } else if (caseState.arrestAttempted) {
+        message = `מעצר במקום הלא נכון — ${suspect?.nickname ?? 'החשוד'} (${suspect?.name ?? 'לא ידוע'}) נמלט/ת.`
+      } else {
+        message = 'החקירה נכשלה.'
+      }
       break
     default:
       return null

@@ -137,10 +137,11 @@ export type Difficulty = 'easy' | 'medium' | 'hard'
 export interface DifficultyConfig {
   label: string
   initialTime: number
+  /** Real-time investigation limit in seconds (when timed mode is on) */
+  realTimeLimitSeconds: number
   routeMin: number
   routeMax: number
   suspectPoolSize: number
-  minFiltersForWarrant: number
   suspectClueChance: number
   wrongTravelCost: number
 }
@@ -149,34 +150,36 @@ export const DIFFICULTY_CONFIG: Record<Difficulty, DifficultyConfig> = {
   easy: {
     label: 'קל',
     initialTime: 50,
+    realTimeLimitSeconds: 18 * 60,
     routeMin: 4,
     routeMax: 5,
     suspectPoolSize: 16,
-    minFiltersForWarrant: 3,
     suspectClueChance: 0.42,
-    wrongTravelCost: 2,
+    wrongTravelCost: 3,
   },
   medium: {
     label: 'בינוני',
     initialTime: 42,
+    realTimeLimitSeconds: 12 * 60,
     routeMin: 5,
     routeMax: 6,
     suspectPoolSize: 24,
-    minFiltersForWarrant: 4,
     suspectClueChance: 0.33,
-    wrongTravelCost: 3,
+    wrongTravelCost: 4,
   },
   hard: {
     label: 'קשה',
     initialTime: 34,
+    realTimeLimitSeconds: 8 * 60,
     routeMin: 6,
     routeMax: 8,
     suspectPoolSize: 28,
-    minFiltersForWarrant: 5,
     suspectClueChance: 0.28,
-    wrongTravelCost: 4,
+    wrongTravelCost: 5,
   },
 }
+
+export type EscapeReason = 'timeUnits' | 'realTime'
 
 export interface CaseState {
   difficulty: Difficulty
@@ -191,14 +194,23 @@ export interface CaseState {
   knownClues: Clue[]
   investigatedSites: string[]
   suspectFilters: SuspectFilter[]
-  warrantSuspectId: string | null
+  /** Player's chosen suspect for the final arrest */
+  selectedSuspectId: string | null
   timeRemaining: number
   status: CaseStatus
   score: number
   lastTravelWasCorrect: boolean | null
   arrestAttempted: boolean
+  /** Hideout site picked during the arrest attempt */
+  lastArrestSiteId: string | null
   /** After a wrong flight, player must return here before continuing the trail */
   mustReturnToCityId: string | null
+  /** Active real-time limit in seconds; null when timed mode is off */
+  realTimeLimitSeconds: number | null
+  /** Unix ms when the real-time clock expires; set when investigation begins */
+  realTimeDeadlineMs: number | null
+  /** Why the suspect escaped, if status is escaped */
+  escapeReason: EscapeReason | null
 }
 
 export interface GameData {
@@ -209,14 +221,25 @@ export interface GameData {
 }
 
 export const TIME_COST = {
-  investigate: 1,
-  correctTravel: 1,
+  investigate: 2,
+  correctTravel: 2,
   wrongTravel: 3,
+  arrest: 2,
   /** Extra time to skip a math challenge and still investigate */
-  mathSkip: 2,
+  mathSkip: 3,
 } as const
 
 export const INITIAL_TIME = 42
+
+export function formatRealTimeClock(totalSeconds: number): string {
+  const m = Math.floor(totalSeconds / 60)
+  const s = totalSeconds % 60
+  return `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`
+}
+
+export function getRealTimeRemainingSeconds(deadlineMs: number): number {
+  return Math.max(0, Math.ceil((deadlineMs - Date.now()) / 1000))
+}
 
 export const TREASURES: Treasure[] = [
   { id: 'gold-statue', name: 'פסל זהב עתיק', imageKey: 'treasure-statue' },

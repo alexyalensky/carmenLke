@@ -4,9 +4,9 @@ import {
   getActiveSuspects,
   getMatchingSuspects,
   getSuspectClueReveals,
+  isAtFinalCity,
   isSuspectTraitRevealed,
 } from '../game/engine'
-import { DIFFICULTY_CONFIG } from '../game/types'
 import type { SuspectTrait } from '../game/types'
 import { SuspectPhoto } from './Photo'
 
@@ -21,15 +21,14 @@ const TRAIT_LABELS: Record<SuspectTrait, string> = {
 const ALL_TRAITS = Object.keys(TRAIT_LABELS) as SuspectTrait[]
 
 export function InterpolPanel() {
-  const { caseState, doFilter, doClearFilters, setActivePanel } = useGame()
+  const { caseState, doFilter, doClearFilters, doSelectSuspect, setActivePanel } = useGame()
   if (!caseState) return null
 
   const pool = getActiveSuspects(gameData, caseState)
-  const matches = getMatchingSuspects(pool, caseState.suspectFilters)
+  const highlighted = getMatchingSuspects(pool, caseState.suspectFilters)
   const reveals = getSuspectClueReveals(caseState.knownClues)
   const revealedTraits = ALL_TRAITS.filter((t) => (reveals.get(t)?.size ?? 0) > 0)
-  const minFilters = DIFFICULTY_CONFIG[caseState.difficulty].minFiltersForWarrant
-  const filtersNeeded = Math.max(0, minFilters - caseState.suspectFilters.length)
+  const atFinal = isAtFinalCity(caseState)
 
   return (
     <div className="deluxe-modal-overlay" onClick={() => setActivePanel('none')}>
@@ -37,21 +36,25 @@ export function InterpolPanel() {
         <header className="modal-header">
           <h2>🗂 CrimeNet — מאגר החשודים</h2>
           <p>
-            סננו לפי תכונות שגיליתם ברמזי חקירה. נדרשות לפחות {minFilters} תכונות כדי להנפיק צו
-            מעצר, וחשוד יחיד בלבד.
+            סמנו תכונות לפי הרמזים שאספתם — חשודים תואמים יודגשו במסגרת.
+            {atFinal && ' בחרו את החשוד שאתם מאשימים ולכו לחקירה לביצוע המעצר.'}
             {' '}
-            ({pool.length} חשודים בחקירה זו)
+            ({pool.length} חשודים בחקירה)
           </p>
         </header>
 
         <div className="dossier-grid">
           {pool.map((s) => {
-            const isMatch = matches.some((m) => m.id === s.id)
-            const isWarrant = caseState.warrantSuspectId === s.id
+            const isHighlighted =
+              caseState.suspectFilters.length === 0 ||
+              highlighted.some((m) => m.id === s.id)
+            const isSelected = caseState.selectedSuspectId === s.id
             return (
-              <div
+              <button
                 key={s.id}
-                className={`dossier-card ${isMatch ? 'match' : 'filtered-out'} ${isWarrant ? 'warrant' : ''}`}
+                type="button"
+                className={`dossier-card dossier-card-btn ${isHighlighted ? 'highlighted' : ''} ${isSelected ? 'selected' : ''}`}
+                onClick={() => doSelectSuspect(s.id)}
               >
                 <SuspectPhoto suspect={s} name={s.name} />
                 <div className="dossier-info">
@@ -69,29 +72,32 @@ export function InterpolPanel() {
                       </span>
                     ))}
                   </dl>
-                  {isWarrant && <span className="pill pill-green">צו מעצר</span>}
+                  {isSelected && <span className="pill pill-green">חשוד נבחר</span>}
                 </div>
-              </div>
+              </button>
             )
           })}
         </div>
 
-        {caseState.warrantSuspectId && (
-          <div className="warrant-banner">✓ צו מעצר הונפק — אתם מוכנים למעצר!</div>
+        {caseState.selectedSuspectId && (
+          <div className="selection-banner">
+            ✓ בחרתם חשוד — {atFinal ? 'לכו לחקירה ובחרו את מקום המחבוא.' : 'המשיכו לעקוב אחרי הגנב.'}
+          </div>
         )}
 
-        {!caseState.warrantSuspectId && filtersNeeded > 0 && matches.length > 1 && (
+        {atFinal && !caseState.selectedSuspectId && (
           <div className="alert-banner">
-            נותרו {matches.length} חשודים תואמים — הוסיפו עוד {filtersNeeded} סינון/ים.
+            הגעתם לעיר המחבוא! בחרו חשוד מהרשימה למעלה, ואז חקור מקום לביצוע המעצר.
           </div>
         )}
 
         {revealedTraits.length === 0 ? (
           <p className="alert-banner">
-            אין עדיין רמזי חשוד. חקרו מקומות בעיר כדי לגלות תכונות לסינון.
+            אין עדיין רמזי חשוד. חקרו מקומות בעיר כדי לגלות תכונות לסימון.
           </p>
         ) : (
           <div className="filter-section">
+            <p className="filter-section-hint">לחצו על תכונה לסימון — חשודים תואמים יודגשו:</p>
             {revealedTraits.map((trait) => (
               <div key={trait} className="filter-group">
                 <label>{TRAIT_LABELS[trait]}</label>
@@ -118,16 +124,16 @@ export function InterpolPanel() {
         )}
 
         <p className="match-count">
-          חשודים תואמים: <strong>{matches.length}</strong>
+          חשודים מודגשים: <strong>{caseState.suspectFilters.length ? highlighted.length : pool.length}</strong>
           {' · '}
-          סינונים: <strong>{caseState.suspectFilters.length}/{minFilters}</strong>
+          סימונים: <strong>{caseState.suspectFilters.length}</strong>
           {' · '}
           רמזי חשוד: <strong>{revealedTraits.length}</strong>
         </p>
 
         <div className="modal-actions">
           <button type="button" className="btn-secondary" onClick={doClearFilters}>
-            נקה סינון
+            נקה סימונים
           </button>
           <button type="button" className="btn-secondary" onClick={() => setActivePanel('none')}>
             סגור

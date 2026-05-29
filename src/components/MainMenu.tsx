@@ -8,7 +8,7 @@ const DIFFICULTIES: Difficulty[] = ['easy', 'medium', 'hard']
 
 export function MainMenu() {
   const { startGame, showAbout, difficulty, setDifficulty } = useGame()
-  const { useEnglishWords, setUseEnglishWords, useMath, setUseMath, displayPlayerName, openSettings } =
+  const { useEnglishWords, setUseEnglishWords, useMath, setUseMath, timedInvestigation, setTimedInvestigation, displayPlayerName, openSettings } =
     useSettings()
   const { unlock } = useAudio()
 
@@ -51,8 +51,12 @@ export function MainMenu() {
                   onClick={() => setDifficulty(d)}
                 >
                   <strong>{cfg.label}</strong>
-                  <span>{cfg.suspectPoolSize} חשודים · {cfg.minFiltersForWarrant} סינונים</span>
-                  <span>{cfg.initialTime} יחידות זמן</span>
+                  <span>{cfg.suspectPoolSize} חשודים</span>
+                  <span>
+                    {timedInvestigation
+                      ? `${cfg.realTimeLimitSeconds / 60} דק' שעון · ${cfg.initialTime} יחידות`
+                      : `${cfg.initialTime} יחידות זמן`}
+                  </span>
                 </button>
               )
             })}
@@ -83,6 +87,19 @@ export function MainMenu() {
               <strong>תרגילי חשבון לפני רמז</strong>
               <span className="settings-toggle-hint">
                 לפעמים תרגיל לפי הקושי — או דילוג בתשלום בזמן
+              </span>
+            </span>
+          </label>
+          <label className="settings-toggle menu-settings-toggle">
+            <input
+              type="checkbox"
+              checked={timedInvestigation}
+              onChange={(e) => setTimedInvestigation(e.target.checked)}
+            />
+            <span className="settings-toggle-body">
+              <strong>חקירה בזמן אמת</strong>
+              <span className="settings-toggle-hint">
+                שעון יורד בזמן אמת — כשהוא מגיע לאפס הגנב/ת נמלט/ת
               </span>
             </span>
           </label>

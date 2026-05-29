@@ -49,6 +49,7 @@ function cloneState(state: CaseState): CaseState {
     suspectFilters: [...state.suspectFilters],
     activeSuspectIds: [...state.activeSuspectIds],
     mustReturnToCityId: state.mustReturnToCityId,
+    lastArrestSiteId: state.lastArrestSiteId,
   }
 }
 
@@ -195,6 +196,7 @@ export function getActiveSuspects(data: GameData, state: CaseState): Suspect[] {
 export function startNewCase(
   data: GameData = gameData,
   difficulty: Difficulty = 'medium',
+  timedInvestigation = false,
   seed?: number,
 ): CaseState {
   if (seed !== undefined) {
@@ -227,14 +229,33 @@ export function startNewCase(
     knownClues: [],
     investigatedSites: [],
     suspectFilters: [],
-    warrantSuspectId: null,
+    selectedSuspectId: null,
     timeRemaining: config.initialTime,
     status: 'active',
     score: 0,
     lastTravelWasCorrect: null,
     arrestAttempted: false,
+    lastArrestSiteId: null,
     mustReturnToCityId: null,
+    realTimeLimitSeconds: timedInvestigation ? config.realTimeLimitSeconds : null,
+    realTimeDeadlineMs: null,
+    escapeReason: null,
   }
+}
+
+/** Start the real-time clock when the player enters the investigation */
+export function beginRealTimeInvestigation(state: CaseState): CaseState {
+  if (!state.realTimeLimitSeconds || state.realTimeDeadlineMs) return state
+  const next = cloneState(state)
+  next.realTimeDeadlineMs = Date.now() + state.realTimeLimitSeconds * 1000
+  return next
+}
+
+export function triggerRealTimeEscape(state: CaseState): CaseState {
+  const next = cloneState(state)
+  next.status = 'escaped'
+  next.escapeReason = 'realTime'
+  return next
 }
 
 export function isOnTrail(state: CaseState, cityId: string): boolean {
@@ -277,6 +298,7 @@ function applyTimeCost(state: CaseState, cost: number): CaseState {
   if (next.timeRemaining <= 0) {
     next.timeRemaining = 0
     next.status = 'escaped'
+    next.escapeReason = 'timeUnits'
   }
   return next
 }
@@ -457,32 +479,41 @@ export function applySuspectFilter(
   state: CaseState,
   trait: SuspectTrait,
   value: string,
-  data: GameData = gameData,
 ): CaseState {
   if (state.status !== 'active') return state
   if (!isSuspectTraitRevealed(state.knownClues, trait, value)) return state
 
   const next = cloneState(state)
-  next.suspectFilters = next.suspectFilters.filter((f) => f.trait !== trait)
-  next.suspectFilters.push({ trait, value })
-
-  const pool = getActiveSuspects(data, next)
-  const matches = getMatchingSuspects(pool, next.suspectFilters)
-  const minFilters = DIFFICULTY_CONFIG[next.difficulty].minFiltersForWarrant
-
-  if (matches.length === 1 && next.suspectFilters.length >= minFilters) {
-    next.warrantSuspectId = matches[0]!.id
+  const existing = next.suspectFilters.find((f) => f.trait === trait && f.value === value)
+  if (existing) {
+    next.suspectFilters = next.suspectFilters.filter(
+      (f) => !(f.trait === trait && f.value === value),
+    )
   } else {
-    next.warrantSuspectId = null
+    next.suspectFilters = next.suspectFilters.filter((f) => f.trait !== trait)
+    next.suspectFilters.push({ trait, value })
   }
 
+  return next
+}
+
+export function selectSuspect(
+  state: CaseState,
+  suspectId: string,
+  data: GameData = gameData,
+): CaseState {
+  if (state.status !== 'active') return state
+  const pool = getActiveSuspects(data, state)
+  if (!pool.some((s) => s.id === suspectId)) return state
+
+  const next = cloneState(state)
+  next.selectedSuspectId = next.selectedSuspectId === suspectId ? null : suspectId
   return next
 }
 
 export function clearSuspectFilters(state: CaseState): CaseState {
   const next = cloneState(state)
   next.suspectFilters = []
-  next.warrantSuspectId = null
   return next
 }
 
@@ -491,24 +522,22 @@ export function attemptArrest(
   siteId: string,
 ): CaseState {
   if (state.status !== 'active') return state
+  if (!state.selectedSuspectId) return state
 
-  let next = applyTimeCost(state, TIME_COST.investigate)
+  let next = applyTimeCost(state, TIME_COST.arrest)
   if (next.status !== 'active') return next
 
   next = cloneState(next)
   next.arrestAttempted = true
+  next.lastArrestSiteId = siteId
 
   const atFinalCity = isAtFinalCity(next)
-  const correctWarrant = next.warrantSuspectId === next.suspectId
+  const correctSuspect = next.selectedSuspectId === next.suspectId
   const atHideout = siteId === next.hideoutSiteId
 
-  if (atFinalCity && correctWarrant && atHideout) {
+  if (atFinalCity && correctSuspect && atHideout) {
     next.status = 'won'
     next.score += next.timeRemaining * 10 + 500
-  } else if (!correctWarrant) {
-    next.status = 'lost'
-  } else if (!atFinalCity) {
-    next.status = 'lost'
   } else {
     next.status = 'lost'
   }

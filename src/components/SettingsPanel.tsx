@@ -9,6 +9,8 @@ export function SettingsPanel() {
     setUseEnglishWords,
     useMath,
     setUseMath,
+    timedInvestigation,
+    setTimedInvestigation,
     playerName,
     setPlayerName,
     settingsOpen,
@@ -49,11 +51,11 @@ export function SettingsPanel() {
           <div className="settings-instructions-body">
             <p>
               אתם בלשים בסוכנות דלתא. ארגון הצל גנב אוצר — עקבו אחר החשוד ברחבי העולם,
-              אספו רמזים, והנפיקו צו מעצר לפני שיגמר הזמן.
+              אספו רמזים, ובצעו מעצר לפני שיגמר הזמן.
             </p>
             <ol>
               <li>
-                <strong>חקור</strong> — בחרו מקום בעיר ושאלו עדים. כל חקירה עולה יחידת זמן
+                <strong>חקור</strong> — בחרו מקום בעיר ושאלו עדים. כל חקירה עולה יחידות זמן
                 ומעניקה רמז על היעד הבא (שפה, מטבע, דגל ועוד) או על תכונות החשוד.
               </li>
               <li>
@@ -61,21 +63,21 @@ export function SettingsPanel() {
                 טיסה ליעד שגוי מבזבזת יותר זמן.
               </li>
               <li>
-                <strong>CrimeNet</strong> — סננו חשודים לפי תכונות שגיליתם ברמזים. נדרשות מספיק
-                תכונות (לפי הקושי) כדי להנפיק צו מעצר על חשוד יחיד.
+                <strong>CrimeNet</strong> — סמנו תכונות לפי הרמזים, הדגישו חשודים תואמים,
+                ובחרו את מי שאתם מאשימים לפני המעצר.
               </li>
               <li>
                 <strong>ספר עולם</strong> — חפשו מידע גאוגרפי (מדינות, שפות, מטבעות) כדי לפענח
                 את הרמזים.
               </li>
               <li>
-                <strong>מעצר</strong> — כשמגיעים לעיר המחבוא עם צו מעצר בתוקף, חקרו ובצעו מעצר
-                על החשוד הנכון.
+                <strong>מעצר</strong> — בעיר המחבוא, בחרו חשוד ב-CrimeNet וחקור את מקום המחבוא
+                לביצוע המעצר.
               </li>
             </ol>
             <p className="settings-instructions-tip">
-              טיפ: בחרו רמת קושי בתפריט הראשי. אפשר להפעיל מילים באנגלית ברמזים ותרגילי חשבון
-              לפני רמז — כאן בהגדרות.
+              טיפ: אפשר להפעיל <strong>חקירה בזמן אמת</strong> — שעון יורד במקביל ליחידות הזמן.
+              רמת הקושי קובעת כמה זמן יש לפני שהגנב/ת נמלט/ת.
             </p>
           </div>
         </details>
@@ -124,6 +126,22 @@ export function SettingsPanel() {
                 {useMath
                   ? 'לפעמים לפני חקירה — תרגיל לפי הקושי. אפשר לדלג בתשלום בזמן.'
                   : 'חקירות מעניקות רמז מיד, ללא תרגיל חשבון.'}
+              </span>
+            </span>
+          </label>
+
+          <label className="settings-toggle">
+            <input
+              type="checkbox"
+              checked={timedInvestigation}
+              onChange={(e) => setTimedInvestigation(e.target.checked)}
+            />
+            <span className="settings-toggle-body">
+              <strong>חקירה בזמן אמת</strong>
+              <span className="settings-toggle-hint">
+                {timedInvestigation
+                  ? 'שעון חקירה יורד בזמן אמת לפי הקושי — כשהוא מגיע לאפס הגנב/ת נמלט/ת.'
+                  : 'ללא שעון זמן אמת — רק יחידות זמן במשחק.'}
               </span>
             </span>
           </label>

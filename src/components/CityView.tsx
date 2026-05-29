@@ -13,7 +13,7 @@ import { ClueText } from './ClueText'
 import { WorldMapTravel } from './WorldMapTravel'
 
 export function CityView() {
-  const { caseState, activePanel, setActivePanel } = useGame()
+  const { caseState, activePanel, setActivePanel, realTimeRemainingSeconds } = useGame()
   const { displayPlayerName } = useSettings()
   const { playSfx } = useAudio()
   if (!caseState) return null
@@ -30,9 +30,9 @@ export function CityView() {
 
   let chiefMessage = 'אתם על מסלול החקירה. חקור מקומות לאסוף רמזים על היעד הבא ועל תכונות החשוד.'
   if (atFinal) {
-    chiefMessage = caseState.warrantSuspectId
-      ? 'הגעתם לעיר המחבוא! חקור את המקומות ובצעו מעצר.'
-      : 'הגעתם לעיר המחבוא! אספו רמזים וסננו ב-CrimeNet כדי להנפיק צו מעצר.'
+    chiefMessage = caseState.selectedSuspectId
+      ? 'הגעתם לעיר המחבוא! בחרו מקום לביצוע המעצר נגד החשוד שבחרתם.'
+      : 'הגעתם לעיר המחבוא! פתחו CrimeNet ובחרו את החשוד שאתם מאשימים.'
   } else if (onTrail) {
     chiefMessage = 'נראה שהחשוד היה כאן. חקור מקומות בעיר כדי לאסוף רמזים על היעד הבא.'
   } else if (caseState.mustReturnToCityId) {
@@ -50,6 +50,7 @@ export function CityView() {
         cityName={city?.name ?? '—'}
         countryName={country?.name ?? '—'}
         timeRemaining={caseState.timeRemaining}
+        realTimeRemainingSeconds={realTimeRemainingSeconds}
         score={caseState.score}
         rank={getDifficultyLabel(caseState.difficulty)}
         rankLabel="קושי"
@@ -86,10 +87,10 @@ export function CityView() {
               <div>
                 <p className="case-label">אוצר שנגנב</p>
                 <p className="case-value">{caseState.stolenTreasure}</p>
-                {caseState.warrantSuspectId ? (
-                  <span className="pill pill-green">✓ צו מעצר בתוקף</span>
+                {caseState.selectedSuspectId ? (
+                  <span className="pill pill-green">✓ חשוד נבחר</span>
                 ) : (
-                  <span className="pill pill-red">אין צו מעצר</span>
+                  <span className="pill pill-red">לא נבחר חשוד</span>
                 )}
               </div>
             </div>

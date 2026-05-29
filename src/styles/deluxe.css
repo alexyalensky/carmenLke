@@ -175,6 +175,31 @@ body {
   color: var(--accent-red);
 }
 
+.status-value.status-timer {
+  font-family: 'Consolas', 'Courier New', monospace;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.06em;
+}
+
+.status-value.status-timer.critical {
+  animation: timer-critical-pulse 0.85s ease-in-out infinite;
+}
+
+@keyframes timer-critical-pulse {
+  0%, 100% {
+    color: var(--accent-red);
+    text-shadow: none;
+  }
+  50% {
+    color: #ff6b6b;
+    text-shadow: 0 0 12px rgba(239, 68, 68, 0.55);
+  }
+}
+
+.status-block-timer .status-label {
+  color: var(--accent-red);
+}
+
 /* Main split layout */
 .deluxe-game {
   display: flex;
@@ -465,6 +490,94 @@ body {
   color: #fff;
   outline: 2px solid var(--accent-gold);
   outline-offset: 1px;
+}
+
+.clue-site-group {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.15rem;
+  white-space: nowrap;
+}
+
+.clue-site-name {
+  margin-inline-end: 0;
+}
+
+.clue-site-info {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.15rem;
+  height: 1.15rem;
+  padding: 0;
+  border: 1px solid rgba(255, 215, 0, 0.55);
+  border-radius: 50%;
+  background: rgba(0, 40, 80, 0.55);
+  color: var(--accent-gold);
+  font-size: 0.72rem;
+  font-weight: 800;
+  line-height: 1;
+  cursor: pointer;
+  vertical-align: super;
+  transition: background 0.15s, color 0.15s, border-color 0.15s;
+}
+
+.clue-site-info:hover,
+.clue-site-info:focus-visible {
+  background: rgba(255, 215, 0, 0.35);
+  color: #fff;
+  border-color: var(--accent-gold);
+  outline: none;
+}
+
+.site-wiki-overlay {
+  z-index: 1300;
+}
+
+.site-wiki-modal {
+  width: min(100%, 440px);
+}
+
+.site-wiki-header {
+  margin-bottom: 0.75rem;
+}
+
+.site-wiki-title-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.65rem;
+}
+
+.site-wiki-title-row h2 {
+  margin: 0;
+  font-size: 1.25rem;
+}
+
+.site-wiki-subtitle {
+  margin: 0.2rem 0 0;
+  color: var(--text-muted);
+  font-size: 0.88rem;
+}
+
+.site-wiki-image-wrap {
+  margin-bottom: 0.85rem;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+}
+
+.site-wiki-image {
+  display: block;
+  width: 100%;
+  max-height: 220px;
+  object-fit: cover;
+}
+
+.site-wiki-summary {
+  margin: 0 0 1rem;
+  line-height: 1.55;
+  color: var(--text-primary);
+  font-size: 0.95rem;
 }
 
 /* Action toolbar — Deluxe bottom menu */
@@ -1156,18 +1269,60 @@ body {
   gap: 0.75rem;
   padding: 0.75rem;
   background: var(--bg-card);
-  border: 1px solid var(--border);
+  border: 2px solid var(--border);
   border-radius: var(--radius);
-  transition: opacity 0.2s;
+  transition: border-color 0.2s, box-shadow 0.2s, transform 0.15s;
 }
 
-.dossier-card.filtered-out {
-  opacity: 0.3;
+.dossier-card-btn {
+  width: 100%;
+  text-align: start;
+  cursor: pointer;
+  font: inherit;
+  color: inherit;
 }
 
-.dossier-card.warrant {
+.dossier-card-btn:hover {
+  transform: translateY(-1px);
+}
+
+.dossier-card.highlighted {
+  border-color: var(--accent-gold);
+  box-shadow: 0 0 12px rgba(234, 179, 8, 0.2);
+}
+
+.dossier-card.selected {
   border-color: var(--accent-green);
-  box-shadow: 0 0 16px rgba(34, 197, 94, 0.25);
+  box-shadow: 0 0 18px rgba(34, 197, 94, 0.35);
+}
+
+.dossier-card.selected.highlighted {
+  border-color: var(--accent-green);
+  box-shadow:
+    0 0 12px rgba(234, 179, 8, 0.2),
+    0 0 18px rgba(34, 197, 94, 0.35);
+}
+
+.selection-banner {
+  padding: 0.75rem;
+  background: rgba(34, 197, 94, 0.12);
+  border: 1px solid var(--accent-green);
+  border-radius: var(--radius);
+  text-align: center;
+  margin-block: 0.75rem 1rem;
+  color: var(--accent-green);
+  font-weight: 600;
+}
+
+.filter-section-hint {
+  margin: 0 0 0.75rem;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+.site-card-deluxe.arrest-ready {
+  border-color: var(--accent-red);
+  box-shadow: 0 0 14px rgba(239, 68, 68, 0.25);
 }
 
 .dossier-card .suspect-portrait-frame,
@@ -1209,14 +1364,7 @@ body {
 }
 
 .warrant-banner {
-  padding: 0.75rem;
-  background: rgba(34, 197, 94, 0.15);
-  border: 1px solid var(--accent-green);
-  border-radius: var(--radius);
-  text-align: center;
-  margin-block-end: 1rem;
-  color: var(--accent-green);
-  font-weight: 600;
+  display: none;
 }
 
 .filter-group {
@@ -2152,18 +2300,189 @@ body {
   margin-block: 1rem 1.25rem;
 }
 
+.arrest-scene.arrest-won {
+  background: radial-gradient(ellipse at center, #0a1628 0%, #050810 70%);
+}
+
+.arrest-scene.arrest-lost,
+.arrest-scene.arrest-escaped {
+  background: radial-gradient(ellipse at center, #1a0a0a 0%, #050810 70%);
+}
+
+.arrest-sirens {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.arrest-siren {
+  position: absolute;
+  top: 0;
+  width: 50%;
+  height: 100%;
+  opacity: 0.35;
+  animation: arrest-siren-pulse 0.4s ease-in-out infinite;
+}
+
+.arrest-siren-left {
+  left: 0;
+  background: linear-gradient(90deg, rgba(220, 40, 40, 0.5), transparent);
+}
+
+.arrest-siren-right {
+  right: 0;
+  background: linear-gradient(-90deg, rgba(40, 90, 220, 0.5), transparent);
+  animation-delay: 0.2s;
+}
+
+@keyframes arrest-siren-pulse {
+  0%, 100% { opacity: 0.2; }
+  50% { opacity: 0.55; }
+}
+
+.arrest-spotlight {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 50% 35%, rgba(255, 220, 120, 0.25), transparent 45%);
+  pointer-events: none;
+  z-index: 1;
+  animation: arrest-spotlight-pulse 2s ease-in-out infinite;
+}
+
+@keyframes arrest-spotlight-pulse {
+  0%, 100% { opacity: 0.7; }
+  50% { opacity: 1; }
+}
+
+.arrest-smoke {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.arrest-smoke-puff {
+  position: absolute;
+  bottom: 30%;
+  left: calc(50% + (var(--i) - 3) * 24px);
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: rgba(180, 180, 180, 0.15);
+  filter: blur(8px);
+  animation: arrest-smoke-rise 1.2s ease-out forwards;
+  animation-delay: calc(var(--i) * 0.08s);
+}
+
+@keyframes arrest-smoke-rise {
+  from {
+    opacity: 0.6;
+    transform: translateY(0) scale(0.5);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(-80px) scale(1.8);
+  }
+}
+
+.arrest-badge-caught {
+  position: absolute;
+  top: -0.5rem;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 0.2rem 0.6rem;
+  background: var(--accent-green);
+  color: #fff;
+  font-size: 0.75rem;
+  font-weight: 800;
+  border-radius: 4px;
+  z-index: 3;
+  animation: arrest-badge-pop 0.4s ease-out 1.6s both;
+}
+
+@keyframes arrest-badge-pop {
+  from { opacity: 0; transform: translateX(-50%) scale(0.5); }
+  to { opacity: 1; transform: translateX(-50%) scale(1); }
+}
+
+.arrest-speed-lines {
+  position: absolute;
+  right: -1.5rem;
+  top: 50%;
+  font-size: 1.5rem;
+  animation: arrest-speed-flicker 0.15s linear infinite;
+}
+
+@keyframes arrest-speed-flicker {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+
 .arrest-mugshot {
   width: 140px;
   border: 3px solid var(--accent-gold);
   border-radius: 12px;
   overflow: hidden;
   box-shadow: 0 0 32px rgba(255, 200, 80, 0.35);
-  animation: arrest-mugshot-pop 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) 0.2s both;
 }
 
-.arrest-scene.arrest-lost .arrest-mugshot {
+.arrest-scene.arrest-won .arrest-mugshot {
+  border-color: var(--accent-green);
+  box-shadow:
+    0 0 40px rgba(34, 197, 94, 0.5),
+    0 0 80px rgba(34, 197, 94, 0.2);
   animation: arrest-mugshot-pop 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) 0.2s both,
-    arrest-suspect-escape 0.8s ease-in 1.4s forwards;
+    arrest-mugshot-glow 1.5s ease-in-out 1s infinite;
+}
+
+@keyframes arrest-mugshot-glow {
+  0%, 100% { box-shadow: 0 0 40px rgba(34, 197, 94, 0.5), 0 0 80px rgba(34, 197, 94, 0.2); }
+  50% { box-shadow: 0 0 55px rgba(34, 197, 94, 0.7), 0 0 100px rgba(34, 197, 94, 0.35); }
+}
+
+.arrest-scene.arrest-lost .arrest-mugshot,
+.arrest-scene.arrest-escaped .arrest-mugshot {
+  border-color: var(--accent-red);
+  box-shadow: 0 0 24px rgba(239, 68, 68, 0.4);
+  animation: arrest-mugshot-pop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) 0.15s both,
+    arrest-suspect-escape 1s cubic-bezier(0.55, 0.09, 0.68, 0.53) 1.5s forwards;
+}
+
+.arrest-suspect-wrap.fleeing .arrest-mugshot {
+  position: relative;
+}
+
+.arrest-scene.arrest-lost.phase-2,
+.arrest-scene.arrest-lost.phase-3,
+.arrest-scene.arrest-lost.phase-4,
+.arrest-scene.arrest-escaped.phase-2,
+.arrest-scene.arrest-escaped.phase-3,
+.arrest-scene.arrest-escaped.phase-4 {
+  animation: arrest-shake 0.45s ease-in-out;
+}
+
+@keyframes arrest-suspect-escape {
+  0% {
+    opacity: 1;
+    transform: scale(1) translateX(0) rotate(0);
+    filter: blur(0);
+  }
+  30% {
+    transform: scale(1.05) translateX(20px) rotate(3deg);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(0.5) translateX(180px) rotate(12deg);
+    filter: blur(4px);
+  }
+}
+
+.arrest-treasure-caption {
+  margin: 0.5rem 0 0;
+  font-size: 0.9rem;
+  color: var(--accent-gold);
+  font-weight: 600;
 }
 
 @keyframes arrest-mugshot-pop {
@@ -2235,12 +2554,14 @@ body {
   text-shadow: 0 0 24px rgba(39, 174, 96, 0.5);
 }
 
-.arrest-scene.arrest-lost .arrest-title {
+.arrest-scene.arrest-lost .arrest-title,
+.arrest-scene.arrest-escaped .arrest-title {
   color: var(--accent-red);
 }
 
 .arrest-scene.arrest-lost.phase-2,
-.arrest-scene.arrest-lost.phase-3 {
+.arrest-scene.arrest-lost.phase-3,
+.arrest-scene.arrest-lost.phase-4 {
   animation: arrest-shake 0.5s ease-in-out;
 }
 
@@ -2287,6 +2608,60 @@ body {
 .arrest-continue {
   margin-block-start: 1.75rem;
   animation: arrest-continue-in 0.4s ease-out;
+}
+
+.arrest-clues-panel {
+  width: min(100%, 520px);
+  margin-block: 1.25rem 0.5rem;
+  padding: 0.85rem 1rem;
+  text-align: start;
+  background: rgba(0, 20, 48, 0.55);
+  border: 1px solid rgba(255, 215, 0, 0.25);
+  border-radius: var(--radius);
+  max-height: min(40vh, 280px);
+  overflow-y: auto;
+}
+
+.arrest-clues-heading {
+  margin: 0 0 0.65rem;
+  font-size: 1rem;
+  color: var(--accent-gold);
+}
+
+.arrest-clues-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+}
+
+.arrest-clues-list li {
+  padding: 0.45rem 0.55rem;
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 6px;
+  font-size: 0.92rem;
+  line-height: 1.45;
+}
+
+.arrest-clue-suspect {
+  border-inline-start: 3px solid var(--accent-cyan, #5ec8ff);
+}
+
+.arrest-clue-travel {
+  border-inline-start: 3px solid var(--accent-gold);
+}
+
+.arrest-clues-list .clue-tag {
+  display: inline-block;
+  margin-inline-end: 0.35rem;
+  padding: 0.05rem 0.35rem;
+  font-size: 0.72rem;
+  border-radius: 4px;
+  background: rgba(94, 200, 255, 0.2);
+  color: #9ee0ff;
+  vertical-align: middle;
 }
 
 @keyframes arrest-continue-in {

@@ -28,8 +28,8 @@ export function InvestigateModal({ cityId, investigatedSites }: InvestigateModal
   const prevClueCount = useRef(caseState?.knownClues.length ?? 0)
   const city = getCity(gameData, cityId)
   const atFinal = caseState ? isAtFinalCity(caseState) : false
-  const warrantSuspect = caseState?.warrantSuspectId
-    ? getSuspect(gameData, caseState.warrantSuspectId)
+  const selectedSuspect = caseState?.selectedSuspectId
+    ? getSuspect(gameData, caseState.selectedSuspectId)
     : undefined
 
   const findSite = (siteId: string | null): InvestigationSite | undefined =>
@@ -91,7 +91,8 @@ export function InvestigateModal({ cityId, investigatedSites }: InvestigateModal
         <header className="modal-header">
           <h2>🔍 חקירה — {city.name}</h2>
           <p>
-            בחרו מקום לבקר. כל חקירה עולה יחידת זמן.
+            בחרו מקום לבקר. כל חקירה עולה {TIME_COST.investigate} יחידות זמן.
+            {atFinal && ' בחרו את מקום המחבוא לביצוע המעצר.'}
             {useMath
               ? ' לפעמים יופיע תרגיל חשבון — אפשר גם לדלג בתשלום בזמן.'
               : ' לחצו על מילים באנגלית כדי לשמוע אותן.'}
@@ -114,19 +115,20 @@ export function InvestigateModal({ cityId, investigatedSites }: InvestigateModal
               const key = `${cityId}:${site.id}`
               const visited = investigatedSites.includes(key)
               const isActive = heroSite?.id === site.id
+              const canArrest = atFinal && !!caseState.selectedSuspectId
 
               return (
                 <button
                   key={site.id}
                   type="button"
-                  className={`site-card-deluxe ${visited && !atFinal ? 'visited' : ''} ${isActive ? 'active' : ''}`}
+                  className={`site-card-deluxe ${visited && !atFinal ? 'visited' : ''} ${isActive ? 'active' : ''} ${canArrest ? 'arrest-ready' : ''}`}
                   disabled={visited && !atFinal}
                   onMouseEnter={() => setPreviewSiteId(site.id)}
                   onMouseLeave={() => setPreviewSiteId(null)}
                   onFocus={() => setPreviewSiteId(site.id)}
                   onBlur={() => setPreviewSiteId(null)}
                   onClick={() => {
-                    if (atFinal && caseState.warrantSuspectId) {
+                    if (canArrest) {
                       doArrest(site.id)
                     } else if (!visited) {
                       beginInvestigation(site)
@@ -137,9 +139,7 @@ export function InvestigateModal({ cityId, investigatedSites }: InvestigateModal
                   <div className="site-card-info">
                     <strong>{site.name}</strong>
                     {visited && !atFinal && <span className="pill pill-green">נחקר</span>}
-                    {atFinal && caseState.warrantSuspectId && (
-                      <span className="pill pill-red">מעצר</span>
-                    )}
+                    {canArrest && <span className="pill pill-red">מעצר ({TIME_COST.arrest} זמן)</span>}
                   </div>
                 </button>
               )
@@ -165,18 +165,18 @@ export function InvestigateModal({ cityId, investigatedSites }: InvestigateModal
           </div>
         )}
 
-        {atFinal && warrantSuspect && (
+        {atFinal && selectedSuspect && (
           <div className="suspect-spotted">
-            <SuspectPhoto suspect={warrantSuspect} name={warrantSuspect.name} size={64} />
+            <SuspectPhoto suspect={selectedSuspect} name={selectedSuspect.name} size={64} />
             <p>
-              צו מעצר נגד {warrantSuspect.nickname} ({warrantSuspect.name}) — חפשו את מקום המחבוא!
+              חשוד נבחר: {selectedSuspect.nickname} ({selectedSuspect.name}) — בחרו מקום לביצוע המעצר!
             </p>
           </div>
         )}
 
-        {atFinal && !caseState.warrantSuspectId && (
+        {atFinal && !caseState.selectedSuspectId && (
           <p className="alert-banner">
-            מישהו מארגון הצל מסתתר כאן! השתמשו ברמזים ב-CrimeNet כדי להנפיק צו מעצר לפני המעצר.
+            מישהו מארגון הצל מסתתר כאן! פתחו CrimeNet, סמנו רמזים ובחרו את החשוד שאתם מאשימים.
           </p>
         )}
 
