@@ -3,6 +3,36 @@ import type { MathProblem } from '../game/mathProblems'
 import { gradeBandLabel } from '../game/mathProblems'
 import type { Difficulty } from '../game/types'
 
+function MathQuestionBody({ problem }: { problem: MathProblem }) {
+  if (problem.line) {
+    return (
+      <p className="math-question" dir={problem.lineDir ?? 'ltr'}>
+        {problem.line}
+      </p>
+    )
+  }
+
+  return (
+    <p className="math-question math-question-mixed">
+      {problem.before && (
+        <span className="math-q-he" dir="rtl">
+          {problem.before}
+        </span>
+      )}
+      {problem.expr && (
+        <span className="math-q-expr" dir="ltr">
+          {problem.expr}
+        </span>
+      )}
+      {problem.after && (
+        <span className="math-q-he" dir="rtl">
+          {problem.after}
+        </span>
+      )}
+    </p>
+  )
+}
+
 interface MathChallengeProps {
   problem: MathProblem
   difficulty: Difficulty
@@ -53,9 +83,7 @@ export function MathChallenge({
           </p>
         </header>
 
-        <p className="math-question" dir="ltr">
-          {problem.question}
-        </p>
+        <MathQuestionBody problem={problem} />
 
         <form className="math-answer-form" onSubmit={submit}>
           <label htmlFor="math-answer">התשובה שלכם:</label>

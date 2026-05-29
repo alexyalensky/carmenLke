@@ -1,8 +1,16 @@
 import type { Difficulty } from './types'
 
 export interface MathProblem {
-  question: string
   answer: number
+  /** Single-line problem (pure equation or pure Hebrew) */
+  line?: string
+  lineDir?: 'ltr' | 'rtl'
+  /** Hebrew (RTL) text before a numeric expression */
+  before?: string
+  /** LTR math fragment shown between Hebrew parts */
+  expr?: string
+  /** Hebrew (RTL) text after the expression */
+  after?: string
 }
 
 function randInt(min: number, max: number): number {
@@ -13,20 +21,32 @@ function pick<T>(items: T[]): T {
   return items[Math.floor(Math.random() * items.length)]!
 }
 
+function exprLine(text: string, answer: number): MathProblem {
+  return { line: text, lineDir: 'ltr', answer }
+}
+
+function heLine(text: string, answer: number): MathProblem {
+  return { line: text, lineDir: 'rtl', answer }
+}
+
+function mixed(before: string, expr: string, after: string, answer: number): MathProblem {
+  return { before, expr, after, answer }
+}
+
 function makeAdd(a: number, b: number): MathProblem {
-  return { question: `${a} + ${b} = ?`, answer: a + b }
+  return exprLine(`${a} + ${b} = ?`, a + b)
 }
 
 function makeSub(a: number, b: number): MathProblem {
-  return { question: `${a} − ${b} = ?`, answer: a - b }
+  return exprLine(`${a} − ${b} = ?`, a - b)
 }
 
 function makeMul(a: number, b: number): MathProblem {
-  return { question: `${a} × ${b} = ?`, answer: a * b }
+  return exprLine(`${a} × ${b} = ?`, a * b)
 }
 
 function makeDiv(dividend: number, divisor: number): MathProblem {
-  return { question: `${dividend} ÷ ${divisor} = ?`, answer: dividend / divisor }
+  return exprLine(`${dividend} ÷ ${divisor} = ?`, dividend / divisor)
 }
 
 /** Grade 2–4: addition, subtraction, basic multiplication and division */
@@ -85,16 +105,16 @@ function generateMedium(): MathProblem {
     const b = randInt(2, 9)
     const c = randInt(2, 9)
     const a = randInt(2, 20)
-    return { question: `${a} + ${b} × ${c} = ?`, answer: a + b * c }
+    return exprLine(`${a} + ${b} × ${c} = ?`, a + b * c)
   }
   if (kind === 'percent') {
     const pct = pick([10, 20, 25, 50])
     const base = randInt(2, 20) * (100 / pct)
-    return { question: `כמה זה ${pct}% מתוך ${base}?`, answer: (base * pct) / 100 }
+    return mixed(`כמה זה ${pct}% מתוך`, String(base), '?', (base * pct) / 100)
   }
 
   const n = randInt(2, 50) * 2
-  return { question: `מהו חצי מ-${n}?`, answer: n / 2 }
+  return heLine(`מהו חצי מ-${n}?`, n / 2)
 }
 
 /** Grade 6–8: algebra, powers, roots, harder percentages, negatives */
@@ -123,37 +143,37 @@ function generateHard(): MathProblem {
     const b = randInt(3, 12)
     const c = randInt(3, 12)
     const a = randInt(5, 40)
-    return { question: `${a} + ${b} × ${c} = ?`, answer: a + b * c }
+    return exprLine(`${a} + ${b} × ${c} = ?`, a + b * c)
   }
   if (kind === 'percent') {
     const pct = pick([15, 20, 30, 35, 40, 75])
     const multiplier = randInt(2, 12)
     const base = multiplier * (100 / gcd(pct, 100))
-    return { question: `כמה זה ${pct}% מתוך ${base}?`, answer: (base * pct) / 100 }
+    return mixed(`כמה זה ${pct}% מתוך`, String(base), '?', (base * pct) / 100)
   }
   if (kind === 'algebra') {
     const form = pick(['add', 'sub', 'mul'] as const)
     if (form === 'add') {
       const x = randInt(5, 40)
       const a = randInt(3, 25)
-      return { question: `אם x + ${a} = ${x + a}, מהו x?`, answer: x }
+      return mixed('אם', `x + ${a} = ${x + a}`, ', מהו x?', x)
     }
     if (form === 'sub') {
       const x = randInt(10, 50)
       const a = randInt(3, x - 1)
-      return { question: `אם x − ${a} = ${x - a}, מהו x?`, answer: x }
+      return mixed('אם', `x − ${a} = ${x - a}`, ', מהו x?', x)
     }
     const x = randInt(3, 12)
     const a = randInt(3, 9)
-    return { question: `אם ${a} × x = ${a * x}, מהו x?`, answer: x }
+    return mixed('אם', `${a} × x = ${a * x}`, ', מהו x?', x)
   }
   if (kind === 'power') {
     const base = randInt(2, 12)
-    return { question: `${base}² = ?`, answer: base * base }
+    return exprLine(`${base}² = ?`, base * base)
   }
   if (kind === 'sqrt') {
     const root = randInt(2, 12)
-    return { question: `√${root * root} = ?`, answer: root }
+    return exprLine(`√${root * root} = ?`, root)
   }
   if (kind === 'neg') {
     const a = randInt(5, 30)
@@ -164,10 +184,7 @@ function generateHard(): MathProblem {
   const num = pick([3, 4])
   const denom = num === 3 ? 4 : 5
   const whole = randInt(2, 15) * denom
-  return {
-    question: `כמה זה ${num}/${denom} מתוך ${whole}?`,
-    answer: (whole * num) / denom,
-  }
+  return mixed(`כמה זה ${num}/${denom} מתוך`, String(whole), '?', (whole * num) / denom)
 }
 
 function gcd(a: number, b: number): number {

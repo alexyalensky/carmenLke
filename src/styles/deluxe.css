@@ -1871,6 +1871,28 @@ body {
   letter-spacing: 0.02em;
 }
 
+.math-question-mixed {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem 0.5rem;
+  direction: rtl;
+}
+
+.math-q-he {
+  font-size: 1.35rem;
+  line-height: 1.4;
+}
+
+.math-q-expr {
+  font-size: 1.75rem;
+  font-weight: 700;
+  unicode-bidi: isolate;
+  padding-inline: 0.15rem;
+}
+
 .math-answer-form {
   display: flex;
   flex-direction: column;
