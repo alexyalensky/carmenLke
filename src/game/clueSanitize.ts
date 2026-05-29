@@ -5,11 +5,23 @@ export function sanitizeDestinationClue(segments: ClueSegment[], city: City): Cl
   const blocked = buildBlockedNames(city)
   let out = segments.filter((s) => !segmentLeaksDestination(s, blocked, city))
   out = cleanupConnectors(out)
-
-  if (out.length === 0) {
-    return [{ type: 'he', text: 'העד נתן רמז מעורפל על יעד רחוק.' }]
-  }
   return out
+}
+
+function escapeRegExp(value: string): string {
+  return value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+}
+
+function englishMentionsBlocked(word: string, blocked: string[]): boolean {
+  const w = word.toLowerCase()
+  for (const b of blocked) {
+    if (b.length <= 2) continue
+    if (w === b) return true
+    // Whole-word match only — avoid stripping "Roman Empire" when destination is Rome
+    const re = new RegExp(`\\b${escapeRegExp(b)}\\b`, 'i')
+    if (re.test(w)) return true
+  }
+  return false
 }
 
 function buildBlockedNames(city: City): string[] {
@@ -32,11 +44,7 @@ function segmentLeaksDestination(
   city: City,
 ): boolean {
   if (segment.type === 'en') {
-    const w = segment.word.toLowerCase()
-    for (const b of blocked) {
-      if (w === b || (b.length > 3 && w.includes(b))) return true
-    }
-    return false
+    return englishMentionsBlocked(segment.word, blocked)
   }
 
   if (segment.type === 'he') {

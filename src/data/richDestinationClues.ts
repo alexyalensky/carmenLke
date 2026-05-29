@@ -698,8 +698,9 @@ export function pickRichClueForWrongCity(
 export function richClueToDisplay(
   template: RichClueTemplate,
   city: City,
+  entry: AlmanacEntry,
 ) {
-  const finalized = finalizeClueTemplate(template, city)
+  const finalized = finalizeClueTemplate(template, city, entry)
   return {
     dedupeKey: finalized.id,
     text: segmentsToPlainText(finalized.segments),

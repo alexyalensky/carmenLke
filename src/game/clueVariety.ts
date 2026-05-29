@@ -179,10 +179,14 @@ function buildDynamicStyles(
   }
 
   if (!usedCategories.has('capital')) {
+    const capitalText =
+      entry.capital === city.name
+        ? 'שאל על הדרך לבירה.'
+        : `שאל על הדרך ל${entry.capital}.`
     styles.push({
       id: `dyn-${entry.id}-capital`,
       countryId: entry.id,
-      segments: [he(`שאל על הדרך ל${entry.capital}.`)],
+      segments: [he(capitalText)],
     })
   }
 
@@ -224,6 +228,35 @@ function buildDynamicStyles(
   return styles.filter((s) => !categoryBlocked(getClueCategories(s.segments), usedCategories))
 }
 
+/** Informative clue when sanitization removes all segments (never the vague placeholder). */
+function buildInformativeFallback(
+  entry: AlmanacEntry,
+  countryId: string,
+  city: City,
+): ClueSegment[] {
+  const site = pickRandom(entry.mainSites.filter((s) => !siteMentionsCity(s.nameEn, city)))
+  const fact = pickRandom(entry.facts)
+
+  const options: ClueSegment[][] = [
+    [he('גלויה עם דגל: '), flag(countryId)],
+    [flag(countryId), he(' היה מודבק על המזוודה.')],
+    [he(`העד תיאר את ${entry.landmark}.`)],
+    [he('שילם ב'), cur(countryId), he(' בחנות.')],
+    [he('דיבר '), en(entry.languageEn), he(' עם המוכר.')],
+    [he(`דיבר על ${entry.continent}.`)],
+  ]
+
+  if (site) {
+    options.push([he('הזכיר '), en(site.nameEn), he(' בדרך.')])
+  }
+  if (fact) {
+    const trimmed = fact.length > 72 ? `${fact.slice(0, 69)}…` : fact
+    options.push([he(`העד סיפר: "${trimmed}"`)])
+  }
+
+  return pickRandom(options) ?? [he(`העד תיאר את ${entry.landmark}.`)]
+}
+
 export function buildDynamicDestinationClue(
   city: City,
   entry: AlmanacEntry,
@@ -235,9 +268,17 @@ export function buildDynamicDestinationClue(
   return pickVariedTemplate(styles, usedKeys, usedCategories, usedEnglish)
 }
 
-export function finalizeClueTemplate(template: RichClueTemplate, city: City): RichClueTemplate {
+export function finalizeClueTemplate(
+  template: RichClueTemplate,
+  city: City,
+  entry: AlmanacEntry,
+): RichClueTemplate {
+  let segments = sanitizeDestinationClue(template.segments, city)
+  if (!segments.length) {
+    segments = buildInformativeFallback(entry, template.countryId, city)
+  }
   return {
     ...template,
-    segments: sanitizeDestinationClue(template.segments, city),
+    segments,
   }
 }

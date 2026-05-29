@@ -79,7 +79,7 @@ export function generateClueForDestination(
     entry,
   )
   const rich = template
-    ? richClueToDisplay(template, destinationCity)
+    ? richClueToDisplay(template, destinationCity, entry)
     : {
         dedupeKey: `${destinationCityId}-fallback-${slotIndex}`,
         text: 'החשוד השאיל שאלות על יעד מסתורי.',
@@ -117,9 +117,10 @@ export function generateWrongCityClue(
   const template = pickRichClueForWrongCity(cityId, usedTexts, usedCategories, usedEnglish)
   const targetCity =
     data.cities.find((c) => c.countryId === template.countryId) ?? wrongCity
+  const targetEntry = data.almanac.find((a) => a.id === template.countryId)
 
-  const rich = targetCity
-    ? richClueToDisplay(template, targetCity)
+  const rich = targetCity && targetEntry
+    ? richClueToDisplay(template, targetCity, targetEntry)
     : {
         dedupeKey: template.id,
         text: template.segments.map((s) => (s.type === 'he' ? s.text : s.type === 'en' ? s.word : '')).join(''),
