@@ -214,8 +214,12 @@ export function gradeBandLabel(difficulty: Difficulty): string {
 }
 
 /** Share of investigations (when math setting is on) that show a problem */
-export const MATH_CHALLENGE_CHANCE = 0.32
+export const MATH_CHALLENGE_CHANCE = 0.2
 
-export function rollMathChallenge(): boolean {
+/** At most one math challenge per city visit — avoids 2-of-3 witness spam */
+export const MAX_MATH_CHALLENGES_PER_CITY = 1
+
+export function shouldOfferMathChallenge(mathShownInCity: number): boolean {
+  if (mathShownInCity >= MAX_MATH_CHALLENGES_PER_CITY) return false
   return Math.random() < MATH_CHALLENGE_CHANCE
 }

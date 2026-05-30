@@ -18,7 +18,7 @@ export function AboutScreen() {
             אחר החשוד, לאסוף רמזים, ולתפוס אותו לפני שיגמר הזמן.
           </p>
           <p>
-            22 ערים · 28 חשודים · 3 רמות קושי · CrimeNet · ספר העולם
+            28 ערים · 28 חשודים · 3 רמות קושי · CrimeNet · ספר העולם
           </p>
         </div>
         <button type="button" className="btn-secondary btn-large" onClick={goToMenu} style={{ width: '100%', marginBlockStart: '1.5rem' }}>

@@ -2,8 +2,8 @@ import { useEffect, useRef, useState } from 'react'
 import { useGame } from '../context/GameContext'
 import { useSettings } from '../context/SettingsContext'
 import { gameData } from '../data/gameData'
-import { getCity, getSuspect, isAtFinalCity } from '../game/engine'
-import { generateMathProblem, rollMathChallenge } from '../game/mathProblems'
+import { getCity, getSuspect, isAtFinalCity, canRevisitWitnessesAtFinal } from '../game/engine'
+import { generateMathProblem, shouldOfferMathChallenge } from '../game/mathProblems'
 import type { Clue, InvestigationSite } from '../game/types'
 import { TIME_COST } from '../game/types'
 import { ClueText } from './ClueText'
@@ -16,7 +16,7 @@ interface InvestigateModalProps {
 }
 
 export function InvestigateModal({ cityId, investigatedSites }: InvestigateModalProps) {
-  const { doInvestigate, doInvestigateWithMathSkip, doArrest, caseState, setActivePanel } = useGame()
+  const { doInvestigate, doInvestigateWithMathSkip, doArrest, doRecordMathChallenge, caseState, setActivePanel } = useGame()
   const { useMath } = useSettings()
   const [lastClues, setLastClues] = useState<Clue[]>([])
   const [lastWitnessSiteId, setLastWitnessSiteId] = useState<string | null>(null)
@@ -28,6 +28,7 @@ export function InvestigateModal({ cityId, investigatedSites }: InvestigateModal
   const prevClueCount = useRef(caseState?.knownClues.length ?? 0)
   const city = getCity(gameData, cityId)
   const atFinal = caseState ? isAtFinalCity(caseState) : false
+  const revisitWitnesses = caseState ? canRevisitWitnessesAtFinal(gameData, caseState) : false
   const selectedSuspect = caseState?.selectedSuspectId
     ? getSuspect(gameData, caseState.selectedSuspectId)
     : undefined
@@ -57,7 +58,8 @@ export function InvestigateModal({ cityId, investigatedSites }: InvestigateModal
   }
 
   const beginInvestigation = (site: InvestigationSite) => {
-    if (useMath && rollMathChallenge()) {
+    if (useMath && shouldOfferMathChallenge(caseState.mathChallengesInCurrentCity)) {
+      doRecordMathChallenge()
       setPendingSite(site)
       setMathProblem(generateMathProblem(caseState.difficulty))
       return
@@ -92,7 +94,8 @@ export function InvestigateModal({ cityId, investigatedSites }: InvestigateModal
           <h2>🔍 חקירה — {city.name}</h2>
           <p>
             בחרו מקום לבקר. כל חקירה עולה {TIME_COST.investigate} יחידות זמן.
-            {atFinal && ' בחרו את מקום המחבוא לביצוע המעצר.'}
+            {atFinal && revisitWitnesses && ' אין מספיק רמזי חשוד — אפשר לשאול עדים שוב.'}
+            {atFinal && !revisitWitnesses && ' בחרו את מקום המחבוא לביצוע המעצר.'}
             {useMath
               ? ' לפעמים יופיע תרגיל חשבון — אפשר גם לדלג בתשלום בזמן.'
               : ' לחצו על מילים באנגלית כדי לשמוע אותן.'}
@@ -115,14 +118,16 @@ export function InvestigateModal({ cityId, investigatedSites }: InvestigateModal
               const key = `${cityId}:${site.id}`
               const visited = investigatedSites.includes(key)
               const isActive = heroSite?.id === site.id
-              const canArrest = atFinal && !!caseState.selectedSuspectId
+              const canArrest = atFinal && !!caseState.selectedSuspectId && !revisitWitnesses
+              const canAskWitness = !visited || revisitWitnesses
+              const siteDisabled = visited && !canAskWitness && !canArrest
 
               return (
                 <button
                   key={site.id}
                   type="button"
-                  className={`site-card-deluxe ${visited && !atFinal ? 'visited' : ''} ${isActive ? 'active' : ''} ${canArrest ? 'arrest-ready' : ''}`}
-                  disabled={visited && !atFinal}
+                  className={`site-card-deluxe ${visited && !revisitWitnesses ? 'visited' : ''} ${isActive ? 'active' : ''} ${canArrest ? 'arrest-ready' : ''} ${visited && revisitWitnesses ? 'revisit' : ''}`}
+                  disabled={siteDisabled}
                   onMouseEnter={() => setPreviewSiteId(site.id)}
                   onMouseLeave={() => setPreviewSiteId(null)}
                   onFocus={() => setPreviewSiteId(site.id)}
@@ -130,7 +135,7 @@ export function InvestigateModal({ cityId, investigatedSites }: InvestigateModal
                   onClick={() => {
                     if (canArrest) {
                       doArrest(site.id)
-                    } else if (!visited) {
+                    } else if (canAskWitness) {
                       beginInvestigation(site)
                     }
                   }}
@@ -139,6 +144,7 @@ export function InvestigateModal({ cityId, investigatedSites }: InvestigateModal
                   <div className="site-card-info">
                     <strong>{site.name}</strong>
                     {visited && !atFinal && <span className="pill pill-green">נחקר</span>}
+                    {visited && revisitWitnesses && <span className="pill pill-amber">שאל שוב</span>}
                     {canArrest && <span className="pill pill-red">מעצר ({TIME_COST.arrest} זמן)</span>}
                   </div>
                 </button>
@@ -176,7 +182,9 @@ export function InvestigateModal({ cityId, investigatedSites }: InvestigateModal
 
         {atFinal && !caseState.selectedSuspectId && (
           <p className="alert-banner">
-            מישהו מארגון הצל מסתתר כאן! פתחו CrimeNet, סמנו רמזים ובחרו את החשוד שאתם מאשימים.
+            {revisitWitnesses
+              ? 'מישהו מארגון הצל מסתתר כאן! שאלו עדים שוב לאסוף רמזי חשוד, ואז פתחו CrimeNet ובחרו את החשוד.'
+              : 'מישהו מארגון הצל מסתתר כאן! פתחו CrimeNet, סמנו רמזים ובחרו את החשוד שאתם מאשימים.'}
           </p>
         )}
 

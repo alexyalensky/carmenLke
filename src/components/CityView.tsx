@@ -2,7 +2,7 @@ import { useGame } from '../context/GameContext'
 import { useSettings } from '../context/SettingsContext'
 import { useAudio } from '../context/AudioProvider'
 import { gameData } from '../data/gameData'
-import { getCity, getDifficultyLabel, isAtFinalCity, wasCityVisitedByThief } from '../game/engine'
+import { getCity, getDifficultyLabel, isAtFinalCity, wasCityVisitedByThief, canRevisitWitnessesAtFinal } from '../game/engine'
 import { ChiefMonitor } from './ChiefMonitor'
 import { ActionToolbar, InfoPanel, StatusBar, type ActionId } from './GameChrome'
 import { CityPhoto, TreasurePhoto } from './Photo'
@@ -22,6 +22,7 @@ export function CityView() {
   const country = gameData.almanac.find((a) => a.id === city?.countryId)
   const onTrail = wasCityVisitedByThief(caseState, caseState.currentCityId)
   const atFinal = isAtFinalCity(caseState)
+  const revisitWitnesses = canRevisitWitnessesAtFinal(gameData, caseState)
 
   const handleAction = (id: ActionId) => {
     playSfx('panel')
@@ -30,9 +31,11 @@ export function CityView() {
 
   let chiefMessage = 'אתם על מסלול החקירה. חקור מקומות לאסוף רמזים על היעד הבא ועל תכונות החשוד.'
   if (atFinal) {
-    chiefMessage = caseState.selectedSuspectId
+    chiefMessage = caseState.selectedSuspectId && !revisitWitnesses
       ? 'הגעתם לעיר המחבוא! בחרו מקום לביצוע המעצר נגד החשוד שבחרתם.'
-      : 'הגעתם לעיר המחבוא! פתחו CrimeNet ובחרו את החשוד שאתם מאשימים.'
+      : revisitWitnesses
+        ? 'הגעתם לעיר המחבוא! אין מספיק רמזי חשוד — חקור מקומות ושאל עדים שוב.'
+        : 'הגעתם לעיר המחבוא! פתחו CrimeNet ובחרו את החשוד שאתם מאשימים.'
   } else if (onTrail) {
     chiefMessage = 'נראה שהחשוד היה כאן. חקור מקומות בעיר כדי לאסוף רמזים על היעד הבא.'
   } else if (caseState.mustReturnToCityId) {

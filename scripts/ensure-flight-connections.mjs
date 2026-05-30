@@ -24,14 +24,21 @@ const EXTRA_LINKS = {
   montreal: ['buenos-aires', 'berlin', 'amsterdam'],
   amsterdam: ['new-york', 'rome', 'moscow'],
   johannesburg: ['paris', 'mumbai', 'new-york'],
+  warsaw: ['berlin', 'moscow', 'prague'],
+  lisbon: ['madrid', 'paris'],
+  stockholm: ['london', 'berlin', 'amsterdam'],
+  'ho-chi-minh': ['bangkok', 'beijing', 'tokyo'],
+  nairobi: ['cairo', 'johannesburg', 'istanbul'],
+  seoul: ['tokyo', 'beijing', 'bangkok'],
 }
 
 let src = readFileSync(gameDataPath, 'utf8')
 const citiesStart = src.indexOf('export const cities: City[] = [')
 if (citiesStart < 0) throw new Error('cities block not found')
 
-const citiesEnd = src.indexOf('\n]\n\nexport { suspects }', citiesStart)
-if (citiesEnd < 0) throw new Error('cities block end not found')
+const citiesEndMatch = src.slice(citiesStart).match(/\n]\r?\n\r?\nfunction buildAlmanac/)
+if (!citiesEndMatch || citiesEndMatch.index === undefined) throw new Error('cities block end not found')
+const citiesEnd = citiesStart + citiesEndMatch.index + 1
 
 const before = src.slice(0, citiesStart)
 const citiesBlock = src.slice(citiesStart, citiesEnd + 2)

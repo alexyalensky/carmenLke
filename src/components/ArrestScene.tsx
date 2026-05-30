@@ -2,7 +2,8 @@ import { useEffect, useMemo, useState, type CSSProperties } from 'react'
 import { useAudio } from '../context/AudioProvider'
 import { useGame } from '../context/GameContext'
 import { gameData } from '../data/gameData'
-import { getCity, getSuspect } from '../game/engine'
+import { getSuspect } from '../game/engine'
+import { wrongSuspectArrestMessage, wrongCityArrestMessage, wonArrestMessage } from '../game/arrestMessages'
 import { SuspectPhoto, TreasurePhoto } from './Photo'
 import { ClueText } from './ClueText'
 
@@ -28,19 +29,14 @@ export function ArrestScene() {
 
   const loseReason = useMemo(() => {
     if (!caseState || !lost) return ''
-    const wrongPerson = caseState.selectedSuspectId !== caseState.suspectId
-    const wrongSite = caseState.lastArrestSiteId !== caseState.hideoutSiteId
-    if (wrongPerson && realThief && accusedSuspect) {
-      return `טעיתם בחשוד! ${accusedSuspect.nickname} נמלט/ת — הגנב האמיתי היה ${realThief.name}.`
+    if (caseState.arrestLossReason === 'wrongSuspect' && accusedSuspect) {
+      return wrongSuspectArrestMessage(accusedSuspect)
     }
-    if (wrongSite) {
-      const hideoutSite = getCity(gameData, caseState.currentCityId)?.sites.find(
-        (s) => s.id === caseState.hideoutSiteId,
-      )
-      return `הגנב לא היה כאן! המחבוא האמיתי היה ב${hideoutSite?.name ?? 'מקום אחר'}.`
+    if (caseState.arrestLossReason === 'wrongCity') {
+      return wrongCityArrestMessage()
     }
     return `${displaySuspect?.nickname ?? 'החשוד'} הצליח/ה להימלט מהמעצר.`
-  }, [caseState, lost, realThief, accusedSuspect, displaySuspect])
+  }, [caseState, lost, accusedSuspect, displaySuspect])
 
   const outcomeClass = won ? 'arrest-won' : escaped ? 'arrest-escaped' : 'arrest-lost'
 
@@ -67,6 +63,7 @@ export function ArrestScene() {
     if (phase < 2) return won ? 'מעצרים!' : escaped ? 'הזמן אזל!' : 'מנסים לעצור!'
     if (won) return 'נתפס!'
     if (escaped) return 'נמלט!'
+    if (caseState?.arrestLossReason === 'wrongSuspect') return 'אליבי!'
     return 'ברח!'
   }
 
@@ -74,8 +71,12 @@ export function ArrestScene() {
     if (phase < 2) {
       return `${displaySuspect.nickname} (${displaySuspect.name})`
     }
-    if (won) {
-      return `עצרתם את ${realThief?.name ?? displaySuspect.name} והחזרתם את ${caseState.stolenTreasure}!`
+    if (won && realThief) {
+      return wonArrestMessage(
+        realThief,
+        caseState.stolenTreasure,
+        caseState.lastArrestSiteId === caseState.hideoutSiteId,
+      )
     }
     if (escaped) {
       return caseState.escapeReason === 'realTime'

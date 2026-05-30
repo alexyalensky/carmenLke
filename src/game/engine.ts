@@ -23,9 +23,9 @@ import type {
   SuspectFilter,
   SuspectTrait,
 } from './types'
-import { DIFFICULTY_CONFIG, TIME_COST } from './types'
+import { DIFFICULTY_CONFIG, TIME_COST, computeInitialTime } from './types'
 
-const SUSPECT_TRAITS: SuspectTrait[] = ['hair', 'hobby', 'vehicle', 'gender', 'build']
+const SUSPECT_TRAITS: SuspectTrait[] = ['hair', 'hobby', 'vehicle', 'gender', 'build', 'accent', 'accessory', 'ageGroup']
 
 function pickRandom<T>(items: T[]): T {
   return items[Math.floor(Math.random() * items.length)]!
@@ -50,6 +50,8 @@ function cloneState(state: CaseState): CaseState {
     activeSuspectIds: [...state.activeSuspectIds],
     mustReturnToCityId: state.mustReturnToCityId,
     lastArrestSiteId: state.lastArrestSiteId,
+    arrestLossReason: state.arrestLossReason,
+    mathChallengesInCurrentCity: state.mathChallengesInCurrentCity,
   }
 }
 
@@ -92,8 +94,8 @@ function buildSuspectPool(data: GameData, perpetratorId: string, poolSize: numbe
   const picked: Suspect[] = [perpetrator]
   const used = new Set<string>([perpetratorId])
 
-  const minPerTrait = Math.max(4, Math.ceil(poolSize * 0.42))
-  const minPerPair = Math.max(3, Math.ceil(poolSize * 0.18))
+  const minPerTrait = Math.max(5, Math.ceil(poolSize * 0.5))
+  const minPerPair = Math.max(4, Math.ceil(poolSize * 0.24))
 
   const tryAdd = (suspect: Suspect) => {
     if (picked.length >= poolSize || used.has(suspect.id)) return false
@@ -179,6 +181,30 @@ export function isSuspectTraitRevealed(
   return getSuspectClueReveals(knownClues).get(trait)?.has(value) ?? false
 }
 
+/** True when known suspect clues (matching the thief) narrow the pool to one person. */
+export function canIdentifySuspect(data: GameData, state: CaseState): boolean {
+  const perpetrator = getSuspect(data, state.suspectId)
+  if (!perpetrator) return true
+
+  const pool = getActiveSuspects(data, state)
+  const reveals = getSuspectClueReveals(state.knownClues)
+  const filters: SuspectFilter[] = []
+
+  for (const trait of SUSPECT_TRAITS) {
+    const perpetratorValue = perpetrator[trait]
+    if (reveals.get(trait)?.has(perpetratorValue)) {
+      filters.push({ trait, value: perpetratorValue })
+    }
+  }
+
+  if (filters.length === 0) return false
+  return getMatchingSuspects(pool, filters).length === 1
+}
+
+export function canRevisitWitnessesAtFinal(data: GameData, state: CaseState): boolean {
+  return isAtFinalCity(state) && !canIdentifySuspect(data, state)
+}
+
 export function getCity(data: GameData, cityId: string): City | undefined {
   return data.cities.find((c) => c.id === cityId)
 }
@@ -230,16 +256,18 @@ export function startNewCase(
     investigatedSites: [],
     suspectFilters: [],
     selectedSuspectId: null,
-    timeRemaining: config.initialTime,
+    timeRemaining: computeInitialTime(difficulty, routeLength),
     status: 'active',
     score: 0,
     lastTravelWasCorrect: null,
     arrestAttempted: false,
     lastArrestSiteId: null,
+    arrestLossReason: null,
     mustReturnToCityId: null,
     realTimeLimitSeconds: timedInvestigation ? config.realTimeLimitSeconds : null,
     realTimeDeadlineMs: null,
     escapeReason: null,
+    mathChallengesInCurrentCity: 0,
   }
 }
 
@@ -321,13 +349,22 @@ export function investigate(
   if (state.status !== 'active') return state
 
   const key = siteKey(state.currentCityId, siteId)
-  if (state.investigatedSites.includes(key)) return state
+  const revisitWitness = canRevisitWitnessesAtFinal(data, state)
+  if (state.investigatedSites.includes(key) && !revisitWitness) return state
 
-  let next = applyTimeCost(state, TIME_COST.investigate)
-  if (next.status !== 'active') return next
-
-  next = cloneState(next)
-  next.investigatedSites.push(key)
+  const isFreeRevisit = revisitWitness && state.investigatedSites.includes(key)
+  let next: CaseState
+  if (isFreeRevisit) {
+    next = cloneState(state)
+  } else {
+    next = applyTimeCost(state, TIME_COST.investigate)
+    if (next.status !== 'active') return next
+    next = cloneState(next)
+  }
+  const firstVisitToSite = !next.investigatedSites.includes(key)
+  if (firstVisitToSite) {
+    next.investigatedSites.push(key)
+  }
 
   const usedTexts = collectUsedClueTexts(next.knownClues)
   const globalUsed = collectUsedClueCategories(next.knownClues)
@@ -395,21 +432,30 @@ export function investigate(
       usedTraits,
       pool,
     )
+    suspectClue.id = `${next.currentCityId}-${siteId}-suspect-${suspectClue.suspectTrait}-${next.knownClues.length}`
     next.knownClues.push(suspectClue)
-    next.knownClues.push({
-      id: `${next.currentCityId}-${siteId}-hideout`,
-      type: 'landmark',
-      text: 'העד מצביע על אחד מהמקומות הקרובים — החשוד מסתתר כאן!',
-      targetCountryId: getCity(data, next.currentCityId)?.countryId ?? '',
-      siteId,
-      cityId: next.currentCityId,
-    })
+    if (firstVisitToSite) {
+      next.knownClues.push({
+        id: `${next.currentCityId}-${siteId}-hideout`,
+        type: 'landmark',
+        text: 'העד מצביע על אחד מהמקומות הקרובים — החשוד מסתתר כאן!',
+        targetCountryId: getCity(data, next.currentCityId)?.countryId ?? '',
+        siteId,
+        cityId: next.currentCityId,
+      })
+    }
   } else {
     next.knownClues.push(
       generateWrongCityClue(data, next.currentCityId, siteId, usedTexts, globalUsed, usedEnglish, usedFacts, slotIndex),
     )
   }
 
+  return next
+}
+
+export function recordMathChallengeShown(state: CaseState): CaseState {
+  const next = cloneState(state)
+  next.mathChallengesInCurrentCity += 1
   return next
 }
 
@@ -449,6 +495,7 @@ export function travel(
 
   next = cloneState(next)
   next.currentCityId = destinationCityId
+  next.mathChallengesInCurrentCity = 0
   next.lastTravelWasCorrect = isReturnFlight ? true : isCorrect
 
   if (isReturnFlight) {
@@ -530,16 +577,22 @@ export function attemptArrest(
   next = cloneState(next)
   next.arrestAttempted = true
   next.lastArrestSiteId = siteId
+  next.arrestLossReason = null
 
   const atFinalCity = isAtFinalCity(next)
   const correctSuspect = next.selectedSuspectId === next.suspectId
   const atHideout = siteId === next.hideoutSiteId
 
-  if (atFinalCity && correctSuspect && atHideout) {
+  if (atFinalCity && correctSuspect) {
     next.status = 'won'
-    next.score += next.timeRemaining * 10 + 500
+    const hideoutBonus = atHideout ? 150 : 0
+    next.score += next.timeRemaining * 10 + 500 + hideoutBonus
+  } else if (atFinalCity && !correctSuspect) {
+    next.status = 'lost'
+    next.arrestLossReason = 'wrongSuspect'
   } else {
     next.status = 'lost'
+    next.arrestLossReason = 'wrongCity'
   }
 
   return next

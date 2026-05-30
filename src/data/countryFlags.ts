@@ -22,6 +22,12 @@ export const countryFlagEmoji: Record<string, string> = {
   canada: '🇨🇦',
   netherlands: '🇳🇱',
   'south-africa': '🇿🇦',
+  poland: '🇵🇱',
+  portugal: '🇵🇹',
+  sweden: '🇸🇪',
+  vietnam: '🇻🇳',
+  kenya: '🇰🇪',
+  'south-korea': '🇰🇷',
 }
 
 /** ISO 3166-1 alpha-2 for flag images */
@@ -48,6 +54,12 @@ export const countryFlagIso: Record<string, string> = {
   canada: 'ca',
   netherlands: 'nl',
   'south-africa': 'za',
+  poland: 'pl',
+  portugal: 'pt',
+  sweden: 'se',
+  vietnam: 'vn',
+  kenya: 'ke',
+  'south-korea': 'kr',
 }
 
 export function getCountryFlag(countryId: string): string {

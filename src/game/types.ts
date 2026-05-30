@@ -1,4 +1,4 @@
-export type SuspectTrait = 'hair' | 'hobby' | 'vehicle' | 'gender' | 'build'
+export type SuspectTrait = 'hair' | 'hobby' | 'vehicle' | 'gender' | 'build' | 'accent' | 'accessory' | 'ageGroup'
 
 export type ClueType =
   | 'language'
@@ -53,6 +53,11 @@ export interface City {
   imageKey: string
 }
 
+export interface AlmanacCultureItem {
+  name: string
+  nameEn: string
+}
+
 export interface Suspect {
   id: string
   name: string
@@ -62,6 +67,9 @@ export interface Suspect {
   vehicle: string
   gender: string
   build: string
+  accent: string
+  accessory: string
+  ageGroup: string
   imageKey: string
 }
 
@@ -93,6 +101,9 @@ export interface AlmanacEntry {
   imageKey: string
   majorCities: AlmanacCity[]
   mainSites: AlmanacSite[]
+  foods: AlmanacCultureItem[]
+  events: AlmanacCultureItem[]
+  famousPeople: AlmanacCultureItem[]
   facts: string[]
 }
 
@@ -181,6 +192,8 @@ export const DIFFICULTY_CONFIG: Record<Difficulty, DifficultyConfig> = {
 
 export type EscapeReason = 'timeUnits' | 'realTime'
 
+export type ArrestLossReason = 'wrongSuspect' | 'wrongCity'
+
 export interface CaseState {
   difficulty: Difficulty
   activeSuspectIds: string[]
@@ -203,6 +216,8 @@ export interface CaseState {
   arrestAttempted: boolean
   /** Hideout site picked during the arrest attempt */
   lastArrestSiteId: string | null
+  /** Why an arrest attempt failed */
+  arrestLossReason: ArrestLossReason | null
   /** After a wrong flight, player must return here before continuing the trail */
   mustReturnToCityId: string | null
   /** Active real-time limit in seconds; null when timed mode is off */
@@ -211,6 +226,8 @@ export interface CaseState {
   realTimeDeadlineMs: number | null
   /** Why the suspect escaped, if status is escaped */
   escapeReason: EscapeReason | null
+  /** Math challenges already shown in the current city (resets on travel) */
+  mathChallengesInCurrentCity: number
 }
 
 export interface GameData {
@@ -228,6 +245,16 @@ export const TIME_COST = {
   /** Extra time to skip a math challenge and still investigate */
   mathSkip: 3,
 } as const
+
+/** Scale starting time to route length so perfect play can finish without running dry */
+export function computeInitialTime(difficulty: Difficulty, routeLength: number): number {
+  const investigateEstimate = routeLength * 2.5 * TIME_COST.investigate
+  const travelEstimate = Math.max(0, routeLength - 1) * TIME_COST.correctTravel
+  const slack = difficulty === 'easy' ? 16 : difficulty === 'medium' ? 12 : 8
+  return Math.ceil(
+    investigateEstimate + travelEstimate + TIME_COST.arrest + 6 + slack,
+  )
+}
 
 export const INITIAL_TIME = 42
 

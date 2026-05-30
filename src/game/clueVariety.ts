@@ -21,6 +21,9 @@ export type ClueCategory =
   | 'neighbor'
   | 'capital'
   | 'cultural'
+  | 'food'
+  | 'event'
+  | 'person'
 
 const LANGUAGE_EN_WORDS = new Set([
   'hebrew', 'french', 'arabic', 'japanese', 'english', 'german', 'spanish',
@@ -30,7 +33,7 @@ const LANGUAGE_EN_WORDS = new Set([
 
 const CURRENCY_EN_WORDS = new Set([
   'shekel', 'yen', 'euro', 'dollar', 'pound', 'peso', 'real', 'lira',
-  'rupee', 'ruble', 'yuan', 'baht', 'rand',
+  'rupee', 'ruble', 'yuan', 'baht', 'rand', 'zloty', 'krona', 'dong', 'shilling', 'won',
 ])
 
 const GREETING_EN_WORDS = new Set([
@@ -101,6 +104,9 @@ export function getClueCategories(segments: ClueSegment[]): Set<ClueCategory> {
       if (/בירה|דרך ל/.test(s.text)) cats.add('capital')
       if (/אתר מפורסם:|תיאר את/.test(s.text)) cats.add('landmark')
       if (/— בירתה |השפה /.test(s.text)) cats.add('language')
+      if (/מאכל מקומי|אכל |מנה מ|מאכל |שאל איפה|הריח של/.test(s.text)) cats.add('food')
+      if (/אירוע היסטורי|אירוע חשוב|חג לאומי|סימולציה|פוסטר של|כאירוע היסטורי/.test(s.text)) cats.add('event')
+      if (/דמות מפורסמת|אישיות מ|ספר על|תמונה של|שיר על/.test(s.text)) cats.add('person')
     }
   }
   if (segments.some((s) => s.type === 'en')) cats.add('cultural')
@@ -296,6 +302,9 @@ const CITY_ONCE_CATEGORIES: Set<ClueCategory> = new Set([
   'flag',
   'currency',
   'language',
+  'food',
+  'event',
+  'person',
 ])
 
 function categoryBlockedForPick(
@@ -314,8 +323,10 @@ function templateWeakness(template: RichClueTemplate): number {
   if (template.id.includes('-fact')) return 50
   const cats = getClueCategories(template.segments)
   if (template.id.includes('-site-') || template.id.includes('-landmark')) return 0
+  if (template.id.includes('-culture-') || cats.has('food') || cats.has('event') || cats.has('person')) return -1
   if (template.id.includes('-flag')) return 2
   if (cats.has('landmark')) return 1
+  if (cats.has('food') || cats.has('event') || cats.has('person')) return -1
   if (cats.has('cultural')) return 4
   if (cats.has('capital') || cats.has('neighbor')) return 6
   if (cats.has('language')) return 8
@@ -398,8 +409,152 @@ export function pickVariedTemplate(
     .sort((a, b) => a.score - b.score)
 
   if (!ranked.length) return null
-  const top = ranked.slice(0, Math.min(3, ranked.length))
+  const top = ranked.slice(0, Math.min(6, ranked.length))
   return pickRandom(top)!.t
+}
+
+function shuffleInPlace<T>(items: T[]): void {
+  for (let i = items.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1))
+    ;[items[i], items[j]] = [items[j]!, items[i]!]
+  }
+}
+
+/** Clue-type buckets used for balanced random selection */
+export type DestinationClueBucket =
+  | 'flag'
+  | 'food'
+  | 'event'
+  | 'person'
+  | 'site'
+  | 'landmark'
+  | 'capital'
+  | 'neighbor'
+  | 'currency'
+  | 'language'
+  | 'fact'
+  | 'static'
+
+export function templateDestinationBucket(template: RichClueTemplate): DestinationClueBucket {
+  const id = template.id
+  if (id.includes('-culture-food')) return 'food'
+  if (id.includes('-culture-event')) return 'event'
+  if (id.includes('-culture-person')) return 'person'
+  if (id.includes('-flag')) return 'flag'
+  if (id.includes('-site-')) return 'site'
+  if (id.includes('-landmark')) return 'landmark'
+  if (id.includes('-capital')) return 'capital'
+  if (id.includes('-neighbor')) return 'neighbor'
+  if (id.includes('-currency')) return 'currency'
+  if (id.includes('-language')) return 'language'
+  if (id.includes('-fact')) return 'fact'
+
+  const cats = getClueCategories(template.segments)
+  const order: ClueCategory[] = [
+    'food', 'event', 'person', 'flag', 'currency', 'language',
+    'capital', 'neighbor', 'landmark', 'cultural',
+  ]
+  for (const cat of order) {
+    if (!cats.has(cat)) continue
+    if (cat === 'food' || cat === 'event' || cat === 'person') return cat
+    if (cat === 'cultural') return 'site'
+    return cat as DestinationClueBucket
+  }
+  return 'static'
+}
+
+function bucketClueCategory(bucket: DestinationClueBucket): ClueCategory | null {
+  if (bucket === 'site' || bucket === 'fact' || bucket === 'static') return null
+  return bucket
+}
+
+function isTemplateAvailable(
+  template: RichClueTemplate,
+  globalUsed: Set<ClueCategory>,
+  cityUsed: Set<ClueCategory>,
+  usedEnglish: Set<string>,
+  usedTexts: Set<string>,
+  entry?: AlmanacEntry,
+  usedPlaceGroups?: Set<number>,
+): boolean {
+  return (
+    scoreTemplate(
+      template,
+      globalUsed,
+      cityUsed,
+      usedEnglish,
+      usedTexts,
+      entry,
+      usedPlaceGroups,
+    ) < Infinity
+  )
+}
+
+/** Pick a clue type at random, then a random template within that type */
+export function pickBalancedDestinationClue(
+  templates: RichClueTemplate[],
+  globalUsed: Set<ClueCategory>,
+  cityUsed: Set<ClueCategory>,
+  usedEnglish: Set<string>,
+  usedTexts: Set<string> = new Set(),
+  entry?: AlmanacEntry,
+  usedPlaceGroups?: Set<number>,
+): RichClueTemplate | null {
+  if (!templates.length) return null
+
+  const byBucket = new Map<DestinationClueBucket, RichClueTemplate[]>()
+  for (const t of templates) {
+    const bucket = templateDestinationBucket(t)
+    const list = byBucket.get(bucket) ?? []
+    list.push(t)
+    byBucket.set(bucket, list)
+  }
+
+  const bucketValid = (bucket: DestinationClueBucket): boolean =>
+    (byBucket.get(bucket) ?? []).some((t) =>
+      isTemplateAvailable(t, globalUsed, cityUsed, usedEnglish, usedTexts, entry, usedPlaceGroups),
+    )
+
+  const bucketBlocked = (bucket: DestinationClueBucket): boolean => {
+    const cat = bucketClueCategory(bucket)
+    if (!cat) return false
+    if (ONCE_PER_CASE.has(cat) && globalUsed.has(cat)) return true
+    if (CITY_ONCE_CATEGORIES.has(cat) && cityUsed.has(cat)) return true
+    return false
+  }
+
+  let buckets = [...byBucket.keys()].filter((b) => bucketValid(b) && !bucketBlocked(b))
+  if (!buckets.length) {
+    buckets = [...byBucket.keys()].filter((b) => bucketValid(b))
+  }
+  shuffleInPlace(buckets)
+
+  for (const bucket of buckets) {
+    const valid = (byBucket.get(bucket) ?? []).filter((t) =>
+      isTemplateAvailable(t, globalUsed, cityUsed, usedEnglish, usedTexts, entry, usedPlaceGroups),
+    )
+    if (!valid.length) continue
+    shuffleInPlace(valid)
+    return pickRandom(valid)!
+  }
+
+  return null
+}
+
+export function gatherDestinationTemplates(
+  city: City,
+  entry: AlmanacEntry,
+  staticPool: RichClueTemplate[],
+  globalUsed: Set<ClueCategory>,
+  cityUsed: Set<ClueCategory>,
+  usedFacts: Set<string>,
+  usedPlaceGroups: Set<number>,
+): RichClueTemplate[] {
+  return [
+    ...staticPool,
+    ...buildCultureClueStyles(entry, cityUsed),
+    ...buildDynamicStyles(city, entry, globalUsed, cityUsed, usedFacts, usedPlaceGroups),
+  ]
 }
 
 function buildDynamicStyles(
@@ -431,8 +586,9 @@ function buildDynamicStyles(
     })
   }
 
-  for (const site of safeSites.slice(0, 4)) {
-    if (siteGroupUsed(site)) continue
+  const siteCandidates = safeSites.filter((site) => !siteGroupUsed(site))
+  shuffleInPlace(siteCandidates)
+  for (const site of siteCandidates.slice(0, 2)) {
     styles.push({
       id: `dyn-${entry.id}-site-${site.nameEn.replace(/\s+/g, '-').toLowerCase()}`,
       countryId: entry.id,
@@ -515,6 +671,93 @@ function buildDynamicStyles(
   }
 
   return styles.filter((s) => !categoryBlockedForPick(getClueCategories(s.segments), globalUsed, cityUsed))
+}
+
+function buildCultureClueStyles(
+  entry: AlmanacEntry,
+  cityUsed: Set<ClueCategory>,
+): RichClueTemplate[] {
+  const styles: RichClueTemplate[] = []
+  const slug = (s: string) => s.replace(/\s+/g, '-').toLowerCase()
+
+  if (!cityUsed.has('food')) {
+    for (const food of entry.foods) {
+      const variants: ClueSegment[][] = [
+        [he('שאל איפה אפשר '), en(food.nameEn, food.nameEn), he('.')],
+        [he('הריח של '), en(food.nameEn, food.nameEn), he(' בא מהתיק.')],
+        [he('דיבר על מאכל '), en(food.nameEn, food.nameEn), he('.')],
+        [he('הזכיר שאכל '), en(food.nameEn, food.nameEn), he(' במסעדה.')],
+      ]
+      for (let i = 0; i < variants.length; i++) {
+        styles.push({
+          id: `dyn-${entry.id}-culture-food-${slug(food.nameEn)}-${i}`,
+          countryId: entry.id,
+          segments: variants[i]!,
+        })
+      }
+    }
+  }
+
+  if (!cityUsed.has('event')) {
+    for (const event of entry.events) {
+      const variants: ClueSegment[][] = [
+        [he('דיבר על '), en(event.nameEn, event.nameEn), he(' כאירוע היסטורי.')],
+        [he('ראה פוסטר של '), en(event.nameEn, event.nameEn), he('.')],
+        [he('השתתף בסימולציה של '), en(event.nameEn, event.nameEn), he('.')],
+        [he('הזכיר את '), en(event.nameEn, event.nameEn), he(' בטלפון.')],
+      ]
+      for (let i = 0; i < variants.length; i++) {
+        styles.push({
+          id: `dyn-${entry.id}-culture-event-${slug(event.nameEn)}-${i}`,
+          countryId: entry.id,
+          segments: variants[i]!,
+        })
+      }
+    }
+  }
+
+  if (!cityUsed.has('person')) {
+    for (const person of entry.famousPeople) {
+      const variants: ClueSegment[][] = [
+        [he('דיבר על '), en(person.nameEn, person.nameEn), he('.')],
+        [he('קרא ספר על '), en(person.nameEn, person.nameEn), he('.')],
+        [he('ראה תמונה של '), en(person.nameEn, person.nameEn), he('.')],
+        [he('שמע שיר על '), en(person.nameEn, person.nameEn), he('.')],
+      ]
+      for (let i = 0; i < variants.length; i++) {
+        styles.push({
+          id: `dyn-${entry.id}-culture-person-${slug(person.nameEn)}-${i}`,
+          countryId: entry.id,
+          segments: variants[i]!,
+        })
+      }
+    }
+  }
+
+  return styles
+}
+
+export function buildCultureDestinationClue(
+  entry: AlmanacEntry,
+  usedKeys: Set<string>,
+  globalUsed: Set<ClueCategory>,
+  cityUsed: Set<ClueCategory>,
+  usedEnglish: Set<string>,
+  usedTexts: Set<string>,
+  usedPlaceGroups?: Set<number>,
+): RichClueTemplate | null {
+  const styles = buildCultureClueStyles(entry, cityUsed)
+  if (!styles.length) return null
+  return pickVariedTemplate(
+    styles,
+    usedKeys,
+    globalUsed,
+    cityUsed,
+    usedEnglish,
+    usedTexts,
+    entry,
+    usedPlaceGroups,
+  )
 }
 
 /** Informative clue when sanitization removes all segments (never the vague placeholder). */

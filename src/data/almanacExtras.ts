@@ -550,4 +550,118 @@ export const almanacExtras: Record<string, AlmanacExtra> = {
       'שכנות: נמיביה, בוטסואנה, זימבבואה, מוזמביק, אסוואטיני, לסוטו.',
     ],
   },
+  poland: {
+    languageEn: 'Polish',
+    continent: 'אירופה',
+    majorCities: [
+      { name: 'ורשה', nameEn: 'Warsaw', inGame: true },
+      { name: 'קרכוב', nameEn: 'Krakow' },
+      { name: 'גדנסק', nameEn: 'Gdansk' },
+    ],
+    mainSites: [
+      { name: 'העיר העתיקה בורשה', nameEn: 'Warsaw Old Town' },
+      { name: 'טירת וואיל', nameEn: 'Wawel Castle' },
+      { name: 'מחנה אושביץ', nameEn: 'Auschwitz Memorial' },
+    ],
+    facts: [
+      'פולין — בירתה ורשה, והשפה פולנית.',
+      'מרי קורי נולדה בורשה.',
+      'תנועת סולידריות היתה חלק מסיפור העצמאות.',
+    ],
+  },
+  portugal: {
+    languageEn: 'Portuguese',
+    continent: 'אירופה',
+    majorCities: [
+      { name: 'ליסבון', nameEn: 'Lisbon', inGame: true },
+      { name: 'פורטו', nameEn: 'Porto' },
+      { name: 'פארו', nameEn: 'Faro' },
+    ],
+    mainSites: [
+      { name: 'מגדל בלם', nameEn: 'Belem Tower' },
+      { name: 'מנזר ג׳רונימוס', nameEn: 'Jerónimos Monastery' },
+      { name: 'ארמון פנה', nameEn: 'Pena Palace' },
+    ],
+    facts: [
+      'פורטוגל — בירתה ליסבון, והשפה פורטוגזית.',
+      'ואסו דה גאמה יצא מכאן לדרך הים להודו.',
+      'מאכל מפורסם: פסטל די נטה.',
+    ],
+  },
+  sweden: {
+    languageEn: 'Swedish',
+    continent: 'אירופה',
+    majorCities: [
+      { name: 'סטוקהולם', nameEn: 'Stockholm', inGame: true },
+      { name: 'גותנבורג', nameEn: 'Gothenburg' },
+      { name: 'מאלמו', nameEn: 'Malmo' },
+    ],
+    mainSites: [
+      { name: 'מוזיאון הספינה ואזה', nameEn: 'Vasa Museum' },
+      { name: 'העיר העתיקה בסטוקהולם', nameEn: 'Old Town Stockholm' },
+      { name: 'מוזיאון אבבא', nameEn: 'ABBA Museum' },
+    ],
+    facts: [
+      'שוודיה — בירתה סטוקהולם, והשפה שוודית.',
+      'פרס נובל נוסד כאן.',
+      'כדורי בשר שוודיים הם מאכל לאומי.',
+    ],
+  },
+  vietnam: {
+    languageEn: 'Vietnamese',
+    continent: 'אסיה',
+    majorCities: [
+      { name: 'הו צ׳י מין', nameEn: 'Ho Chi Minh City', inGame: true },
+      { name: 'האני', nameEn: 'Hanoi' },
+      { name: 'דנאנג', nameEn: 'Da Nang' },
+    ],
+    mainSites: [
+      { name: 'מפרץ האלונג', nameEn: 'Ha Long Bay' },
+      { name: 'מנהרות קו׳י צ׳י', nameEn: 'Cu Chi Tunnels' },
+      { name: 'עיר הקיסר בהואה', nameEn: 'Imperial City of Hue' },
+    ],
+    facts: [
+      'וייטנאם — בירתה האני, והשפה וייטנאמית.',
+      'פו הוא מרק מפורסם במדינה.',
+      'מפרץ האלונג הוא אתר מורשת עולמית.',
+    ],
+  },
+  kenya: {
+    languageEn: 'English and Swahili',
+    continent: 'אפריקה',
+    majorCities: [
+      { name: 'ניירובי', nameEn: 'Nairobi', inGame: true },
+      { name: 'מומבסה', nameEn: 'Mombasa' },
+      { name: 'קיסומו', nameEn: 'Kisumu' },
+    ],
+    mainSites: [
+      { name: 'פארק הספארי בניירובי', nameEn: 'Nairobi National Park' },
+      { name: 'מסעי מרה', nameEn: 'Maasai Mara' },
+      { name: 'הר קניה', nameEn: 'Mount Kenya' },
+    ],
+    facts: [
+      'קניה — בירתה ניירובי, והשפות אנגלית וסוואהלי.',
+      'ואנגרי מאתאי זכתה בפרס נובל לשלום.',
+      'ספארי בקניה מפורסם ברחבי העולם.',
+    ],
+  },
+  'south-korea': {
+    languageEn: 'Korean',
+    continent: 'אסיה',
+    majorCities: [
+      { name: 'סיאול', nameEn: 'Seoul', inGame: true },
+      { name: 'בוסאן', nameEn: 'Busan' },
+      { name: 'אינצ׳ון', nameEn: 'Incheon' },
+    ],
+    mainSites: [
+      { name: 'ארמון גיונגבוק', nameEn: 'Gyeongbokgung Palace' },
+      { name: 'מגדל סיאול', nameEn: 'N Seoul Tower' },
+      { name: 'האזור המפורז', nameEn: 'Korean Demilitarized Zone' },
+    ],
+    facts: [
+      'דרום קוריאה — בירתה סיאול, והשפה קוריאית.',
+      'קימצ׳י הוא מאכל מסורתי מפורסם.',
+      'המלך סגונג המציא את האלפבית הקוריאי.',
+    ],
+  },
 }

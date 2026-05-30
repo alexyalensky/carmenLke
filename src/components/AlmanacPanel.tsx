@@ -27,6 +27,9 @@ export function AlmanacPanel() {
         ...entry.neighbors,
         ...entry.majorCities.flatMap((c) => [c.name, c.nameEn]),
         ...entry.mainSites.flatMap((s) => [s.name, s.nameEn]),
+        ...entry.foods.flatMap((f) => [f.name, f.nameEn]),
+        ...entry.events.flatMap((e) => [e.name, e.nameEn]),
+        ...entry.famousPeople.flatMap((p) => [p.name, p.nameEn]),
         ...entry.facts,
       ]
         .join(' ')
@@ -140,6 +143,48 @@ export function AlmanacPanel() {
                       <strong>{site.name}</strong>
                       {site.name !== site.nameEn && (
                         <span className="almanac-en-hint"> — {site.nameEn}</span>
+                      )}
+                    </li>
+                  ))}
+                </ul>
+              </section>
+
+              <section className="almanac-section">
+                <h4>מאכלים מסורתיים</h4>
+                <ul className="almanac-chip-list">
+                  {selected.foods.map((item) => (
+                    <li key={`food-${item.nameEn}`} className="almanac-chip">
+                      {item.name}
+                      {item.name !== item.nameEn && (
+                        <span className="almanac-en-hint"> ({item.nameEn})</span>
+                      )}
+                    </li>
+                  ))}
+                </ul>
+              </section>
+
+              <section className="almanac-section">
+                <h4>אירועים היסטוריים</h4>
+                <ul className="almanac-chip-list">
+                  {selected.events.map((item) => (
+                    <li key={`event-${item.nameEn}`} className="almanac-chip">
+                      {item.name}
+                      {item.name !== item.nameEn && (
+                        <span className="almanac-en-hint"> ({item.nameEn})</span>
+                      )}
+                    </li>
+                  ))}
+                </ul>
+              </section>
+
+              <section className="almanac-section">
+                <h4>אישים מפורסמים</h4>
+                <ul className="almanac-chip-list">
+                  {selected.famousPeople.map((item) => (
+                    <li key={`person-${item.nameEn}`} className="almanac-chip">
+                      {item.name}
+                      {item.name !== item.nameEn && (
+                        <span className="almanac-en-hint"> ({item.nameEn})</span>
                       )}
                     </li>
                   ))}

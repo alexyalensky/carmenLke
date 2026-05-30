@@ -86,7 +86,7 @@ export function MainMenu() {
             <span className="settings-toggle-body">
               <strong>תרגילי חשבון לפני רמז</strong>
               <span className="settings-toggle-hint">
-                לפעמים תרגיל לפי הקושי — או דילוג בתשלום בזמן
+                לפעמים תרגיל אחד לכל היותר בכל עיר — או דילוג בתשלום בזמן
               </span>
             </span>
           </label>
@@ -117,7 +117,7 @@ export function MainMenu() {
           </button>
         </div>
         <footer className="menu-footer">
-          22 ערים · 28 חשודים · CrimeNet · ספר העולם
+          28 ערים · 28 חשודים · CrimeNet · ספר העולם
         </footer>
       </div>
     </div>

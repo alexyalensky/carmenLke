@@ -406,6 +406,11 @@ body {
   color: var(--accent-red);
 }
 
+.pill-amber {
+  background: rgba(245, 158, 11, 0.2);
+  color: #f59e0b;
+}
+
 .clue-feed {
   list-style: none;
   padding: 0;
@@ -437,6 +442,7 @@ body {
   border-radius: 4px;
   background: rgba(255, 180, 50, 0.2);
   color: var(--accent-gold);
+  margin-inline-end: 0.15rem;
   border: 1px solid rgba(255, 180, 50, 0.35);
 }
 
@@ -490,6 +496,66 @@ body {
   color: #fff;
   outline: 2px solid var(--accent-gold);
   outline-offset: 1px;
+}
+
+.clue-en-group {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.2rem;
+  white-space: nowrap;
+  vertical-align: baseline;
+}
+
+.clue-translate-hint {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 1.15em;
+  height: 1.15em;
+  padding: 0 0.2em;
+  font-size: 0.62em;
+  font-weight: 800;
+  line-height: 1;
+  border-radius: 999px;
+  background: rgba(96, 165, 250, 0.22);
+  color: #93c5fd;
+  border: 1px solid rgba(147, 197, 253, 0.45);
+  cursor: help;
+  flex-shrink: 0;
+  position: relative;
+  user-select: none;
+}
+
+.clue-translate-hint::after {
+  content: attr(title);
+  position: absolute;
+  inset-inline-start: 50%;
+  bottom: calc(100% + 6px);
+  transform: translateX(-50%);
+  min-width: max-content;
+  max-width: 16rem;
+  padding: 0.35rem 0.55rem;
+  border-radius: 6px;
+  background: rgba(15, 23, 42, 0.96);
+  color: #f8fafc;
+  font-size: 0.85rem;
+  font-weight: 600;
+  line-height: 1.35;
+  text-align: center;
+  white-space: normal;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35);
+  border: 1px solid rgba(147, 197, 253, 0.35);
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity 0.12s ease, visibility 0.12s ease;
+  z-index: 20;
+}
+
+.clue-translate-hint:hover::after,
+.clue-translate-hint:focus-visible::after {
+  opacity: 1;
+  visibility: visible;
 }
 
 .clue-site-group {

@@ -34,6 +34,12 @@ export const cityGeoCoords: Record<string, MapCoord> = {
   montreal: { lon: -73.57, lat: 45.5 },
   amsterdam: { lon: 4.9, lat: 52.37 },
   johannesburg: { lon: 28.05, lat: -26.2 },
+  warsaw: { lon: 21.01, lat: 52.23 },
+  lisbon: { lon: -9.14, lat: 38.72 },
+  stockholm: { lon: 18.07, lat: 59.33 },
+  'ho-chi-minh': { lon: 106.63, lat: 10.82 },
+  nairobi: { lon: 36.82, lat: -1.29 },
+  seoul: { lon: 126.98, lat: 37.57 },
 }
 
 export function projectCityToMap({ lon, lat }: MapCoord): { x: number; y: number } {

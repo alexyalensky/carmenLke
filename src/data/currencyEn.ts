@@ -22,6 +22,12 @@ export const currencyShort: Record<string, string> = {
   canada: 'Dollar',
   netherlands: 'Euro',
   'south-africa': 'Rand',
+  poland: 'Zloty',
+  portugal: 'Euro',
+  sweden: 'Krona',
+  vietnam: 'Dong',
+  kenya: 'Shilling',
+  'south-korea': 'Won',
 }
 
 /** Full names for almanac display */
@@ -48,6 +54,12 @@ export const currencyEnglish: Record<string, string> = {
   canada: 'Canadian dollar',
   netherlands: 'Euro',
   'south-africa': 'South African rand',
+  poland: 'Polish zloty',
+  portugal: 'Euro',
+  sweden: 'Swedish krona',
+  vietnam: 'Vietnamese dong',
+  kenya: 'Kenyan shilling',
+  'south-korea': 'South Korean won',
 }
 
 export function getCurrencyShort(countryId: string): string {

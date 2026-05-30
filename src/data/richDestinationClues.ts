@@ -1,17 +1,13 @@
 import type { ClueSegment } from '../game/types'
 import { segmentsToPlainText } from '../utils/clueSegments'
 import {
-  buildDynamicDestinationClue,
+  gatherDestinationTemplates,
+  pickBalancedDestinationClue,
   finalizeClueTemplate,
-  getClueCategories,
   pickVariedTemplate,
-  templateMixesFlagWithOtherClues,
-  templateUsesPlaceGroup,
-  isVagueDestinationClue,
   type ClueCategory,
   type RichClueTemplate,
 } from '../game/clueVariety'
-import { extractEnglishWords } from '../game/clueSanitize'
 import type { AlmanacEntry, City } from '../game/types'
 
 export type { RichClueTemplate }
@@ -621,6 +617,108 @@ export const richDestinationClues: Record<string, RichClueTemplate[]> = {
       segments: [he('הזכיר '), en('lion'), he(' ו'), en('savanna'), he(' בכרטיס.')],
     },
   ],
+  warsaw: [
+    {
+      id: 'warsaw-1',
+      countryId: 'poland',
+      segments: [flag('poland'), he(' העד אמר '), en('pierogi'), he(' ו'), en('zloty'), he('.')],
+    },
+    {
+      id: 'warsaw-2',
+      countryId: 'poland',
+      segments: [he('הזכיר '), en('Marie Curie'), he(' ו'), en('Warsaw Old Town'), he('.')],
+    },
+    {
+      id: 'warsaw-3',
+      countryId: 'poland',
+      segments: [he('דיבר '), en('Polish'), he(' ו'), en('Solidarity movement'), he('.')],
+    },
+  ],
+  lisbon: [
+    {
+      id: 'lisbon-1',
+      countryId: 'portugal',
+      segments: [flag('portugal'), he(' — '), en('pastel de nata'), he(' ו'), en('Belem Tower'), he('.')],
+    },
+    {
+      id: 'lisbon-2',
+      countryId: 'portugal',
+      segments: [he('הזכיר '), en('Vasco da Gama'), he(' ו'), en('Age of Discovery'), he('.')],
+    },
+    {
+      id: 'lisbon-3',
+      countryId: 'portugal',
+      segments: [he('דיבר '), en('Portuguese'), he(' עם '), en('euro'), he(' בכיס.')],
+    },
+  ],
+  stockholm: [
+    {
+      id: 'stockholm-1',
+      countryId: 'sweden',
+      segments: [flag('sweden'), he(' — '), en('Swedish meatballs'), he(' ו'), en('Nobel Prize'), he('.')],
+    },
+    {
+      id: 'stockholm-2',
+      countryId: 'sweden',
+      segments: [he('הזכיר '), en('ABBA'), he(' ו'), en('Vasa Museum'), he('.')],
+    },
+    {
+      id: 'stockholm-3',
+      countryId: 'sweden',
+      segments: [he('דיבר '), en('Swedish'), he(' ו'), en('krona'), he('.')],
+    },
+  ],
+  'ho-chi-minh': [
+    {
+      id: 'ho-chi-minh-1',
+      countryId: 'vietnam',
+      segments: [flag('vietnam'), he(' — '), en('pho'), he(' ו'), en('spring rolls'), he('.')],
+    },
+    {
+      id: 'ho-chi-minh-2',
+      countryId: 'vietnam',
+      segments: [he('הזכיר '), en('Ho Chi Minh'), he(' ו'), en('Ha Long Bay'), he('.')],
+    },
+    {
+      id: 'ho-chi-minh-3',
+      countryId: 'vietnam',
+      segments: [he('דיבר '), en('Vietnamese'), he(' ו'), en('dong'), he('.')],
+    },
+  ],
+  nairobi: [
+    {
+      id: 'nairobi-1',
+      countryId: 'kenya',
+      segments: [flag('kenya'), he(' — '), en('safari'), he(' ו'), en('nyama choma'), he('.')],
+    },
+    {
+      id: 'nairobi-2',
+      countryId: 'kenya',
+      segments: [he('הזכיר '), en('Wangari Maathai'), he(' ו'), en('Mount Kenya'), he('.')],
+    },
+    {
+      id: 'nairobi-3',
+      countryId: 'kenya',
+      segments: [he('דיבר '), en('Swahili'), he(' ו'), en('shilling'), he('.')],
+    },
+  ],
+  seoul: [
+    {
+      id: 'seoul-1',
+      countryId: 'south-korea',
+      segments: [flag('south-korea'), he(' — '), en('kimchi'), he(' ו'), en('Korean barbecue'), he('.')],
+    },
+    {
+      id: 'seoul-2',
+      countryId: 'south-korea',
+      segments: [he('הזכיר '), en('King Sejong'), he(' ו'), en('Seoul Olympics'), he('.')],
+    },
+    {
+      id: 'seoul-3',
+      countryId: 'south-korea',
+      segments: [he('דיבר '), en('Korean'), he(' ו'), en('won'), he('.')],
+    },
+  ],
 }
 
 function pickUnusedTemplate(
@@ -645,19 +743,6 @@ function pickUnusedTemplate(
   )
 }
 
-function templateWeakness(template: RichClueTemplate): number {
-  if (template.id.includes('-fact')) return 50
-  const cats = getClueCategories(template.segments)
-  if (template.id.includes('-site-') || template.id.includes('-landmark')) return 0
-  if (template.id.includes('-flag')) return 2
-  if (cats.has('landmark')) return 1
-  if (cats.has('cultural')) return 4
-  if (cats.has('capital') || cats.has('neighbor')) return 6
-  if (cats.has('language')) return 8
-  if (cats.has('currency')) return 10
-  return 5
-}
-
 export function pickRichClueForCity(
   cityId: string,
   usedKeys: Set<string>,
@@ -669,113 +754,46 @@ export function pickRichClueForCity(
   usedTexts: Set<string> = usedKeys,
   usedFacts: Set<string> = new Set(),
   usedPlaceGroups: Set<number> = new Set(),
+  _slotIndex = 0,
 ): RichClueTemplate | null {
-  const pool = richDestinationClues[cityId] ?? []
+  const staticPool = richDestinationClues[cityId] ?? []
 
-  const staticPick = pool.length
-    ? pickUnusedTemplate(
-        pool,
-        usedKeys,
-        globalUsed,
-        cityUsed,
-        usedEnglish,
-        usedTexts,
-        entry,
-        usedPlaceGroups,
-      )
-    : null
-
-  const dynamicPick =
-    city && entry
-      ? buildDynamicDestinationClue(
-          city,
-          entry,
-          usedKeys,
-          globalUsed,
-          cityUsed,
-          usedEnglish,
-          usedTexts,
-          usedFacts,
-          usedPlaceGroups,
-        )
-      : null
-
-  const candidates = [staticPick, dynamicPick].filter(Boolean) as RichClueTemplate[]
-  if (!candidates.length) return null
-
-  return pickRandomCandidate(
-    candidates,
-    globalUsed,
-    cityUsed,
-    usedEnglish,
-    usedTexts,
-    entry,
-    usedPlaceGroups,
-  )
-}
-
-function pickRandomCandidate(
-  candidates: RichClueTemplate[],
-  globalUsed: Set<ClueCategory>,
-  cityUsed: Set<ClueCategory>,
-  usedEnglish: Set<string>,
-  usedTexts: Set<string>,
-  entry?: AlmanacEntry,
-  usedPlaceGroups?: Set<number>,
-): RichClueTemplate {
-  const ranked = candidates
-    .map((t) => ({
-      t,
-      score: scoreCandidate(
-        t,
-        globalUsed,
-        cityUsed,
-        usedEnglish,
-        usedTexts,
-        entry,
-        usedPlaceGroups,
-      ),
-    }))
-    .filter((x) => x.score < Infinity)
-    .sort((a, b) => a.score - b.score)
-  if (!ranked.length) return candidates[0]!
-  return ranked[0]!.t
-}
-
-function scoreCandidate(
-  template: RichClueTemplate,
-  globalUsed: Set<ClueCategory>,
-  cityUsed: Set<ClueCategory>,
-  usedEnglish: Set<string>,
-  usedTexts: Set<string>,
-  entry?: AlmanacEntry,
-  usedPlaceGroups?: Set<number>,
-): number {
-  if (templateMixesFlagWithOtherClues(template.segments)) return Infinity
-  if (isVagueDestinationClue(template.segments)) return Infinity
-  if (entry && usedPlaceGroups?.size && templateUsesPlaceGroup(template.segments, entry, usedPlaceGroups)) {
-    return Infinity
+  if (city && entry) {
+    const allTemplates = gatherDestinationTemplates(
+      city,
+      entry,
+      staticPool,
+      globalUsed,
+      cityUsed,
+      usedFacts,
+      usedPlaceGroups,
+    )
+    const balanced = pickBalancedDestinationClue(
+      allTemplates,
+      globalUsed,
+      cityUsed,
+      usedEnglish,
+      usedTexts,
+      entry,
+      usedPlaceGroups,
+    )
+    if (balanced) return balanced
   }
-  const cats = getClueCategories(template.segments)
-  for (const cat of cats) {
-    if (globalUsed.has(cat) && (cat === 'flag' || cat === 'currency' || cat === 'language' || cat === 'capital' || cat === 'neighbor')) {
-      return Infinity
-    }
-    if (cityUsed.has(cat) && (cat === 'landmark' || cat === 'neighbor' || cat === 'capital' || cat === 'flag' || cat === 'currency' || cat === 'language')) {
-      return Infinity
-    }
-  }
-  if (usedTexts.has(segmentsToPlainText(template.segments))) return Infinity
 
-  let score = Math.random() * 8 + templateWeakness(template)
-  for (const cat of cats) {
-    if (globalUsed.has(cat)) score += 15
-    if (cityUsed.has(cat)) score += 18
+  if (staticPool.length) {
+    return pickUnusedTemplate(
+      staticPool,
+      usedKeys,
+      globalUsed,
+      cityUsed,
+      usedEnglish,
+      usedTexts,
+      entry,
+      usedPlaceGroups,
+    )
   }
-  for (const w of extractEnglishWords(template.segments)) {
-    if (usedEnglish.has(w)) score += 10
-  }
-  return score
+
+  return null
 }
 
 export function pickRichClueForWrongCity(

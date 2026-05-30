@@ -6,6 +6,7 @@ import {
   getSuspectClueReveals,
   isAtFinalCity,
   isSuspectTraitRevealed,
+  canRevisitWitnessesAtFinal,
 } from '../game/engine'
 import type { SuspectTrait } from '../game/types'
 import { SuspectPhoto } from './Photo'
@@ -16,6 +17,9 @@ const TRAIT_LABELS: Record<SuspectTrait, string> = {
   vehicle: 'רכב',
   gender: 'מגדר',
   build: 'מבנה גוף',
+  accent: 'מבטא',
+  accessory: 'אביזר',
+  ageGroup: 'גיל',
 }
 
 const ALL_TRAITS = Object.keys(TRAIT_LABELS) as SuspectTrait[]
@@ -29,6 +33,7 @@ export function InterpolPanel() {
   const reveals = getSuspectClueReveals(caseState.knownClues)
   const revealedTraits = ALL_TRAITS.filter((t) => (reveals.get(t)?.size ?? 0) > 0)
   const atFinal = isAtFinalCity(caseState)
+  const revisitWitnesses = canRevisitWitnessesAtFinal(gameData, caseState)
 
   return (
     <div className="deluxe-modal-overlay" onClick={() => setActivePanel('none')}>
@@ -87,7 +92,9 @@ export function InterpolPanel() {
 
         {atFinal && !caseState.selectedSuspectId && (
           <div className="alert-banner">
-            הגעתם לעיר המחבוא! בחרו חשוד מהרשימה למעלה, ואז חקור מקום לביצוע המעצר.
+            {revisitWitnesses
+              ? 'אין מספיק רמזי חשוד — חזרו לחקירה ושאלו עדים שוב, ואז בחרו חשוד מהרשימה.'
+              : 'הגעתם לעיר המחבוא! בחרו חשוד מהרשימה למעלה, ואז חקור מקום לביצוע המעצר.'}
           </div>
         )}
 

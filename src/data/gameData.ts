@@ -4,8 +4,20 @@ import { suspects } from './suspects'
 import { citySites } from './citySites'
 import { currencyEnglish } from './currencyEn'
 import { almanacExtras } from './almanacExtras'
+import { almanacCulture } from './almanacCulture'
 
-const baseAlmanac: Omit<AlmanacEntry, 'currencyEn' | 'languageEn' | 'continent' | 'majorCities' | 'mainSites' | 'facts'>[] = [
+const baseAlmanac: Omit<
+  AlmanacEntry,
+  | 'currencyEn'
+  | 'languageEn'
+  | 'continent'
+  | 'majorCities'
+  | 'mainSites'
+  | 'facts'
+  | 'foods'
+  | 'events'
+  | 'famousPeople'
+>[] = [
   {
     id: 'israel',
     name: 'ישראל',
@@ -248,6 +260,72 @@ const baseAlmanac: Omit<AlmanacEntry, 'currencyEn' | 'languageEn' | 'continent' 
     flagDescription: 'דגל ירוק עם משולש צהוב ופסים אדום וכחול',
     imageKey: 'south-africa',
   },
+  {
+    id: 'poland',
+    name: 'פולין',
+    capital: 'ורשה',
+    currency: 'זלוטי פולני',
+    language: 'פולנית',
+    neighbors: ['גרמניה', 'צ׳כיה', 'סלובקיה', 'אוקראינה', 'בלארוס', 'ליטבה', 'רוסיה'],
+    landmark: 'העיר העתיקה בורשה',
+    flagDescription: 'פסים אופקיים לבן ואדום',
+    imageKey: 'poland',
+  },
+  {
+    id: 'portugal',
+    name: 'פורטוגל',
+    capital: 'ליסבון',
+    currency: 'אירו',
+    language: 'פורטוגזית',
+    neighbors: ['ספרד'],
+    landmark: 'מגדל בלם',
+    flagDescription: 'ירוק ואדום עם סמל במרכז',
+    imageKey: 'portugal',
+  },
+  {
+    id: 'sweden',
+    name: 'שוודיה',
+    capital: 'סטוקהולם',
+    currency: 'קרון שוודי',
+    language: 'שוודית',
+    neighbors: ['נורווגיה', 'פינלנד'],
+    landmark: 'מוזיאון הספינה ואזה',
+    flagDescription: 'צלב צהוב על רקע כחול',
+    imageKey: 'sweden',
+  },
+  {
+    id: 'vietnam',
+    name: 'וייטנאם',
+    capital: 'האני',
+    currency: 'דון',
+    language: 'וייטנאמית',
+    neighbors: ['סין', 'לאוס', 'קמבודיה', 'תאילנד'],
+    landmark: 'מפרץ האלונג',
+    flagDescription: 'דגל אדום עם כוכב צהוב',
+    imageKey: 'vietnam',
+  },
+  {
+    id: 'kenya',
+    name: 'קניה',
+    capital: 'ניירובי',
+    currency: 'שילינג קניה',
+    language: 'אנגלית וסוואהלי',
+    neighbors: ['אתיופיה', 'סומליה', 'טנזניה', 'אוגנדה', 'דרום סודאן'],
+    landmark: 'פארק הספארי בניירובי',
+    flagDescription: 'פסים אופקיים שחור, אדום וירוק עם מגן',
+    imageKey: 'kenya',
+  },
+  {
+    id: 'south-korea',
+    name: 'דרום קוריאה',
+    capital: 'סיאול',
+    currency: 'וון',
+    language: 'קוריאית',
+    neighbors: ['צפון קוריאה'],
+    landmark: 'ארמון גיונגבוק',
+    flagDescription: 'דגל לבן עם סמל יין-יאנג ופסים',
+    imageKey: 'south-korea',
+  },
 ]
 
 const defaultLanguageEn: Record<string, string> = {
@@ -256,6 +334,8 @@ const defaultLanguageEn: Record<string, string> = {
   brazil: 'Portuguese', turkey: 'Turkish', italy: 'Italian', spain: 'Spanish', russia: 'Russian',
   china: 'Mandarin Chinese', thailand: 'Thai', greece: 'Greek', mexico: 'Spanish', canada: 'English and French',
   netherlands: 'Dutch', 'south-africa': 'English',
+  poland: 'Polish', portugal: 'Portuguese', sweden: 'Swedish', vietnam: 'Vietnamese',
+  kenya: 'English and Swahili', 'south-korea': 'Korean',
 }
 
 const defaultContinent: Record<string, string> = {
@@ -264,6 +344,8 @@ const defaultContinent: Record<string, string> = {
   brazil: 'דרום אמריקה', turkey: 'אסיה ואירופה', italy: 'אירופה', spain: 'אירופה', russia: 'אירופה ואסיה',
   china: 'אסיה', thailand: 'אסיה', greece: 'אירופה', mexico: 'צפון אמריקה', canada: 'צפון אמריקה',
   netherlands: 'אירופה', 'south-africa': 'אפריקה',
+  poland: 'אירופה', portugal: 'אירופה', sweden: 'אירופה', vietnam: 'אסיה',
+  kenya: 'אפריקה', 'south-korea': 'אסיה',
 }
 
 export const cities: City[] = [
@@ -281,7 +363,7 @@ export const cities: City[] = [
     name: 'פריז',
     nameEn: 'Paris',
     countryId: 'france',
-    connections: ['amsterdam', 'berlin', 'cairo', 'johannesburg', 'london', 'madrid', 'montreal', 'moscow', 'new-york', 'rome', 'tel-aviv'],
+    connections: ['amsterdam', 'berlin', 'cairo', 'johannesburg', 'lisbon', 'london', 'madrid', 'montreal', 'moscow', 'new-york', 'rome', 'tel-aviv'],
     sites: citySites['paris'],
     imageKey: 'paris',
   },
@@ -290,7 +372,7 @@ export const cities: City[] = [
     name: 'קהיר',
     nameEn: 'Cairo',
     countryId: 'egypt',
-    connections: ['athens', 'bangkok', 'istanbul', 'johannesburg', 'mumbai', 'paris', 'tel-aviv'],
+    connections: ['athens', 'bangkok', 'istanbul', 'johannesburg', 'mumbai', 'nairobi', 'paris', 'tel-aviv'],
     sites: citySites['cairo'],
     imageKey: 'cairo',
   },
@@ -299,7 +381,7 @@ export const cities: City[] = [
     name: 'טוקיו',
     nameEn: 'Tokyo',
     countryId: 'japan',
-    connections: ['bangkok', 'beijing', 'london', 'mumbai', 'new-york', 'sydney', 'tel-aviv'],
+    connections: ['bangkok', 'beijing', 'ho-chi-minh', 'london', 'mumbai', 'new-york', 'seoul', 'sydney', 'tel-aviv'],
     sites: citySites['tokyo'],
     imageKey: 'tokyo',
   },
@@ -317,7 +399,7 @@ export const cities: City[] = [
     name: 'ברלין',
     nameEn: 'Berlin',
     countryId: 'germany',
-    connections: ['amsterdam', 'athens', 'istanbul', 'london', 'madrid', 'montreal', 'moscow', 'paris', 'rome', 'tel-aviv'],
+    connections: ['amsterdam', 'athens', 'istanbul', 'london', 'madrid', 'montreal', 'moscow', 'paris', 'rome', 'stockholm', 'tel-aviv', 'warsaw'],
     sites: citySites['berlin'],
     imageKey: 'berlin',
   },
@@ -353,7 +435,7 @@ export const cities: City[] = [
     name: 'לונדון',
     nameEn: 'London',
     countryId: 'uk',
-    connections: ['amsterdam', 'beijing', 'berlin', 'johannesburg', 'madrid', 'mexico-city', 'montreal', 'moscow', 'new-york', 'paris', 'sydney', 'tokyo'],
+    connections: ['amsterdam', 'beijing', 'berlin', 'johannesburg', 'madrid', 'mexico-city', 'montreal', 'moscow', 'new-york', 'paris', 'stockholm', 'sydney', 'tokyo'],
     sites: citySites['london'],
     imageKey: 'london',
   },
@@ -371,7 +453,7 @@ export const cities: City[] = [
     name: 'איסטנבול',
     nameEn: 'Istanbul',
     countryId: 'turkey',
-    connections: ['athens', 'bangkok', 'berlin', 'cairo', 'moscow', 'mumbai', 'rome', 'tel-aviv'],
+    connections: ['athens', 'bangkok', 'berlin', 'cairo', 'moscow', 'mumbai', 'nairobi', 'rome', 'tel-aviv'],
     sites: citySites['istanbul'],
     imageKey: 'istanbul',
   },
@@ -389,7 +471,7 @@ export const cities: City[] = [
     name: 'מדריד',
     nameEn: 'Madrid',
     countryId: 'spain',
-    connections: ['amsterdam', 'berlin', 'buenos-aires', 'london', 'mexico-city', 'new-york', 'paris', 'rio', 'rome'],
+    connections: ['amsterdam', 'berlin', 'buenos-aires', 'lisbon', 'london', 'mexico-city', 'new-york', 'paris', 'rio', 'rome'],
     sites: citySites['madrid'],
     imageKey: 'madrid',
   },
@@ -398,7 +480,7 @@ export const cities: City[] = [
     name: 'מוסקבה',
     nameEn: 'Moscow',
     countryId: 'russia',
-    connections: ['amsterdam', 'athens', 'beijing', 'berlin', 'istanbul', 'london', 'paris'],
+    connections: ['amsterdam', 'athens', 'beijing', 'berlin', 'istanbul', 'london', 'paris', 'warsaw'],
     sites: citySites['moscow'],
     imageKey: 'moscow',
   },
@@ -407,7 +489,7 @@ export const cities: City[] = [
     name: 'בייג׳ינג',
     nameEn: 'Beijing',
     countryId: 'china',
-    connections: ['bangkok', 'london', 'moscow', 'mumbai', 'sydney', 'tokyo'],
+    connections: ['bangkok', 'ho-chi-minh', 'london', 'moscow', 'mumbai', 'seoul', 'sydney', 'tokyo'],
     sites: citySites['beijing'],
     imageKey: 'beijing',
   },
@@ -416,7 +498,7 @@ export const cities: City[] = [
     name: 'בנגקוק',
     nameEn: 'Bangkok',
     countryId: 'thailand',
-    connections: ['beijing', 'cairo', 'istanbul', 'mumbai', 'sydney', 'tokyo'],
+    connections: ['beijing', 'cairo', 'ho-chi-minh', 'istanbul', 'mumbai', 'seoul', 'sydney', 'tokyo'],
     sites: citySites['bangkok'],
     imageKey: 'bangkok',
   },
@@ -452,7 +534,7 @@ export const cities: City[] = [
     name: 'אמסטרדם',
     nameEn: 'Amsterdam',
     countryId: 'netherlands',
-    connections: ['berlin', 'london', 'madrid', 'mexico-city', 'montreal', 'moscow', 'new-york', 'paris', 'rome'],
+    connections: ['berlin', 'london', 'madrid', 'mexico-city', 'montreal', 'moscow', 'new-york', 'paris', 'rome', 'stockholm'],
     sites: citySites['amsterdam'],
     imageKey: 'amsterdam',
   },
@@ -461,15 +543,70 @@ export const cities: City[] = [
     name: 'יוהנסבורג',
     nameEn: 'Johannesburg',
     countryId: 'south-africa',
-    connections: ['cairo', 'london', 'mumbai', 'new-york', 'paris', 'sydney'],
+    connections: ['cairo', 'london', 'mumbai', 'nairobi', 'new-york', 'paris', 'sydney'],
     sites: citySites['johannesburg'],
     imageKey: 'johannesburg',
+  },
+  {
+    id: 'warsaw',
+    name: 'ורשה',
+    nameEn: 'Warsaw',
+    countryId: 'poland',
+    connections: ['amsterdam', 'berlin', 'istanbul', 'london', 'moscow'],
+    sites: citySites['warsaw'],
+    imageKey: 'warsaw',
+  },
+  {
+    id: 'lisbon',
+    name: 'ליסבון',
+    nameEn: 'Lisbon',
+    countryId: 'portugal',
+    connections: ['amsterdam', 'london', 'madrid', 'paris', 'rio'],
+    sites: citySites['lisbon'],
+    imageKey: 'lisbon',
+  },
+  {
+    id: 'stockholm',
+    name: 'סטוקהולם',
+    nameEn: 'Stockholm',
+    countryId: 'sweden',
+    connections: ['amsterdam', 'berlin', 'london', 'moscow', 'paris'],
+    sites: citySites['stockholm'],
+    imageKey: 'stockholm',
+  },
+  {
+    id: 'ho-chi-minh',
+    name: 'הו צ׳י מין',
+    nameEn: 'Ho Chi Minh City',
+    countryId: 'vietnam',
+    connections: ['bangkok', 'beijing', 'mumbai', 'sydney', 'tokyo'],
+    sites: citySites['ho-chi-minh'],
+    imageKey: 'ho-chi-minh',
+  },
+  {
+    id: 'nairobi',
+    name: 'ניירובי',
+    nameEn: 'Nairobi',
+    countryId: 'kenya',
+    connections: ['cairo', 'istanbul', 'johannesburg', 'london', 'mumbai'],
+    sites: citySites['nairobi'],
+    imageKey: 'nairobi',
+  },
+  {
+    id: 'seoul',
+    name: 'סיאול',
+    nameEn: 'Seoul',
+    countryId: 'south-korea',
+    connections: ['bangkok', 'beijing', 'mumbai', 'sydney', 'tokyo'],
+    sites: citySites['seoul'],
+    imageKey: 'seoul',
   },
 ]
 
 function buildAlmanac(): AlmanacEntry[] {
   return baseAlmanac.map((entry) => {
     const extra = almanacExtras[entry.id]
+    const culture = almanacCulture[entry.id]
     const gameCity = cities.find((c) => c.countryId === entry.id)
     const defaultCities = gameCity
       ? [{ name: gameCity.name, nameEn: gameCity.nameEn, inGame: true as const }]
@@ -481,6 +618,9 @@ function buildAlmanac(): AlmanacEntry[] {
       continent: extra?.continent ?? defaultContinent[entry.id] ?? '',
       majorCities: extra?.majorCities ?? defaultCities,
       mainSites: extra?.mainSites ?? [{ name: entry.landmark, nameEn: entry.landmark }],
+      foods: culture?.foods ?? [],
+      events: culture?.events ?? [],
+      famousPeople: culture?.famousPeople ?? [],
       facts: extra?.facts ?? [
         `${entry.name} — בירתה ${entry.capital}, והשפה ${entry.language}.`,
         `מטבע: ${entry.currency}.`,

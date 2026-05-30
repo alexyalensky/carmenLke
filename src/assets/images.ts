@@ -45,6 +45,12 @@ export const cityPhotos: Record<string, string> = {
   montreal: img('cities', 'montreal'),
   amsterdam: img('cities', 'amsterdam'),
   johannesburg: img('cities', 'johannesburg'),
+  warsaw: img('cities', 'warsaw'),
+  lisbon: img('cities', 'lisbon'),
+  stockholm: img('cities', 'stockholm'),
+  'ho-chi-minh': img('cities', 'ho-chi-minh'),
+  nairobi: img('cities', 'nairobi'),
+  seoul: img('cities', 'seoul'),
 }
 
 export const sitePhotos: Record<string, string> = {

@@ -1,6 +1,6 @@
 import type { Suspect } from '../game/types'
 
-/** 28 suspects — overlapping traits; pool builder spreads matches so filters narrow gradually */
+/** 28 suspects with overlapping traits — multiple filters needed to identify */
 export const suspects: Suspect[] = [
   {
     "id": "dana",
@@ -11,6 +11,9 @@ export const suspects: Suspect[] = [
     "vehicle": "אופנוע",
     "gender": "גבר",
     "build": "גבוה",
+    "accent": "ישראלי",
+    "accessory": "משקפיים",
+    "ageGroup": "צעיר",
     "imageKey": "dana"
   },
   {
@@ -22,6 +25,9 @@ export const suspects: Suspect[] = [
     "vehicle": "מכונית ספורט",
     "gender": "אישה",
     "build": "גבוהה",
+    "accent": "אירופאי",
+    "accessory": "כובע",
+    "ageGroup": "צעירה",
     "imageKey": "yossi"
   },
   {
@@ -33,6 +39,9 @@ export const suspects: Suspect[] = [
     "vehicle": "ג׳יפ",
     "gender": "גבר",
     "build": "בינוני",
+    "accent": "אמריקאי",
+    "accessory": "עגילים",
+    "ageGroup": "בוגר",
     "imageKey": "maya"
   },
   {
@@ -44,6 +53,9 @@ export const suspects: Suspect[] = [
     "vehicle": "רכב שטח",
     "gender": "אישה",
     "build": "בינונית",
+    "accent": "אסיאתי",
+    "accessory": "צעיף",
+    "ageGroup": "בוגרת",
     "imageKey": "ron"
   },
   {
@@ -55,6 +67,9 @@ export const suspects: Suspect[] = [
     "vehicle": "מכונית ישנה",
     "gender": "גבר",
     "build": "נמוך",
+    "accent": "אפריקאי",
+    "accessory": "שעון",
+    "ageGroup": "מבוגר",
     "imageKey": "lila"
   },
   {
@@ -66,6 +81,9 @@ export const suspects: Suspect[] = [
     "vehicle": "מונית",
     "gender": "אישה",
     "build": "נמוכה",
+    "accent": "ישראלי",
+    "accessory": "משקפיים",
+    "ageGroup": "מבוגרת",
     "imageKey": "omar"
   },
   {
@@ -77,6 +95,9 @@ export const suspects: Suspect[] = [
     "vehicle": "אופניים",
     "gender": "גבר",
     "build": "גבוה",
+    "accent": "אירופאי",
+    "accessory": "כובע",
+    "ageGroup": "צעיר",
     "imageKey": "nina"
   },
   {
@@ -88,6 +109,9 @@ export const suspects: Suspect[] = [
     "vehicle": "משאית",
     "gender": "אישה",
     "build": "גבוהה",
+    "accent": "אמריקאי",
+    "accessory": "עגילים",
+    "ageGroup": "צעירה",
     "imageKey": "dana"
   },
   {
@@ -99,6 +123,9 @@ export const suspects: Suspect[] = [
     "vehicle": "יאכטה",
     "gender": "גבר",
     "build": "בינוני",
+    "accent": "אסיאתי",
+    "accessory": "צעיף",
+    "ageGroup": "בוגר",
     "imageKey": "yossi"
   },
   {
@@ -110,6 +137,9 @@ export const suspects: Suspect[] = [
     "vehicle": "רכבת",
     "gender": "אישה",
     "build": "בינונית",
+    "accent": "אפריקאי",
+    "accessory": "שעון",
+    "ageGroup": "בוגרת",
     "imageKey": "maya"
   },
   {
@@ -121,6 +151,9 @@ export const suspects: Suspect[] = [
     "vehicle": "אופנוע",
     "gender": "גבר",
     "build": "נמוך",
+    "accent": "ישראלי",
+    "accessory": "משקפיים",
+    "ageGroup": "מבוגר",
     "imageKey": "ron"
   },
   {
@@ -132,6 +165,9 @@ export const suspects: Suspect[] = [
     "vehicle": "מכונית ספורט",
     "gender": "אישה",
     "build": "נמוכה",
+    "accent": "אירופאי",
+    "accessory": "כובע",
+    "ageGroup": "מבוגרת",
     "imageKey": "lila"
   },
   {
@@ -143,6 +179,9 @@ export const suspects: Suspect[] = [
     "vehicle": "ג׳יפ",
     "gender": "גבר",
     "build": "גבוה",
+    "accent": "אמריקאי",
+    "accessory": "עגילים",
+    "ageGroup": "צעיר",
     "imageKey": "omar"
   },
   {
@@ -154,6 +193,9 @@ export const suspects: Suspect[] = [
     "vehicle": "רכב שטח",
     "gender": "אישה",
     "build": "גבוהה",
+    "accent": "אסיאתי",
+    "accessory": "צעיף",
+    "ageGroup": "צעירה",
     "imageKey": "nina"
   },
   {
@@ -165,6 +207,9 @@ export const suspects: Suspect[] = [
     "vehicle": "מכונית ישנה",
     "gender": "גבר",
     "build": "בינוני",
+    "accent": "אפריקאי",
+    "accessory": "שעון",
+    "ageGroup": "בוגר",
     "imageKey": "dana"
   },
   {
@@ -176,6 +221,9 @@ export const suspects: Suspect[] = [
     "vehicle": "מונית",
     "gender": "אישה",
     "build": "בינונית",
+    "accent": "ישראלי",
+    "accessory": "משקפיים",
+    "ageGroup": "בוגרת",
     "imageKey": "yossi"
   },
   {
@@ -187,6 +235,9 @@ export const suspects: Suspect[] = [
     "vehicle": "אופניים",
     "gender": "גבר",
     "build": "נמוך",
+    "accent": "אירופאי",
+    "accessory": "כובע",
+    "ageGroup": "מבוגר",
     "imageKey": "maya"
   },
   {
@@ -198,6 +249,9 @@ export const suspects: Suspect[] = [
     "vehicle": "משאית",
     "gender": "אישה",
     "build": "נמוכה",
+    "accent": "אמריקאי",
+    "accessory": "עגילים",
+    "ageGroup": "מבוגרת",
     "imageKey": "ron"
   },
   {
@@ -209,6 +263,9 @@ export const suspects: Suspect[] = [
     "vehicle": "יאכטה",
     "gender": "גבר",
     "build": "גבוה",
+    "accent": "אסיאתי",
+    "accessory": "צעיף",
+    "ageGroup": "צעיר",
     "imageKey": "lila"
   },
   {
@@ -220,6 +277,9 @@ export const suspects: Suspect[] = [
     "vehicle": "רכבת",
     "gender": "אישה",
     "build": "גבוהה",
+    "accent": "אפריקאי",
+    "accessory": "שעון",
+    "ageGroup": "צעירה",
     "imageKey": "omar"
   },
   {
@@ -231,6 +291,9 @@ export const suspects: Suspect[] = [
     "vehicle": "אופנוע",
     "gender": "גבר",
     "build": "בינוני",
+    "accent": "ישראלי",
+    "accessory": "משקפיים",
+    "ageGroup": "בוגר",
     "imageKey": "nina"
   },
   {
@@ -242,6 +305,9 @@ export const suspects: Suspect[] = [
     "vehicle": "מכונית ספורט",
     "gender": "אישה",
     "build": "בינונית",
+    "accent": "אירופאי",
+    "accessory": "כובע",
+    "ageGroup": "בוגרת",
     "imageKey": "dana"
   },
   {
@@ -253,6 +319,9 @@ export const suspects: Suspect[] = [
     "vehicle": "ג׳יפ",
     "gender": "גבר",
     "build": "נמוך",
+    "accent": "אמריקאי",
+    "accessory": "עגילים",
+    "ageGroup": "מבוגר",
     "imageKey": "yossi"
   },
   {
@@ -264,6 +333,9 @@ export const suspects: Suspect[] = [
     "vehicle": "רכב שטח",
     "gender": "אישה",
     "build": "נמוכה",
+    "accent": "אסיאתי",
+    "accessory": "צעיף",
+    "ageGroup": "מבוגרת",
     "imageKey": "maya"
   },
   {
@@ -275,6 +347,9 @@ export const suspects: Suspect[] = [
     "vehicle": "מכונית ישנה",
     "gender": "גבר",
     "build": "גבוה",
+    "accent": "אפריקאי",
+    "accessory": "שעון",
+    "ageGroup": "צעיר",
     "imageKey": "ron"
   },
   {
@@ -286,6 +361,9 @@ export const suspects: Suspect[] = [
     "vehicle": "מונית",
     "gender": "אישה",
     "build": "גבוהה",
+    "accent": "ישראלי",
+    "accessory": "משקפיים",
+    "ageGroup": "צעירה",
     "imageKey": "lila"
   },
   {
@@ -297,6 +375,9 @@ export const suspects: Suspect[] = [
     "vehicle": "אופניים",
     "gender": "גבר",
     "build": "בינוני",
+    "accent": "אירופאי",
+    "accessory": "כובע",
+    "ageGroup": "בוגר",
     "imageKey": "omar"
   },
   {
@@ -308,6 +389,9 @@ export const suspects: Suspect[] = [
     "vehicle": "משאית",
     "gender": "אישה",
     "build": "בינונית",
+    "accent": "אמריקאי",
+    "accessory": "עגילים",
+    "ageGroup": "בוגרת",
     "imageKey": "nina"
   }
 ]

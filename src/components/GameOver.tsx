@@ -1,5 +1,6 @@
 import { useGame } from '../context/GameContext'
 import { gameData } from '../data/gameData'
+import { wrongSuspectArrestMessage, wrongCityArrestMessage, wonArrestMessage } from '../game/arrestMessages'
 import { getSuspect } from '../game/engine'
 import { SuspectPhoto, TreasurePhoto } from './Photo'
 
@@ -8,6 +9,9 @@ export function GameOver() {
   if (!caseState) return null
 
   const suspect = getSuspect(gameData, caseState.suspectId)
+  const accused = caseState.selectedSuspectId
+    ? getSuspect(gameData, caseState.selectedSuspectId)
+    : undefined
 
   let title = ''
   let message = ''
@@ -15,7 +19,14 @@ export function GameOver() {
   switch (caseState.status) {
     case 'won':
       title = '🏆 התיק נסגר!'
-      message = `עצרתם את ${suspect?.name ?? 'החשוד'} (${suspect?.nickname}) והחזרתם את ${caseState.stolenTreasure}!`
+      message =
+        suspect != null
+          ? wonArrestMessage(
+              suspect,
+              caseState.stolenTreasure,
+              caseState.lastArrestSiteId === caseState.hideoutSiteId,
+            )
+          : `החזרתם את ${caseState.stolenTreasure}!`
       break
     case 'escaped':
       title = '⏱ החשוד נמלט!'
@@ -26,13 +37,10 @@ export function GameOver() {
       break
     case 'lost':
       title = '❌ המעצר נכשל'
-      if (caseState.arrestAttempted && caseState.selectedSuspectId !== caseState.suspectId) {
-        const accused = caseState.selectedSuspectId
-          ? getSuspect(gameData, caseState.selectedSuspectId)
-          : undefined
-        message = `טעיתם בחשוד! ${accused?.nickname ?? 'החשוד'} לא היה/הייתה הגנב/ת — ${suspect?.name ?? 'האמת'} נמלט/ת.`
+      if (caseState.arrestLossReason === 'wrongSuspect' && accused) {
+        message = wrongSuspectArrestMessage(accused)
       } else if (caseState.arrestAttempted) {
-        message = `מעצר במקום הלא נכון — ${suspect?.nickname ?? 'החשוד'} (${suspect?.name ?? 'לא ידוע'}) נמלט/ת.`
+        message = wrongCityArrestMessage()
       } else {
         message = 'החקירה נכשלה.'
       }
@@ -45,7 +53,12 @@ export function GameOver() {
     <div className={`game-over-deluxe ${caseState.status}`}>
       <div className="game-over-card">
         <div className="game-over-visuals">
-          {suspect && <SuspectPhoto suspect={suspect} name={suspect.name} />}
+          {(caseState.status === 'lost' && accused ? accused : suspect) && (
+            <SuspectPhoto
+              suspect={(caseState.status === 'lost' && accused ? accused : suspect)!}
+              name={(caseState.status === 'lost' && accused ? accused : suspect)!.name}
+            />
+          )}
           <TreasurePhoto treasureId={caseState.stolenTreasureId} name={caseState.stolenTreasure} />
         </div>
         <h2>{title}</h2>

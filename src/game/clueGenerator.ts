@@ -10,7 +10,7 @@ import {
 } from './clueVariety'
 import type { Clue, GameData, Suspect, SuspectTrait } from './types'
 
-const SUSPECT_TRAITS: SuspectTrait[] = ['hair', 'hobby', 'vehicle', 'gender', 'build']
+const SUSPECT_TRAITS: SuspectTrait[] = ['hair', 'hobby', 'vehicle', 'gender', 'build', 'accent', 'accessory', 'ageGroup']
 
 const TRAIT_CLUE_TEMPLATES: Record<SuspectTrait, ((value: string) => string)[]> = {
   hair: [
@@ -36,6 +36,21 @@ const TRAIT_CLUE_TEMPLATES: Record<SuspectTrait, ((value: string) => string)[]> 
     (v) => `העד תיאר מבנה גוף ${v}.`,
     (v) => `החשוד נראה ${v}.`,
     (v) => `מישהו ${v} נראה רץ מהמקום.`,
+  ],
+  accent: [
+    (v) => `העד זיהה מבטא ${v}.`,
+    (v) => `דיבר עם מבטא ${v}.`,
+    (v) => `שמעתי מבטא ${v} בטלפון.`,
+  ],
+  accessory: [
+    (v) => `החשוד נראה עם ${v}.`,
+    (v) => `העד שם לב ל${v}.`,
+    (v) => `ראיתי ${v} על החשוד.`,
+  ],
+  ageGroup: [
+    (v) => `נראה ${v}.`,
+    (v) => `העד תיאר אדם ${v}.`,
+    (v) => `החשוד נראה ${v}.`,
   ],
 }
 
@@ -103,6 +118,7 @@ export function generateClueForDestination(
     usedTexts,
     usedFacts,
     usedPlaceGroups,
+    slotIndex,
   )
   const rich = template
     ? richClueToDisplay(template, destinationCity, entry, usedFacts, usedPlaceGroups)

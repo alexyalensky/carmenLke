@@ -112,4 +112,34 @@ export const citySites: Record<string, InvestigationSite[]> = {
     { id: 'johannesburg-taxi', name: 'דבר עם נהג מונית', scene: 'taxi-driver' },
     { id: 'johannesburg-hotel', name: 'שאל בקבלת המלון', scene: 'hotel-clerk' },
   ],
+  warsaw: [
+    { id: 'warsaw-market', name: 'שאל בשוק העיר', scene: 'market' },
+    { id: 'warsaw-cafe', name: 'שאל בבית קפה', scene: 'cafe-waiter' },
+    { id: 'warsaw-subway', name: 'חקור בתחנת הרכבת', scene: 'subway' },
+  ],
+  lisbon: [
+    { id: 'lisbon-tram', name: 'דבר עם נהג חשמלית', scene: 'bus-driver' },
+    { id: 'lisbon-market', name: 'שאל בשוק', scene: 'market' },
+    { id: 'lisbon-tour', name: 'שאל מדריך תיירים', scene: 'tour-guide' },
+  ],
+  stockholm: [
+    { id: 'stockholm-bridge', name: 'שאל בגשר', scene: 'bridge-toll' },
+    { id: 'stockholm-cafe', name: 'שאל בבית קפה', scene: 'cafe-waiter' },
+    { id: 'stockholm-museum', name: 'שאל שומר במוזיאון', scene: 'museum-guard' },
+  ],
+  'ho-chi-minh': [
+    { id: 'ho-chi-minh-market', name: 'שאל בשוק', scene: 'market' },
+    { id: 'ho-chi-minh-vendor', name: 'שאל דוכן רחוב', scene: 'street-vendor' },
+    { id: 'ho-chi-minh-dock', name: 'שאל בנמל', scene: 'dock-worker' },
+  ],
+  nairobi: [
+    { id: 'nairobi-park', name: 'שאל רanger בפארק', scene: 'park-jogger' },
+    { id: 'nairobi-market', name: 'שאל בשוק', scene: 'market' },
+    { id: 'nairobi-taxi', name: 'דבר עם נהג מונית', scene: 'taxi-driver' },
+  ],
+  seoul: [
+    { id: 'seoul-subway', name: 'חקור בתחנת הרכבת', scene: 'subway' },
+    { id: 'seoul-market', name: 'שאל בשוק', scene: 'market' },
+    { id: 'seoul-cafe', name: 'שאל בבית קפה', scene: 'cafe-waiter' },
+  ],
 }

@@ -16,6 +16,9 @@ for (const entry of gameData.almanac) {
   add(entry.landmark, entry.landmark)
   for (const site of entry.mainSites) add(site.nameEn, site.name)
   for (const city of entry.majorCities) add(city.nameEn, city.name)
+  for (const item of [...entry.foods, ...entry.events, ...entry.famousPeople]) {
+    add(item.nameEn, item.name)
+  }
 }
 
 const GREETINGS: Record<string, string> = {
@@ -59,6 +62,9 @@ export function getHebrewForEnglish(word: string, countryId?: string): string {
       if (key === getCurrencyShort(countryId).toLowerCase()) return entry.currency
       const site = entry.mainSites.find((s) => s.nameEn.toLowerCase() === key)
       if (site) return site.name
+      for (const item of [...entry.foods, ...entry.events, ...entry.famousPeople]) {
+        if (item.nameEn.toLowerCase() === key) return item.name
+      }
     }
   }
   return lookup.get(key) ?? word
